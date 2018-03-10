@@ -1,0 +1,223 @@
+---
+layout: post
+title:  "Template Metaprogramming Part 1"
+date:   2017-01-14 22:00:00
+categories: c++ cpp template metaprogramming typelist brigand
+comments: True
+permalink: posts/tmpl-part1
+shortUrl: https://goo.gl/wksrMH
+is_post: true
+---
+
+What is template metaprogramming? Why do I care about template
+metaprogramming? What is a typelist? These are the sorts of questions
+I asked myself when I first started looking at template
+metaprogramming seriously.
+
+In this series of posts I will do my best
+to answer these questions using practical (from my line of work,
+anyway) examples that will hopefully convince you of the merits of
+template metaprograming (TMP). I will try to answer the first two
+questions together. TMP is writing code that is executed by the
+compiler and manipulates types rather than data. TMP is even more
+powerful when combined with [constant expressions][cppref_constexpr]
+to do compile-time computations. I will restrict myself to using C++11
+since this is currently best supported on the HPC systems used in
+academic settings. Currently the Intel compiler is what is prohibiting
+us from fully adopting C++14.
+
+I will begin by discussing several runtime ideas that we need to
+implement at compile time in order to be able to have flexible
+metacode. TMP is functional programming in the sense that all
+metavariables or types and [type aliases](cppref_type_alias) are
+immutable
+(const) and that all metafunctions return
+by value. In order to have flexible and useful metaprograms we want
+the idea of `if`, `for` and `while`, so let's start with `if`. I will
+cover loops in part 2. How do
+we implement an `if` in TMP?  Well we need a `bool` that can be true
+or false, so that could be one parameter to the metafunction. We also
+need the value that is returned if the bool is true and the return
+value if the bool is false. Okay, so our metafunction will need to take
+three parameters, so let's start with that.
+
+{% highlight cpp linenos %}
+template <bool B, typename T, typename F>
+struct if_c {
+  using type = F;
+};
+template <typename T, typename F>
+struct if_c<true, T, F> {
+  using type = T;
+};
+{% endhighlight %}
+
+What is happening here? We use a struct as the metafunction that
+applies the `if` and call it `if_c` (recall that `if` is a
+keyword). Arguments are passed to the metafunction as template
+parameters, and returned by setting a member type alias or `static
+constexpr` variable. For `if_c` the general (unspecialized) definition
+takes three template parameters: a bool, the metavalue (type) to be
+returned if the bool is true and the type to be returned if the bool
+is false. The general definition sets its member
+metavariable `type` to the false evaluation and we provide a (partial)
+template specialization on line 5 where the bool is `true`. The
+specialization sets the metavariable `type` to the true evaluation
+template parameter. How does this actually perform a conditional
+check? Well the compiler must use a specialization of `if_c` if it
+exists, if not
+it attempts to instantiate and use the general definition. Thus, if
+the first template parameter is `true` then the specialization is
+used, otherwise the general definition is used. Why did we choose to
+make the specialization for the `true` case? This is an arbitrary
+choice (and is the same one made in libc++). What we have implemented
+here is
+actually already in the standard library (stdlib, either libc++ or
+stdlibc++) and is named [`std::conditional`][cppref_conditional].
+
+Okay, great, we're done with a compile time `if`! Wait, not so fast!
+Sometimes in runtime code we use `if` statements to avoid evaluating
+one branch altogether but that isn't what happens with
+`conditional`. When using `conditional` all template parameters must
+be evaluable, which isn't always what we need. Furthermore, maybe we
+want to "branch" compilation depending on a conditional or simply
+avoid the compiler checking a branch altogether so our compile time
+stays low. By branch I mean maybe we want a function that has the
+same name but operates on
+either associative containers ([`std::map`][cppref_map] or
+[`std::unordered_map`][cppref_unordered_map])
+or sequence containers ([`std::array`][cppref_array] or
+[`std::vector`][cppref_vector]). Well how do we
+do this? Clearly `conditional` isn't the answer here, what we want is
+something that enables a (meta)function if a condition is met. This is
+exactly what [`std::enable_if`][cppref_enable_if] does.
+
+Let's now implement this second type of `if` statement. Here is our
+implementation:
+
+{% highlight cpp linenos %}
+template <bool B, typename T = void>
+struct enable_if {};
+template <typename T>
+struct enable_if<true, T> {
+  using type = T;
+};
+{% endhighlight %}
+
+While shorter than `conditional` it is more subtle in its
+utility. First `enable_if` takes two template parameters, a bool and a
+type where the type is void by default and really serves as the method
+of enabling a (meta)function. Note that the template parameter `T` has
+a default value of `void` for all specializations too. Just like arguments
+to functions may only have their default value specified
+once, template parameters may only have their default value
+specified once. We again have the general definition handle the
+`false` case and supply a specialization for the `true` case with a
+member metavariable `type` set to the template parameter `T` (void by
+default). So how do we actually use `enable_if` and how does it work?
+Well let's first look at a practical use and then I'll explain how
+`enable_if` works. 
+
+As our example let's write a few type traits to check if a type is a
+`map` or `unordered_map`. The concepts are the same as what we used
+for `conditional` and `enable_if` and plays a central role in TMP. We
+first define a generic class template that inherits from
+[`std::false_type`][cppref_false_type] and therefore has a member
+variable named `value` whose value is (hopefully not surprisingly)
+`false`. Next we define a template specialization that is
+specialized for a `map` and inherits from
+[`std::true_type`][cppref_false_type]. This works because the
+compiler has to always choose the specialization if it can, just as
+with `conditional` and `enable_if` where the compiler selects the
+`true` specialization. Here are the implementations: 
+
+{% highlight cpp linenos %}
+template <typename T>
+struct is_std_map : std::false_type {};
+
+template <typename K, typename V, typename Comp, typename A>
+struct is_std_map<std::map<K, V, Comp, A>> : std::true_type {};
+
+template <typename T>
+struct is_std_unordered_map : std::false_type {};
+
+template <typename K, typename V, typename Hash, typename KeyEqual, typename A>
+struct is_std_unordered_map<std::unordered_map<K, V, Hash, KeyEqual, A>>
+    : std::true_type {};
+{% endhighlight %}
+
+You may find it surprising that the specialization has more template
+parameters than the general definition. This is fine because the
+`<std::map<K, V, Comp, A>>` after the struct name on line 5 indicates
+that we have defined a specialization. Thus the compiler knows to
+first use this specialized definition if it is satisfied. Finally,
+what we have is that
+`is_std_map<std::map<int, double>>::value` is true while
+`is_std_map<std::unordered_map<int, double>>::value` is false. The
+implementation for `unordered_map` is essentially the same.
+
+Since both `map` and `unordered_map` have the same dereferenced
+iterator (a `pair`) we might only care if the type is either a `map`
+or `unordered_map` but not which one. Let's write another type trait
+that checks if a type is either `map` or `unordered_map` and call it
+`is_map`. Again the
+general definition will need the type to check as a parameter, and
+inherit from `false_type`. Now how do we use our above type traits to
+specialize `is_map`? We use `enable_if`, that's how! In order to use
+`enable_if` we must add a second template parameter that we will not
+use other than to perform the `enable_if` check. Therefore we can use
+an unnamed template parameter with a default value, which we'll set to
+void. The reason for setting a default value is so that the user of
+our type trait does not need to specify a second "filler" template
+parameter. Let me show you the general definition and specialization
+together, then explain the specialization.
+
+{% highlight cpp linenos %}
+template <typename T, typename = void>
+struct is_map : std::false_type {};
+template <typename T>
+struct is_map<T, typename std::enable_if<is_std_map<T>::value or
+                                         is_std_unordered_map<T>::value>::type>
+    : std::true_type {};
+{% endhighlight %}
+
+This might seem like a bit to swallow, but let's break it down. The
+specialization only takes one template parameter, the type `T` that we
+want to check. The second parameter holds the `enable_if`
+statement, which in this case takes the result of a logical `or`
+between the result of `is_std_map<T>::value` and
+`is_std_unordered_map<T>::value`. If `T` is either a `map` or an
+`unordered_map` then the specialization of `enable_if` is used and it
+has a member metavariable `type`. In this case the compiler can
+compile the code and must prefer the specialization over the general
+definition. If the result of the logical `or` is `false` then the
+general definition of `enable_if` is used and the compiler cannot
+compile the code because the general `enable_if` does not have a
+metavariable named `type`. As a result the compiler ignores the
+specialization of `is_map` and falls back to the generic
+definition. Lastly, the `typename` keyword is required to tell the
+compiler that `type` is a metavariable (a type) rather than a
+variable with a value.
+
+So what have we discovered? Well we discovered that there are at least
+three different ways to perform if-else or switch statements at
+compile time. One is using [`std::conditional`](cppref_conditional),
+another is using [`std::enable_if`](cppref_enable_if), and lastly we
+can also use (partial) template specialization to have the compiler
+select a certain definition over all others. Comparing these to
+runtime concepts `conditional` is probably most like the ternary
+operator, `enable_if` like if-else statements, and (partial) template
+specialization like if-else and switch statements.
+
+[cppref_type_alias]: http://en.cppreference.com/w/cpp/language/type_alias
+[cppref_enable_if]: http://en.cppreference.com/w/cpp/types/enable_if
+[cppref_conditional]: http://en.cppreference.com/w/cpp/types/conditional
+[cppref_constexpr]: http://en.cppreference.com/w/cpp/language/constexpr
+[cppref_array]: http://en.cppreference.com/w/cpp/container/array
+[cppref_vector]: http://en.cppreference.com/w/cpp/container/vector
+[cppref_map]: http://en.cppreference.com/w/cpp/container/map
+[cppref_unordered_map]: http://en.cppreference.com/w/cpp/container/unordered_map
+[cppref_false_type]: http://en.cppreference.com/w/cpp/types/integral_constant
+[cppref_void_t]: http://en.cppreference.com/w/cpp/types/void_t
+[cppcast]: http://cppcast.com/2016/06/anastasia-kazakova/
+[clion]: https://www.jetbrains.com/clion/specials/clion/clion.html?&gclid=Cj0KEQjw_9-9BRCqpZeZhLeOg68BEiQAOviWAs-q4ChSK0G-TnqehxOk13WbDplaR8PoLSEh7W_oWKoaAm_v8P8HAQ&gclsrc=aw.ds.ds&dclid=CNTekdOw0M4CFcZBNwodTJsMWw
