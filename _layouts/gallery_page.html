@@ -1,0 +1,60 @@
+---
+layout: page
+---
+<style TYPE="text/css">
+ .gallery-image-wrapper {
+     height: 300px;
+     width: 300px;
+     display: inline-block;
+     margin: 1em;
+     position: relative;
+ }
+ .gallery-image {
+     margin: auto;
+     position: absolute;
+     top: 0px;
+     bottom: 0px;
+     max-height: 100%;
+     max-width: 100%;
+     padding: 0px 0px 0px 0px;
+}
+</style>
+
+<script src="/js/lightbox-plus-jquery.js"></script>
+<link href="/css/lightbox.css" rel="stylesheet" />
+
+{% comment %} get list of names of images in this gallery and their
+tags, if any {% endcomment %}
+{% assign namesList = page.image_names %}
+{% assign filenamesList = page.image_filenames %}
+
+
+
+{% for image in page.images %}
+
+  {% comment %} if the same number of names and filenamse were supplied
+  {% endcomment %}
+  {% if filenamesList.size == namesList.size %}
+
+    {% comment %} If this image has a caption, set it so {% endcomment %}
+    {% assign pictureCaption = "" %}
+    {% for i in (0..filenamesList.size) %}
+
+    {% if filenamesList[i] == image.name %}
+        {% assign pictureCaption = namesList[i] %}
+
+      {% endif %}
+
+    {% endfor %}
+
+  {% endif %}
+
+<div class="gallery-image-wrapper">
+
+    <a name="{{ image.name }}"></a>
+    <a href="{{ image.src }}"
+       data-lightbox="{{ page.gallery }}" data-title="{{ pictureCaption }}">
+        <img class="gallery-image" src="{{ site.url }}/assets/photos/{{ page.gallery }}/thumbs/{{ image.name }}">
+    </a>
+</div>
+{% endfor %}

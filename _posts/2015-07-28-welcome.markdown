@@ -1,0 +1,30 @@
+---
+layout: post
+title:  "Well, Hello!"
+date:   2015-07-28 13:00:38
+categories: general welcome
+comments: True
+permalink: posts/blog-welcome
+---
+Welcome! I'm starting this site to share my knowledge of physics,
+experiences developing software for scientific use, and anything
+else that gets me excited. I am currently
+a graduate student in the [physics department][3]
+at [Cornell University][4] working with [Prof. Saul Teukolsky][5] with
+the [SXS][6] collaboration. My research interests are solving
+Einstein's equations using computers to study physics not available to
+us here on Earth. Common examples of problems solved using numerical relativity
+include binary black hole mergers, binary neutron star mergers, and jets
+and acretion disk formation and evolution. Recently numerical
+relativity has also been used to study quantum mechanical systems using
+the so-called anti-de Sitter/conformal field theory (AdS/CFT) conjecture.
+If you have not heard of AdS/CFT fear not, I will have a post on this
+at some stage but be warned that it is from the view of a relativist, not
+a particle physicist.
+
+[1]: http://www.uwinnipeg.ca/physics/
+[2]: http://uwinnipeg.ca/
+[3]: http://www.physics.cornell.edu/
+[4]: http://www.cornell.edu/
+[5]: http://astro.cornell.edu/members/saul-a-teukolsky.html
+[6]: http://www.black-holes.org/

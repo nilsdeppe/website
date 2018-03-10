@@ -1,0 +1,82 @@
+# Site settings
+title: Nils Deppe
+email: nilsdeppe@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  I hope to share some of my excitement and knowledge of physics and
+  scientific computing here. My interests are general and numerical relativity,
+  computational techniques for solving partial differential equations
+  like those arising in Einstein's theory of gravity and science in general.
+  
+baseurl: "" # the subpath of your site, e.g. /blog/
+# the base hostname & protocol for your site
+url: "http://nilsdeppe.com"
+twitter_username: nilsdeppe
+github_username:  nilsdeppe
+bitbucket_username: ndeppe
+
+# Facebook things
+fb_appid: 337414769782635
+
+# my timezone
+timezone: America/New_York
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+keep_files: [.git,.gitignore]
+
+# gems
+plugins:
+  - jekyll-gallery-generator
+
+# Default layouts
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "my-site"
+      author: "Nils"
+      is_post: true
+  -
+    scope:
+      path: "projects"
+      type: "pages" # previously `page` in Jekyll 2.2.
+    values:
+      layout: "project" # overrides previous default layout
+      author: "Nils"
+
+# Settings for the photo gallery
+gallery:
+  # path to the gallery
+  dir: assets/photos
+  # title for gallery index
+  title: "Photography"
+  # title prefix for gallery page. title=title_prefix+gallery_name
+  title_prefix: "Photography: "
+  # field to control sorting of galleries for the index page
+  # (possible values are: title, date_time, best_image)
+  sort_field: "date_time"
+  # sizes for thumbnails
+  thumbnail_size:
+    x: 400
+    y: 400
+  # custom configuration for individual gallery
+  # best_image is image for the index page (defaults to last image)
+  # In order for the captions to work correctly you must make sure to add the following
+  # to the jekyll-gallery-generator.rb file:
+  # # Read file names to have tags under
+  # self.data["image_filenames"] = gallery_config["image_filenames"].split("::")
+  # self.data["image_names"] = gallery_config["image_names"].split("::")
+  # This must go in the function GalleryPage < ReadYamlPage
+  # and should be right below "self.data["images"] = @images"
+  galleries:
+    Family:
+      best_image: ezraStaringOff.jpg
+      image_filenames: "ezraStaringOff.jpg::ezraSmiling.jpg"
+      image_names: "Ezra sees something interesting::Nephew and I before dad's wedding"
+    Ithaca:
+      best_image: waterCascadillaHCl.jpg
+      image_filenames: ""
+      image_names: ""
