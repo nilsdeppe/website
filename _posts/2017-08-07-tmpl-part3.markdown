@@ -1,0 +1,91 @@
+---
+layout: post
+title:  "TMP Part 3 - Tuple Iteration With Recursion"
+date:   2017-08-24 00:01:00
+categories: c++ cpp template metaprogramming typelist brigand
+comments: True
+permalink: posts/tmpl-part3
+shortUrl: https://goo.gl/ZM4vbB
+is_post: true
+---
+
+A fairly common task one encounters is iterating over a `std::tuple`.
+I'm going to keep this post fairly brief and go over how not to iterate
+over a tuple. We'll discuss how you should iterate over a tuple in the
+next [post]({% post_url 2017-08-08-tmpl-part4 %}).
+
+The most naive way to iterate over a tuple is via recursive function calls
+using SFINAE to end the recursion. Here is one way to implement a transform
+over a tuple with recursion:
+
+{% highlight cpp linenos %}
+template <size_t Index, typename... Elements, typename Func, typename... Args,
+          std::enable_if_t<Index == 0>* = nullptr>
+constexpr inline void tuple_transform(const std::tuple<Elements...>& tuple,
+                                      Func&& func, Args&&... args) {
+  func(std::get<Index>(tuple), std::integral_constant<size_t, Index>{},
+       args...);
+}
+
+template <size_t Index, typename... Elements, typename Func, typename... Args,
+          std::enable_if_t<Index != 0>* = nullptr>
+constexpr inline void tuple_transform(const std::tuple<Elements...>& tuple,
+                                      Func&& func, Args&&... args) {
+  tuple_transform<Index - 1>(tuple, func, args...);
+  func(std::get<Index>(tuple), std::integral_constant<size_t, Index>{},
+       args...);
+}
+{% endhighlight %}
+If you prefer, you can write the code such that the function counts up instead of
+down, but aside from that this is pretty much what we're stuck with in C++11/14.
+In C++17, constexpr-if can be used so that we only have one function, but
+nevertheless we are doing recursion.
+
+With the above could you can do both a
+[`fold`](https://en.wikipedia.org/wiki/Fold_(higher-order_function)), and a
+[`transform`](https://en.wikipedia.org/wiki/Map_(higher-order_function))
+(referred to as `map` in functional languages). Here is an example of using
+a fold to compute the sum of elements in a tuple (yes, yes, in this case a
+`std::vector` would work fine, humor me for the purposes of this example).
+{% highlight cpp linenos %}
+const auto my_tupull = std::make_tuple(2, 7, -3.8, 20.9);
+double sum_value = 0.0;
+tuple_transform<3>(my_tupull, [](const auto& element, auto /*index*/,
+                                 double& state) { state += element; },
+                   sum_value);
+std::cout << "Expected: 26.1   Computed: " << sum_value << "\n";
+
+sum_value = 0.0;
+tuple_transform<3>(my_tupull,
+                   [](const auto& element, auto index, double& state) {
+                     if (index.value != 1) {
+                       state += element;
+                     }
+                   },
+                   sum_value);
+std::cout << "Expected: 19.1   Computed: " << sum_value << "\n";
+{% endhighlight %}
+
+A transform can be performed similarly but the compile time integral
+value must be extracted from `index` using `decltype(index)::value`. The
+compile time `index` can then be used to index a second tuple as follows:
+{% highlight cpp linenos %}
+const auto my_tupull = std::make_tuple(2, 7, -3.8, 20.9);
+std::decay_t<decltype(my_tupull)> out_tupull;
+tuple_transform<3>(my_tupull,
+                   [](const auto& element, auto index, auto& out_tuple) {
+                     constexpr size_t index_v = decltype(index)::value;
+                     std::get<index_v>(out_tuple) = -element;
+                   },
+                   out_tupull);
+std::cout << "Expected: (-2, -7, 3.8, -20.9)   Computed: " << out_tupull
+          << "\n";
+{% endhighlight %}
+The lines of interest are 5 and 6. On 5 we assign the value held in the
+`std::integral_constant` to a constexpr variable, and on line 6 we use the
+constexpr variable to retrieve an element from the tuple.
+
+As I mentioned at the beginning, this post is fairly short and I don't go into
+much detail because this is the way you *shouldn't* iterate over a tuple. I'm
+posting the correct way to iterate over a tuple at the same time
+[here]({% post_url 2017-08-08-tmpl-part4 %}) so you can compare them both.
