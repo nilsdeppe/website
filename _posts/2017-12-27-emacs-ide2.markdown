@@ -1,0 +1,353 @@
+---
+layout: post
+title:  "Using Emacs as a C++ IDE - Take 2"
+date:   2017-12-27 17:00:00
+categories: emacs clang c++ cpp ide
+comments: True
+permalink: posts/emacs-c++-ide2
+shortUrl: https://goo.gl/jAAsDp
+is_post: true
+---
+
+*Updated Feb. 10, 2018*<br>
+Just over a year ago I wrote a
+[post]({% post_url 2016-07-17-emacs-as-ide %}) about using Emacs is a C++
+IDE. Over the past year many small improvements have led me to an entirely
+different configuration that I find to be much faster and easier to use.
+In this post I will show screencasts of the features I'm using
+and provide my entire init file at the end. There should be enough comments
+in the init file to make it clear what's going on. If not leave a comment
+and I'll try to explain.
+
+**Note:** ~~I use `emacs-nox`, i.e. a non-graphical Emacs. You may have
+to perform some minor changes to get things to work in the graphical
+Emacs.~~ *Edit:* I've started using [EIN][ein] to be able to edit Jupyter
+notebooks inside the GUI Emacs. While most of my work is still in the
+terminal, I now have more confidence that this configuration works well
+on both GUI and nox Emacs.
+
+### Overview of Changes
+
+First I'll just briefly outline what I changed and why.
+
+- Use Emacs server-client: faster startup when opening emacsclient than
+when opening Emacs
+- Better battery use: [RTags][rtags] is way too CPU intensive for what it
+offers
+- Better tags navigation: again, RTags uses too much CPU (really bad
+for a laptop), and it also doesn't scale well to really large projects
+that have more than 100,000 lines of C++.
+- cmake-ide is clumsy: that's just it. It requires a lot of configuration
+for each individual project, and depends too heavily on RTags
+- Autocompletion using company-mode with semantic, irony, and rtags is
+really slow, especially with large projects
+- [Ivy][ivy] turns out to be a faster, more lightweight alternative to
+[Helm][helm] that suites my needs just fine.
+
+The biggest reason that I continued investigating alternative configurations
+is that RTags was just way too CPU intensive. It would use up all 8
+hyperthreads if I let it, and every time I changed something in a low-level
+header file it would re-parse the entire project. This was just way too
+expensive on a laptop. It might be okay if you have a powerful desktop
+and don't care about battery life, but when you're on the go it's just
+not a realistic implementation.
+
+### Faster Startup - The Emacs Server and Client
+
+One thing that can be annoying as an Emacs configuration grows in
+complexity is the increased startup time. There are a few ways of
+dealing with this. One that looks promising but I have not tried
+yet is [use-package][se-package]. The basic idea seems to be loading
+packages lazily so that the total load time is spread out
+rather than all at once.
+
+I've opted for using the Emacs server-client approach. What this
+means is I start Emacs once at login using systemd, then connect
+to the running session using the emacsclient. The alias I use to
+connect to Emacs is `alias ec="emacsclient -c"`. My systemd
+file is in `~/.config/systemd/user/emacsd.service` and contains:
+
+{% highlight shell linenos %}
+[Unit]
+Description=Emacs: the extensible, self-documenting text editor
+Documentation=man:emacs(1) info:Emacs
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/emacs --daemon
+ExecStop=/usr/bin/emacsclient --eval "(progn (setq kill-emacs-hook nil) (kill-emacs))"
+Restart=on-failure
+Environment=DISPLAY=:%i
+# Provide access to SSH
+Environment=SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+# Setup modules
+Environment=PATH="/home/nils/Research/mosh/install/bin/:/home/nils/Research/spack/opt/spack/linux-antergosrolling-x86_64/gcc-7.1.1/catch-1.9.4-qgdxfjhwk4mqhelhn2ggxmvyxvx6xm3k/bin:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/gsl-2.3-hsntrnj45jqjdmb6fq74tnxkmqxekts6/bin:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/openblas-0.2.19-if6giqoypphsmgle4anxox5kmb23g3vj/bin:/home/nils/Research/install/bin:/home/nils/.gem/ruby/2.4.0/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/nils/Research/spack/bin:/opt/intel/bin:/opt/intel/vtune_amplifier_xe_2017.2.0.499904/bin64:/home/nils/Research/llvm/build/bin:/home/nils/Research/templight-tools/build/bin:/home/nils/Research/standardese/build/tool:$PATH"
+Environment=CPATH="/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/brigand-master-pcaoburzhlfibhh4mvmcia2e6dkbry5x/include:/home/nils/Research/spack/opt/spack/linux-antergosrolling-x86_64/gcc-7.2.0/kvasir-mpl-develop-hr2lgqezjkiif3vbjsoxccorj2f5wppm/include:/home/nils/Research/spack/opt/spack/linux-antergosrolling-x86_64/gcc-7.1.1/catch-1.9.4-qgdxfjhwk4mqhelhn2ggxmvyxvx6xm3k/include:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/yaml-cpp-master-gmc3k4n2vsvmqwjcyqrxwaz2h5fukxc2/include:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/gsl-2.3-hsntrnj45jqjdmb6fq74tnxkmqxekts6/include:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/openblas-0.2.19-if6giqoypphsmgle4anxox5kmb23g3vj/include:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/libxsmm-1.8.1-mevsuzxzo47g33rihi4t7fdohp3ga7gk/include:/home/nils/Research/spack/opt/spack/linux-antergosrolling-x86_64/gcc-7.2.0/blaze-3.2-mnkglifq5s6ib5ltbvil4xt66fekqq2l/include:/home/nils/Research/install/include::/opt/petsc/linux-c-opt/include:$CPATH"
+Environment=LD_LIBRARY_PATH="/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/yaml-cpp-master-gmc3k4n2vsvmqwjcyqrxwaz2h5fukxc2/lib:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/gsl-2.3-hsntrnj45jqjdmb6fq74tnxkmqxekts6/lib:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/openblas-0.2.19-if6giqoypphsmgle4anxox5kmb23g3vj/lib:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/libxsmm-1.8.1-mevsuzxzo47g33rihi4t7fdohp3ga7gk/lib:/home/nils/Research/install/lib:::/opt/petsc/linux-c-opt/lib:$LD_LIBRARY_PATH"
+Environment=LIBRARY_PATH="/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/yaml-cpp-master-gmc3k4n2vsvmqwjcyqrxwaz2h5fukxc2/lib:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/gsl-2.3-hsntrnj45jqjdmb6fq74tnxkmqxekts6/lib:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/openblas-0.2.19-if6giqoypphsmgle4anxox5kmb23g3vj/lib:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/libxsmm-1.8.1-mevsuzxzo47g33rihi4t7fdohp3ga7gk/lib:/opt/petsc/linux-c-opt/lib:$LIBRARY_PATH"
+Environment=CMAKE_PREFIX_PATH="/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/brigand-master-pcaoburzhlfibhh4mvmcia2e6dkbry5x:/home/nils/Research/spack/opt/spack/linux-antergosrolling-x86_64/gcc-7.2.0/kvasir-mpl-develop-hr2lgqezjkiif3vbjsoxccorj2f5wppm:/home/nils/Research/spack/opt/spack/linux-antergosrolling-x86_64/gcc-7.1.1/catch-1.9.4-qgdxfjhwk4mqhelhn2ggxmvyxvx6xm3k:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/yaml-cpp-master-gmc3k4n2vsvmqwjcyqrxwaz2h5fukxc2:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/gsl-2.3-hsntrnj45jqjdmb6fq74tnxkmqxekts6:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/openblas-0.2.19-if6giqoypphsmgle4anxox5kmb23g3vj:/home/nils/Research/spack/opt/spack/linux-antergos17-x86_64/gcc-6.3.1/libxsmm-1.8.1-mevsuzxzo47g33rihi4t7fdohp3ga7gk:/home/nils/Research/spack/opt/spack/linux-antergosrolling-x86_64/gcc-7.2.0/blaze-3.2-mnkglifq5s6ib5ltbvil4xt66fekqq2l"
+TimeoutStartSec=0
+
+[Install]
+WantedBy=default.target
+{% endhighlight %}
+
+The important part is the `Environment=SSH_AUTH_SOCK` on line --
+this ensures that you have access to your SSH agent from within
+the Emacs session. Without this line
+you will need to re-enter your SSH key's password each time you use it.
+Lines 14-18 add to various `PATH`s that I need for my work. Once you've
+created the file run
+`systemctl  --user enable emacsd.service && systemctl --user start emacsd.service`
+to start the backgrounded Emacs process and also set it to start at login.
+The Emacs daemon can be restarted using
+`systemctl --user restart emacsd.service`.
+
+### Ivy and Swiper
+
+I've switched to using [Ivy][ivy] for fuzzy matching instead of
+[Helm][helm]. Ivy is quite a bit smaller than Helm because it only
+serves as the underlying completion engine that other packages
+plug in to. The important thing to note is that I also use [ripgrep][ripgrep]
+for faster searching. If you do not or cannot install
+ripgrep then just remove any lines referring to `ripgrep` or `rg` from my
+init file. In the screencast below I show the use of Ivy's fuzzy matching when
+opening a file, as well as when using `project-find-file`. For ease-of-use
+I've mapped `C-x M-f` to `project-find-file`. Because of this I haven't
+really found a strong reason to use [projectile][projectile].
+
+<br>
+<img src="/assets/images/emacs_ide2_ivy.gif" alt="Ivy Example" align="middle">
+<br>
+
+Another useful plugin that builds on top of Ivy is [swiper][swiper], which
+replaces the standard search in Emacs. Rather than having to manually jump
+through the file, swiper shows all the matches in an extended minibuffer. This
+means that forward and reverse search are effectively the same and both
+can be remapped to swiper.
+
+<br>
+<img src="/assets/images/emacs_ide2_swiper.gif" alt="Swiper Example" align="middle">
+<br>
+
+
+### Navigating the Code Base With Tags
+
+Similar to RTags, there are [CTags][ctags], and [GTags][gtags]. These allow
+you to rapidly navigate the code base by jumping to the definition of a class
+or function. For example, say I want to see the definition of a function
+that's used in the code I'm looking at. Well, I can jump to the definition
+by pressing `M-.`. Once I've
+understood what I needed to from the function definition I can jump back
+to where I was previously by pressing `M-,`. Similarly, `M-t` shows all the
+occurrences of the word-at-point in the tags database. Hopefully this makes
+the use case for tags quite clear. What I wanted was a fast-parsing, and
+accurate tag implementation. After trying around five different ones
+I finally settled on [Universal-CTags][uctags] as the generator for the tags
+database. The first step is installing [Universal-CTags][uctags] on your
+system. You should verify you have Universal-CTags installed and not some
+other implementation by running `ctags --version`.
+
+For navigating the tags inside Emacs I use [counsel-etags][counsel-etags],
+which works really well despite being quite young. My configuration
+triggers a rebuild of the tags database every time you save a file in the
+project and 3 minutes have elapsed since the last time a rebuild was
+triggered. This ensures
+navigation to new classes and functions is possible. Note that
+as of this writing I override the provided auto-update function with one
+that is capable of using wildcards in both file names and directory names.
+By default only file names support wild cards. Below is a demo of the
+source code navigation.
+
+<br>
+<img src="/assets/images/emacs_ide2_tags.gif" alt="CTags Example" align="middle">
+<br>
+
+### Pretty Code With ClangFormat
+
+If you aren't using [ClangFormat][clang-format] you should very seriously
+consider it. Here's my simple Emacs config for it:
+
+{% highlight elisp linenos %}
+;; clang-format can be triggered using C-c C-f
+;; Create clang-format file using google style
+;; clang-format -style=google -dump-config > .clang-format
+(require 'clang-format)
+(global-set-key (kbd "C-c C-f") 'clang-format-region)
+{% endhighlight %}
+
+### Syntax Highlighting for C++11 and Beyond
+
+The builtin syntax highlighting doesn't do a very good job when it comes
+to modern C++. Luckily there's a remedy:
+[modern-cpp-font-lock][modern-cpp-font-lock]. Configure using:
+
+{% highlight elisp linenos %}
+(require 'modern-cpp-font-lock)
+(modern-c++-font-lock-global-mode t)
+{% endhighlight %}
+
+### YouCompleteMe - Fast Code Completion
+
+The two most important parts of code completion speed and accuracy.
+If either of these is not outstanding then the code
+completion will not be useful to a seasoned developer. A third criteria that
+is important for me is that the code completion engine uses less CPU resources
+than compiling the code would, otherwise I might as well just use the compiler
+to give me suggestions. I also want to be able to use code completion when
+I'm traveling and low CPU usage means better battery life. The best
+solution that I've found is the [YouCompleteMeDaemon][ycmd] with
+[emacs-ycmd][emacs-ycmd]. ycmd uses libclang for finding completions and so
+is accurate and fast, even with large projects. Additionally, it only
+parses the file you currently have open, unlike some completion frameworks
+that would re-parse the entire project.
+
+First you must install the [ycmd][ycmd] server, for which instructions are
+available [here][ycmd]. Next install the [emacs-ycmd][emacs-ycmd]
+package in Emacs, which hooks into [company][company] and
+[flycheck][flycheck] to provide completions and on-the-fly syntax
+checking. In the screencast below I show the use of the code completion and
+syntax checking features together to output the size of a container to
+standard out. The error message that appears at the end in the minibuffer
+tells us that the `<iostream>` header was not included.
+
+<br>
+<img src="/assets/images/emacs_ide2_ycmd.gif" alt="ycmd Example" align="middle">
+<br>
+
+In my init file I have separated the setup of ycmd, company, and flycheck
+into three different sections for easier maintenance in the future.
+With ycmd, company, and flycheck I get really fast and really accurate completions
+with my CPU idling most of the time, so I also get great battery life.
+Finally, mission accomplished!
+
+### YouCompleteMe Tips
+
+I use YCMD for a fairly complex C++14 project that uses many new language
+features and has a lot of class and function templates. To get really good
+code completion I've developed a python script for YCMD that very
+aggressively finds compilation flags for header files. The reason such a
+script is necessary at all is because a `compile_commands.json` file does
+not contain any compilation flags for header files, since they aren't
+compiled. I've shared the script as a [Gist here][ycmd-config-gist].
+The script must be placed at `~/.ycm_extra_conf.py` for the Emacs
+configuration to find and use it. If you do not want to use the
+script, then remove the lines
+{% highlight elisp linenos %}
+(set-variable 'ycmd-extra-conf-whitelist '("~/.ycm_extra_conf.py"))
+
+(set-variable 'ycmd-global-config "~/.ycm_extra_conf.py")
+{% endhighlight %}
+from the
+Emacs init file.
+
+Another thing to be aware of is that getting YCMD, or more specifically
+libclang, to play nicely with precompiled headers took some work. See
+[this issue][ycmd-pch-issue] on the YCMD GitHub for details. The short
+story is that if you use precompiled headers you might have to build
+YCMD using your system libclang by passing `--system-libclang` to
+the build script.
+
+### Git Source Code Management
+
+I also perform all my git operations inside Emacs using [magit][magit],
+and use [git-gutter][git-gutter] to show me which lines I've changed in
+the current file. Magit is extremely feature rich and I highly recommend
+reading through the [lengthy documentation][magit-docs]. You will very
+quickly save the time you invest by no longer typing out long git
+commands. There are also screencasts available on the magit site, so I
+won't show any here.
+
+### Fast Startup Time
+
+*Note:* This section was added on Feb. 10, 2018. The functionality of the
+configuration does not change, but it is faster to load.
+
+I don't do much python development and I especially try to avoid notebooks, but
+sometimes I have no choice. I find web browsers to be a terrible
+development environment and so I've started using [EIN][ein] for editing
+Jupyter notebooks. This makes the process much more tolerable. Unfortunately,
+starting a Jupyter server when starting Emacs takes ~2.5s, which is a long
+time. I use an Emacs server on my development machine, but when working on a
+supercomputer I typically don't, or still have to have it load when I log in. I
+decided to do some research and use [`use-package`][use-package] to speed up the
+load time. The result is that my Emacs startup time is down to ~0.6s from
+~4.7s without loss of functionality. While I'd love to have it be 0.1s, 0.6s
+makes the startup time very tolerable. I won't say more about this other than
+that I've shared my most recent version of my `~/.emacs.el` file in the
+[Gist][init-file-gist].
+
+### My init File/Installation
+
+I've shared my init file as a [Gist here][init-file-gist]. The only things
+you will need to do to have it completely replace your current configuration
+are install [ycmd][ycmd] and change the path to where you installed ycmd
+(search for `/home/nils/Research/ycmd` in the `.emacs.el` file). To ensure
+Emacs loads the new init file make sure that you do not have an
+`~/.emacs` or `~/.emacs.d/init.el` file. Make sure you have an internet
+connection when you start Emacs because it will download
+and install any missing or outdated packages automatically for you. If
+everything is correct you should not receive any errors or warnings in
+the `*Messages*`, `*warnings*`, and `*ycmd-server*` buffer.
+
+I'll now provide a step-by-step guide to installing my configuration.
+
+Prerequisites:
+
+- Emacs 24.5 or newer
+- [YCMD][ycmd] and its requirements (e.g. glibc version 2.14 or newer)
+- [ripgrep][ripgrep] (optional, remove from init if you don't have it)
+
+Installation:
+
+1. Make a copy of your `~/.emacs` or `~/.emacs.el`, as well as `~/.emacs.d`
+2. Delete `~/.emacs`, `~/.emacs.el`, or `~/.emacs.d/init.el`, whichever you use
+3. Copy the [Gist][init-file-gist] to `~/.emacs.el`
+4. Start Emacs. If Emacs does not start installing packages immediately press
+`M-x` and run `list-packages`, then close and start Emacs again.
+5. If any packages fail to install automatically, press `M-x` and run
+`list-packages` to install them manually, though most will install
+automatically.
+6. Edit `~/.emacs.el` replacing `/home/nils/Research/ycmd/ycmd` with the path
+to wherever you've chosen to install ycmd and restart Emacs.
+7. Copy the [ycmd Gist][ycmd-config-gist] to `~/.ycm_extra_conf.py`
+
+Note: On one machine I installed this configuration on I had to comment out
+the `(require 'yasnippet)` section, start Emacs and let everything install,
+then uncomment that section and restart Emacs.
+
+### Summary
+
+In this post I gave a fairly brief overview of the major changes I've
+made to my Emacs configuration.
+I've put in a fair amount of effort into cleaning up and organizing my
+Emacs init file, so hopefully sharing it [here][init-file-gist]
+is enough to get you started. If not, please leave a comment on
+what you want an explanation on and I'll update this post with more
+information.
+
+[clang-format]: https://clang.llvm.org/docs/ClangFormat.html
+[company]: https://github.com/company-mode/company-mode
+[counsel-etags]: https://github.com/redguardtoo/counsel-etags
+[ctags]: https://github.com/universal-ctags/ctags
+[emacs-ycmd]: https://github.com/abingham/emacs-ycmd
+[flycheck]: http://www.flycheck.org/en/latest/
+[git-gutter]: https://github.com/syohex/emacs-git-gutter
+[gtags]: https://www.gnu.org/software/global/
+[helm]: https://github.com/emacs-helm/helm
+[init-file-gist]: https://gist.github.com/nilsdeppe/7645c096d93b005458d97d6874a91ea9
+[ivy]: https://github.com/abo-abo/swiper
+[magit]: https://magit.vc/
+[magit-docs]: https://magit.vc/manual/magit.html
+[modern-cpp-font-lock]: https://github.com/ludwigpacifici/modern-cpp-font-lock
+[projectile]: https://github.com/bbatsov/projectile
+[ripgrep]: https://github.com/BurntSushi/ripgrep
+[rtags]: https://github.com/Andersbakken/rtags
+[swiper]: https://github.com/abo-abo/swiper
+[uctags]: https://github.com/universal-ctags/ctags
+[use-package]: https://github.com/jwiegley/use-package
+[ycmd]: https://github.com/Valloric/ycmd
+[ycmd-config-gist]: https://gist.github.com/nilsdeppe/449f1bd4920b7f50b6f05d8f7fda4f6f
+[ycmd-pch-issue]: https://github.com/Valloric/ycmd/issues/892
+[ein]: https://github.com/millejoh/emacs-ipython-notebook
+[use-package]: https://github.com/jwiegley/use-package
