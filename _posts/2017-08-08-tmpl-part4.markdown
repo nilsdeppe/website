@@ -1,0 +1,305 @@
+---
+layout: post
+title:  "TMP Part 4 - Recursion Free Tuple Iteration"
+date:   2017-08-25 00:05:00
+categories: c++ cpp template metaprogramming typelist brigand
+comments: True
+permalink: posts/tmpl-part4
+shortUrl: https://goo.gl/3ebydh
+is_post: true
+---
+
+This post is a follow up to
+[iterating over tuples]({% post_url 2017-08-07-tmpl-part3 %}),
+but this time we do not use runtime or compile time recursion, so the
+resulting code is cleaner and faster. There are two different types of
+iteration, one where you keep a "state" and one where you do not. By
+state I mean, for example, the partial sum of all elements  already
+processed in a reduction, accumulation, or fold.
+[Parameter pack](http://en.cppreference.com/w/cpp/language/parameter_pack)
+expansion is the fastest and preferred method of iteration. However,
+it has the drawback that it cannot keep state at compile time (or at least
+I haven't figured out how, yet). That means parameter pack expansion works well
+in `transform`s at compile time but not `fold`s. Interestingly enough, we can
+use parameter pack expansion for runtime iteration with state. This is something
+I have spent a fair amount of time thinking about and I now have a solution I'm
+very happy with. Let's dive in!
+
+### A Tuple Fold
+
+We have a `std::tuple` and want to iterate over the elements of it by performing
+either a fold or a transform. These are distinct because, for a transform, the
+current index of the iteration must be passed as a template parameter. I will
+come back to this important point in a bit. First, let's implement a fold
+and a counted fold. For this section I will use C++14 because it makes the
+discussion and code more concise, but everything can readily be implemented
+in C++11 by removing `constexpr` in some places and implementing an
+`integer_sequence`. The code I show here is shared on
+[GitHub](https://github.com/nilsdeppe/template-metaprogramming-tutorials).
+
+{% highlight cpp linenos %}
+namespace tuple_impl_detail {
+template <bool ReverseIteration, typename... Elements, typename N_naryOp,
+          typename... Args, size_t... Is>
+constexpr inline void tuple_fold_impl(
+    const std::tuple<Elements...>& tupull, N_naryOp&& op,
+    std::index_sequence<Is...> /*meta*/,
+    Args&... args) noexcept(
+        noexcept(static_cast<void>(std::initializer_list<char>{
+    (static_cast<void>(
+         op(std::get<(ReverseIteration ? sizeof...(Elements) - 1 - Is : Is)>(
+                tupull),
+            args...)),
+     '0')...}))) {
+  constexpr size_t tuple_size = sizeof...(Elements);
+  static_cast<void>(std::initializer_list<char>{
+      (static_cast<void>(
+           op(std::get<(ReverseIteration ? tuple_size - 1 - Is : Is)>(tupull),
+              args...)),
+       '0')...});
+}
+} // namespace tuple_impl_detail
+
+template <bool ReverseIteration = false, typename... Elements,
+          typename N_naryOp, typename... Args>
+constexpr inline void tuple_fold(
+    const std::tuple<Elements...>& tuple, N_naryOp&& op,
+    Args&&... args) noexcept(noexcept(tuple_impl_detail::
+                                          tuple_fold_impl<ReverseIteration>(
+                                              tuple, std::forward<N_naryOp>(op),
+                                              std::make_index_sequence<
+                                                  sizeof...(Elements)>{},
+                                              args...))) {
+  tuple_impl_detail::tuple_fold_impl<ReverseIteration>(
+      tuple, std::forward<N_naryOp>(op),
+      std::make_index_sequence<sizeof...(Elements)>{}, args...);
+}
+{% endhighlight %}
+
+There's a lot happening here, so I'll go over it piece by piece.
+First, let's look at the arguments passed to `tuple_fold`. We take a const
+reference to a `std::tuple` since we aren't modifying its state, then we
+take an invokable (with some constraints that I'll explain), and finally
+a list of arguments by forwarding references. Because the call to `op`s
+may have a different first argument for each iteration `op` must be a function
+object with a call operator template, or a generic lambda in C++14. In the case
+that all elements are of the same type you could also pass a function. Next,
+taking `args...` by forwarding
+reference is required so that an rvalue reference can be passed to `tuple_fold`.
+Finally, the first template parameter of `tuple_fold` controls whether we iterate from
+left to right (the default) or from right to left (`ReverseIteration == true`).
+Let's ignore the `noexcept` business until later. 
+
+### Indexing and Evaluation Order
+
+Okay, now that we know what the function receives as arguments and parameters,
+let's look at the body. The only thing there is a call to the implementation,
+since in order to index the `std::tuple` we need a parameter pack of `size_t`s
+ranging from 0 to `sizeof...(Elements)-1`. C++14 has the handy
+[`std::index_sequence`](http://en.cppreference.com/w/cpp/utility/integer_sequence)
+and
+[`std::make_index_sequence`](http://en.cppreference.com/w/cpp/utility/integer_sequence)
+to help us with generating such parameter packs.
+`std::make_index_sequence` takes a single template parameter `N` and generates
+a `std::index_sequnece` from `0` to `N - 1`. The helper function is then able
+to match a parameter pack to the `std::index_sequence`, which is the parameter
+pack we need to index the `std::tuple`. This parameter pack is named `Is` in
+`tuple_fold_impl`. We can now call `std::get<Is>(tupull)...` to generate
+`std::get<0>(tupull), std::get<1>(tupull)`, etc. In other words, being able to
+generate a comma separated list of the `std::get` calls
+allows us to apply `op` to all elements in a tuple using
+`op(std::get<Is>(tupull), args...)...`. Hopefully this makes some sense.
+
+Now we need to figure out how to guarantee the runtime order of evaluation
+of the calls. Luckily `std::initializer_list` has the wonderful property of
+guaranteeing left-to-right evaluation. However, we need to create the
+`initializer_list` with a uniform type, so let's just choose a `char` (it's
+only 1 byte in size). We can use the comma operator to discard the result of
+the `op(std::get<Is>(tupull), args...)` calls. However, we need to make
+sure that the result of the `op` call is `void`. Otherwise, if the user
+overloaded the comma operator for `char` and the return type of `op`, we will
+have unexpected code being executed as part of our `tuple_fold` implementation.
+With all of this is mind we can almost
+write line 14 of the above code block. The last `static_cast<void>` around the
+`initializer_list` on line 14 is there to avoid unused
+variable warnings, and `(ReverseIteration ? tuple_size - 1 - Is : Is)` controls
+left-to-right and right-to-left evaluation order.
+
+### Exception Handling
+
+Phew, that was a lot, but we are not done yet! What about the `noexcept` stuff?
+Well, we want our `tuple_fold` function to be `noexcept` if all the calls
+to `op` are noexcept. Unfortunately, `noexcept` doubles as a specifier
+and as an operator to calculate whether a code block is `noexcept`.
+This is why we have `noexcept(noexcept(....))`: the inner `noexcept` is a call
+to the `noexcept` operator, while the outer is the `noexcept` specifier on a
+function taking the returned boolean of the `noexcept` operator. I'll note
+briefly that for `tuple_counted_fold` you pass the `Is` as the second parameter
+to the invokable `op` (I'll go over why this isn't a transform below).
+
+So we've done quite a bit of work here, and the result is extremely dense code.
+What is so awesome about `tuple_fold`? Well the thing to appreciate is that
+we are iterating over the `std::tuple` *without any recursion*. This means we
+can operate on arbitrary large tuples and never encounter compile time or
+runtime recursion depth limits. Unfortunately, if you are using the `std::tuple`
+implementation in stdlibc++ this won't help you all that much because their
+`std::tuple` implementation is recursive. However, with libcxx you can go wild
+and iterate over tuples with thousands of elements. I've actually found a use
+for this, but that's for another time.
+
+Now, I lied a little bit when I said the implementation is completely compile
+time recursion free. The generation of the `index_sequence` requires recursion.
+However, even compile time recursion can be improved with a technique called
+fast tracking (more on this in a different post). In practice, creating an
+`index_sequence` of two hundred thousand elements takes ~30 seconds with GCC
+7.1.1 and libstdc++. With Clang 4.0.1 and libstdc++ the compile time is about
+the same. However, with Clang and libcxx it compiles instantaneously. The reason
+is that Clang has a compiler intrinsic that can generate `index_sequence`s
+extremely quickly and libcxx takes advantage of this. Using the compiler
+builtin an `index_sequence` of 200,000 elements is generated in under a second.
+If we intentionally fall back to the TMP method of generating the
+`index_sequence`, libcxx is still a factor of roughly two and a half faster than
+libstdc++.
+
+### Tuple Transform
+
+Why did I call the above function a fold? The reason is because we are
+unable to index a second tuple inside `op`, which is necessary for a transform.
+All we are able to do is some sort of reduction operation, so `tuple_fold` is
+a `std::tuple` implementation of `std::accumulate` (feel free to rename
+the function to `tuple_accumulate` if you prefer). In order to perform a
+transform we must pass the current `Index` as a template parameter to the
+invokable. At first glance it looks like this means that `tuple_transform`'s
+`op` must be a function object with a call operator template whose first
+template parameter is a non-type template parameter of type `size_t`, the current
+`Index`. With
+[this](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0428r0.pdf)
+proposal you will also be able to use lambdas, e.g.
+`[]<size_t Index>(const auto& element, ...) {...}`. However, we are able to work
+around this issue by having a generic lambda that takes the current element as
+its first argument and a `std::integral_constant<size_t, Index> index` as its
+second argument. We are then able to get the
+`Index` at compile time using `decltype(index)::value`. I'll show an example
+below, but for now here is the implementation:
+
+{% highlight cpp linenos %}
+namespace tuple_impl_detail {
+template <bool ReverseIteration, typename... Elements, typename N_naryOp,
+          typename... Args, size_t... Is>
+constexpr inline void tuple_transform_impl(
+    const std::tuple<Elements...>& tupull, N_naryOp&& op,
+    std::index_sequence<Is...> /*meta*/,
+    Args&... args) noexcept(
+        noexcept(static_cast<void>(std::initializer_list<char>{
+    (static_cast<void>(op(
+         std::get<(ReverseIteration ? sizeof...(Elements) - 1 - Is : Is)>(
+             tupull),
+         std::integral_constant<
+             size_t, (ReverseIteration ? sizeof...(Elements) - 1 - Is : Is)>{},
+         args...)),
+     '0')...}))) {
+  constexpr size_t tuple_size = sizeof...(Elements);
+  static_cast<void>(std::initializer_list<char>{(
+      static_cast<void>(op(
+          std::get<(ReverseIteration ? tuple_size - 1 - Is : Is)>(tupull),
+          std::integral_constant<size_t, (ReverseIteration ? tuple_size - 1 - Is
+                                                           : Is)>{},
+          args...)),
+      '0')...});
+}
+}  // namespace tuple_impl_detail
+
+template <bool ReverseIteration = false, typename... Elements,
+          typename N_naryOp, typename... Args>
+constexpr void tuple_transform(
+    const std::tuple<Elements...>& tuple, N_naryOp&& op,
+    Args&&... args) noexcept(noexcept(tuple_impl_detail::
+                                          tuple_transform_impl<
+                                              ReverseIteration>(
+                                              tuple, std::forward<N_naryOp>(op),
+                                              std::make_index_sequence<
+                                                  sizeof...(Elements)>{},
+                                              args...))) {
+  tuple_impl_detail::tuple_transform_impl<ReverseIteration>(
+      tuple, std::forward<N_naryOp>(op),
+      std::make_index_sequence<sizeof...(Elements)>{}, args...);
+}
+{% endhighlight %}
+
+As you can see, the code is nearly identical to `tuple_fold` except that now
+`op` is called using
+`op(std::get<Is>(tupull), std::integral_constant<size_t, Is>{}, ...)` so
+that the second argument can be used for indexing a `std::tuple` inside a
+generic lambda. In the C++11 case you are restricted to function objects
+since generic lambdas are a C++14 feature, but other than that the code
+is the same.
+
+### Example Use Cases
+
+Now let's look at some toy examples of how to use the above functions. First,
+let's look at `tuple_fold`
+{% highlight cpp linenos %}
+const auto my_tupull = std::make_tuple(2, 7, -3.8, 20.9);
+double sum_value = 0.0;
+tuple_fold(my_tupull,
+           [](const auto& element, double& state) { state += element; },
+           sum_value);
+std::cout << "Expected: 26.1   Computed: " << sum_value << "\n";
+
+sum_value = 0.0;
+tuple_counted_fold(my_tupull,
+                   [](const auto& element, size_t index, double& state) {
+                    if (index != 1) {
+                      state += element;
+                    }
+                   },
+                   sum_value);
+std::cout << "Expected: 19.1   Computed: " << sum_value << "\n";
+{% endhighlight %}
+Of course, in this example you could have just used a `std::vector<double>`
+as the container instead of a `tuple`.
+However, if you need to iterate over different classes and call a member
+function on each, the solution is less obvious. One method is to have all
+classes derive from an abstract base class, and then have a `vector` of
+pointers to abstract base classes. This works, but does limit what you can do
+at compile time. I've found that avoiding the use of abstract base classes leads
+to clearer and safer code. The objects of different types are stored in a
+`tuple`, over which one can then iterate using either `tuple_fold` or
+`tuple_transform`. An example of this approach is in the `CoordinateMap`
+class in [SpECTRE](https://github.com/sxs-collaboration/spectre).
+
+Now for an example of `tuple_transform`,
+{% highlight cpp linenos %}
+const auto my_tupull = std::make_tuple(2, 7, -3.8, 20.9);
+std::decay_t<decltype(my_tupull)> out_tupull;
+tuple_transform(my_tupull,
+                [](const auto& element, auto index, auto& out_tuple) {
+                  constexpr size_t index_v = decltype(index)::value;
+                  std::get<index_v>(out_tuple) = -element;
+                },
+                out_tupull);
+std::cout << "Expected: (-2, -7, 3.8, -20.9)   Computed: " << out_tupull
+          << "\n";
+{% endhighlight %}
+In order to use the `index` at compile time for indexing the `out_tuple`
+we must get its type (`std::integral_constant`), and then assign the
+member variable `value` to a constexpr variable. Other than that,
+`tuple_transform` and `tuple_fold` behave very similarly and there is not much
+to say.
+
+### Summary
+
+We used parameter pack expansion and `std::initializer_list` to implement
+a non-recursive `tuple_fold` and `tuple_transform` for both C++11 and C++14.
+The main takeaway is
+that using parameter pack expansion is the preferred way to do iteration
+whenever possible because this trivially avoids recursion depth problems
+and is faster than function template and class template instantiation.
+As we saw in the previous post, recursive iteration over a tuple requires
+using [SFINAE](http://en.cppreference.com/w/cpp/language/sfinae), which is
+extremely slow. See 9:20 of
+[Odin Holmes's talk](https://www.youtube.com/watch?v=EtU4RDCCsiU) for some
+insight on performance of different TMP techniques. Finally, I have shared
+the fully implemented version on
+[GitHub](https://github.com/nilsdeppe/template-metaprogramming-tutorials)
+under the Boost License, so please, feel free to use the code.
