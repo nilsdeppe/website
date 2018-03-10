@@ -2,11 +2,9 @@
 title: Nils Deppe
 email: nilsdeppe@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  I hope to share some of my excitement and knowledge of physics and
-  scientific computing here. My interests are general and numerical relativity,
-  computational techniques for solving partial differential equations
-  like those arising in Einstein's theory of gravity and science in general.
-  
+  I hope to share my excitement and knowledge of physics, C++, metaprogramming,
+  high performance computing, and scientific computing here.
+
 baseurl: "" # the subpath of your site, e.g. /blog/
 # the base hostname & protocol for your site
 url: "http://nilsdeppe.com"
