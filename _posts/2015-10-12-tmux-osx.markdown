@@ -1,0 +1,167 @@
+---
+layout: post
+title:  "Terminal Multiplexer (tmux) on OSX"
+date:   2015-11-07 15:00:38
+categories: programming general
+comments: True
+permalink: posts/tmux-basics
+shortUrl: http://goo.gl/sQYcO4
+is_post: true
+image: http://tmux.github.io/ss-tmux2.png
+description: >
+             I recently started using [tmux][1] and have found that it has improved my
+             workflow. Being an Emacs ([Aquamacs][2]) user most of my work is done inside
+             Emacs with little to no need for a separate terminal. However, much of my
+             work requires connecting to remote systems via SSH and so I'd often have...
+---
+I recently started using [tmux][1] and have found that it has improved my
+workflow. Being an Emacs ([Aquamacs][2]) user most of my work is done inside
+Emacs with little to no need for a separate terminal. However, much of my
+work requires connecting to remote systems via SSH and so I'd often have
+several tabs open connected to different servers. Of course if I switched to
+a different desktop these tabs would no longer be there, which was rather
+inconvenient. [tmux][1] has made this aspect and my entire terminal experience
+much better. Even if you think you don't do much, I recommend trying out
+[tmux][1].
+
+I would recommend installing tmux via [brew][3]. Once you have installed
+brew open up the terminal (or [iTerm][4]) and run `brew doctor` to ensure
+everything is okay. You should fix any issues reported. Then run `brew update`
+and finally `brew install tmux` to install tmux. You should also (essentially
+non-optional) install the [tmux OSX pasteboard][5] by running
+`brew install reattach-to-user-namespace` (not that this may not be
+needed on OSX 10.10 or newer). If everything went correctly
+running `tmux` should work. Then type `exit` in tmux and we will start
+customizing things.
+
+The first thing you will want to do is install the plugin manager from
+[here][6]. To do this run
+`git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm`
+in your terminal. Now you will need to edit the tmux configuration file,
+`~/.tmux.conf` using your favorite editor (I recommend [Aquamacs][2]).
+
+{% highlight bash %}
+# reload ~/.tmux.conf using PREFIX r
+bind r source-file ~/.tmux.conf \; display "Reloaded!"
+
+# Use non-Emacs shortcut for sending prefix
+set -g prefix M-`
+bind M-` send-prefix
+
+# Plugin manager:
+set -g @plugin 'tmux-plugins/tpm'
+# The sensible plugin
+set -g @plugin 'tmux-plugins/tmux-sensible'
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
+{% endhighlight %}
+
+The first command allows us to reload the config file using `PREFI + r`. The
+next two commands set the `PREFIX` to meta-prime, which, if you have used
+screen, is the equivalent of `C-a`. The idea is that you "tell" tmux you want
+it to interpret the following keypresses as commands. To install the plugins
+start tmux and run `PREFIX + I`. Once this is complete tmux will tell
+you to press the
+escape key to get back to the shell. Note that we also installed the
+plugin [sensible][7] which offers some "tmux options that should be
+acceptable to everyone."
+Of course you are welcome to remove the plugin or customize the settings to
+whatever you prefer. If you're using OSX and had to install
+`reattach-to-user-namespace` then you will want to install `sensible`,
+which I included in the above config entry.
+
+Now that we have a good core we can start with more plugins and some
+customization. Since I use a MacBook I like to have the battery percentage
+displayed at the bottom. I know, I know, it's also in the menu bar, but hey,
+I spend more time looking at the bottom of the terminal screen than the
+menu bar. The plugin I used is described [here][8]. Because I run a
+decent number of simulations on my computer I also like to
+monitor the CPU usage, for which I use [this][9] plugin.
+To install both of these, add the following to your `.tmux.conf` file
+and press `PREFIX + I`
+{% highlight bash %}
+# Battery status indicator
+set -g @plugin 'tmux-plugins/tmux-battery'
+# CPU monitoring
+set -g @plugin 'tmux-plugins/tmux-cpu'
+{% endhighlight %}
+Below is a sample of a configuration for the
+status bar that displays the current session name,
+window and pane number, date and time,
+CPU and battery, as well as a centered list of window names. After
+adding these you will need to run `PREFIX + r` to reload the config
+file.
+{% highlight bash %}
+set-option -g status-utf8 on
+set -g status-justify centre
+# grey status bar with cyan writing
+set-option -g status-bg colour235
+set-option -g status-fg cyan
+set-option -g status-interval 5
+set-option -g status-left-length 30
+# [Session Name:Window Index:Pane Index]
+set-option -g status-left '[#[fg=green]#S#[fg=cyan]:#[fg=yellow]#I#[fg=cyan]:#[fg=magenta]#P#[fg=cyan]]'
+set -g status-right 'B:#{battery_percentage} #{battery_remain} C:#{cpu_percentage} | %a %h-%d %H:%M '
+{% endhighlight %}
+
+
+Now that we have a basic environment configured with commonly needed information
+readily available to us we will worry about how to have tmux remember our
+sessions through reboots. Ideally I'd like to have my environment completely
+restored after a reboot. To this end I use [tmux-resurrect][10] and
+[tmux-continuum][11]. To install and configure these add the following to
+your `.tmux.conf` and run `PREFIX + I`.
+{% highlight bash %}
+# auto save and auto restore sessions
+# Load the main plugins
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+# Enable restore last environment on start
+set -g @continuum-restore 'on'
+# Start tmux on boot
+set -g @continuum-boot 'on'
+set -g @continuum-boot-options 'iterm'
+{% endhighlight %}
+
+
+While this is all handy there are other plugins that are very useful.
+Two of my favourites are [copycat][12] and [yank][13]. These make
+copying text from the terminal easy by having predefined regex searches
+and allowing custom regex searches. Once you have highlighted the text
+you want you can use `y` to copy, `SHIFT + y` to insert selection into
+the command line, and `M + y` to copy to clipboard and insert into the
+command line. If you use [open][14] you can also open the highlighted
+file or URL using `o` or `C + o` for opening in `$EDITOR`. To install
+these plugins add the following to your config file and run `PREFIX + I`.
+{% highlight bash %}
+# copycat plugin
+set -g @plugin 'tmux-plugins/tmux-copycat'
+# tmux-yank plugin
+set -g @plugin 'tmux-plugins/tmux-yank'
+# tmux-open, o opens, C-o in $EDITOR
+set -g @plugin 'tmux-plugins/tmux-open'
+{% endhighlight %}
+
+
+Finally, there is a cheat sheet available [here][15]. You can find
+sample configuration files that I found helpful [here][16] and
+[here][17].
+
+[1]: http://tmux.github.io/
+[2]: http://aquamacs.org/
+[3]: http://brew.sh/
+[4]: https://www.iterm2.com/
+[5]: https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard/
+[6]: https://github.com/tmux-plugins/tpm
+[7]: https://github.com/tmux-plugins/tmux-sensible
+[8]: https://github.com/tmux-plugins/tmux-battery
+[9]: https://github.com/tmux-plugins/tmux-cpu
+[10]: https://gist.github.com/spicycode/1229612
+[11]: https://github.com/tmux-plugins/tmux-continuum
+[12]: https://github.com/tmux-plugins/tmux-copycat
+[13]: https://github.com/tmux-plugins/tmux-yank
+[14]: https://github.com/tmux-plugins/tmux-open
+[15]: https://gist.github.com/andreyvit/2921703
+[16]: https://gist.github.com/spicycode/1229612
+[17]: http://zanshin.net/2013/09/05/my-tmux-configuration/
