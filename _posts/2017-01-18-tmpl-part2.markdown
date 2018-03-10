@@ -1,0 +1,305 @@
+---
+layout: post
+title:  "Template Metaprogramming Part 2"
+date:   2017-01-29 12:00:00
+categories: c++ cpp template metaprogramming typelist brigand
+comments: True
+permalink: posts/tmpl-part2
+shortUrl: https://goo.gl/LdRg45
+is_post: true
+---
+
+We continue on our adventure of template metaprogramming. We explore
+the concept of compile-time data structures such as a typelist, map,
+and a set. This is done using the [brigand][brigand] template
+metaprogramming library (TMPL). However, there are several other
+options available. I outline them in a table below along with the C++
+standard each requires. Giving credit where it is due, the original
+inspiration for some these libraries were blog posts by
+[Eric Niebler][niebler] and [Peter Dimov][dimov].
+
+| Library | C++ Support Required | Comments |
+| ------------- |:-------------:|:-----:|
+| [Boost.MPL][mpl] | C++03 | Only use if C++11 is not supported |
+| [brigand][brigand] | C++11 | Personal preference, fast, lightweight |
+| [metal][metal] | C++14 | |
+| [Boost.Hana][hana] | C++14 | |
+
+
+In [part one]({% post_url 2017-01-14-tmpl-part1 %}) of this series
+of posts on TMP we explored the idea of `if` statements at compile
+time. In order to truly study loops in metaprogramming we need some
+sort of "data structure". I put this in quotes because our data really
+is types, or as I previously referred to them, metavariables. Maybe
+the term "metadata structures" is appropriate. Regardless of what we
+call them, we need containers to store our metavariables.
+
+The first, and simplest container we will look at is a typelist. Here
+is what a typelist looks like:
+
+{% highlight cpp linenos %}
+template <typename... Ts>
+struct typelist {};
+{% endhighlight %}
+
+Okay, great, right? If you're like me then you might be confused on
+exactly what good this does us. Well, `typelist` is a variadic
+template, which means it can take any number of types as template
+parameters. For example, `typelist<int, bool, char>` and
+`typelist<double, float, std::vector<double>>` are two typelists. So
+the typelist stores the types as template parameters. Alright, cool,
+so I can create a metavariable by writing `using my_list =
+typelist<int, bool, char>;`, that's great but how do I _use_ this?
+Well for that we need
+to write some helper metafunctions. Let's compile a list of things we
+might want to do with a typelist. For inspiration let's look at the
+member functions of [std::vector][cppref_vector]. We probably want the
+following:
+
+- `at`
+- `front`
+- `back`
+- `size`
+- `clear`
+- `erase` (both at a specific location and all occurrences of a
+    particular type)
+- `push_back`
+- `pop_back`
+- `push_front`
+- `pop_front`
+- `swap`
+
+We won't cover all of these but we will get through enough to make you
+feel comfortable using typelist as a metadata structure.
+
+Because the above ordering is not very pedagogical let's start with
+`size`. How would we implement such a thing? Well what we want to do
+is get the number of template parameters in the variadic template
+`typelist` so we should be able to use the `sizeof...()` operator to
+get the size of the parameter pack `Ts`. One approach then is to
+create a `static constexpr` member variable as follows,
+
+{% highlight cpp linenos %}
+template <typename... Ts>
+struct typelist {
+  static constexpr std::size_t size = sizeof...(Ts);
+};
+{% endhighlight %}
+
+then we can get the size of a `typelist` by doing
+`list::size()`. However, in TMP we want to use metafunctions that
+return types, not values. Since `list::size()` returns a value let's
+look for another option. One method would be simply to use a type
+alias,
+
+{% highlight cpp linenos %}
+template <typename... Ts>
+struct typelist {
+  using size = std::integral_constant<std::size_t, sizeof...(Ts)>;
+};
+{% endhighlight %}
+
+Now we can retrieve the size of a `typelist` using `using list_size =
+typename my_list::size;` Okay, that seems pretty good, but can we be
+more generic? Having the `size` member can only work for typelists and
+also complicates our implementation of a typelist. So how can we be
+more generic? What we need is a metafunction that takes a typelist as
+its argument (denoted by `Seq`, short for sequence, in the code
+below) and returns the size in a `std::integral_constant`. Something
+like
+
+{% highlight cpp linenos %}
+template <typename Seq>
+struct size {
+  using type = std::integral_constant<std::size_t, (number of elements
+  in Seq)>;
+};
+{% endhighlight %}
+
+works. So then the question is how to get the number of elements from
+the
+sequence. What the actual thing we want to do is get the template
+parameters of a template parameter. That is, `Seq` is a template
+parameter to `size`, but `Seq` also has template parameters, and these
+are what we want access to. The answer is the rarely seen
+[template-template parameter][tt-parameter], which we will come across
+in some frequency while discussing TMP. Here is our new implementation
+of `size`
+
+{% highlight cpp linenos %}
+template <typename Seq>
+struct size;
+
+template <template <typename...> class Seq, typename... Ts>
+struct size<Seq<Ts...>> {
+  using type = std::integral_constant<std::size_t, sizeof...(Ts)>;
+};
+{% endhighlight %}
+
+That seems pretty good, but we still need to use the `typename`
+keyword to get access to the `type` member metavariable. While this
+isn't terrible, it adds a lot of syntactic noise that is not
+necessary and that we would like to avoid. To avoid this syntactic
+noise we can use a type alias as follows:
+
+{% highlight cpp linenos %}
+namespace detail {
+template <typename Seq>
+struct size_impl;
+
+template <template <typename...> class Seq, typename... Ts>
+struct size_impl<Seq<Ts...>> {
+  using type = std::integral_constant<std::size_t, sizeof...(Ts)>;
+};
+}  // namespace detail
+
+template <typename Seq>
+using size = typename detail::size_impl<Seq>::type;
+{% endhighlight %}
+
+Then, for example we can write `using result = size<typelist<double,
+bool>>;` and have `result::value == 2`. That's pretty good and easy to
+use, so let's stick with that.
+
+Next let's implement `front` as a metafunction. Just like with `size`
+we want access to the template parameters of the typelist, so we need
+a template-template parameter. However, this time we want to single
+out the first template parameter of the typelist. We will make life
+easier by immediately sticking the implementation in a `detail`
+namespace and use a type alias.
+
+{% highlight cpp linenos %}
+namespace detail {
+template <typename Seq>
+struct front_impl;
+
+template <template <typename...> class Seq, typename T, typename... Ts>
+struct front_impl<Seq<T, Ts...>> {
+  using type = T;
+};
+}  // namespace detail
+
+template <typename Seq>
+using front = typename detail::front_impl<Seq>::type;
+{% endhighlight %}
+
+What's happening here is that we use the template parameter `T` on
+lines 5 and 6 to deduce the first template parameter in the
+sequence. We can then trivially return the first type in the typelist
+via the type alias on line 7. That's it for `front`. Hopefully you'll
+agree that this wasn't 
+too bad to implement. However, if you're really paying attention
+you'll have noticed that the above implementation won't work with an
+empty typelist. However, I'll leave it as an exercise to the reader
+dream up ways of handling empty typelists (hint: use a
+compile-time`'if` statement implemented using partial template
+specialization. I've shared my solution on
+[GitHub][example_code]). Here is a sample usage of `front`:
+
+{% highlight cpp linenos %}
+static_assert(
+    std::is_same<front<typelist<double, char, bool, double>>, double>::value,
+    "The implementation of front is bad");
+{% endhighlight %}
+
+Now let's turn our attention to `pop_front` (`push_front` will be very
+similar). Given a typelist we want to remove the first element. Well
+this is almost the same as `front` except that instead
+of returning the first element, we return a typelist of all the
+elements except the first one. Here is the implementation:
+
+{% highlight cpp linenos %}
+namespace detail {
+template <typename Seq>
+struct pop_front_impl;
+
+template <template <typename...> class Seq, typename T, typename... Ts>
+struct pop_front_impl<Seq<T, Ts...>> {
+  using type = Seq<Ts...>;
+};
+}  // namespace detail
+
+template <typename Seq>
+using pop_front = typename detail::pop_front_impl<Seq>::type;
+{% endhighlight %}
+
+On lines 5 and 6 we again deduce the first element and the remaining
+separately. On line 7 we then return `Seq<Ts...>`, or
+`typelist<Ts...>` to be concrete. Again, what's shown above will fail
+for an empty typelist and I'll leave it to the reader to find a
+solution (mine is available on [GitHub][example_code]). Here is an
+example of how to use `pop_front`:
+
+{% highlight cpp linenos %}
+static_assert(std::is_same<pop_front<typelist<double, char, bool, double>>,
+                           typelist<char, bool, double>>::value,
+              "The implementation of pop_front is bad");
+{% endhighlight %}
+
+Finally, I'll leave you with an implementation of `push_front` to
+think about. Hopefully with a bit of thought it will make sense given
+what else we've discussed. The implementations of some of the other
+metafunctions we outlined above are more intricate and would deserve
+their own post. But that's enough digression, here is an
+implementation of `push_front` (I'll leave it as an exercise to write
+`push_back`):
+
+{% highlight cpp linenos %}
+namespace detail {
+template <typename Seq, typename T>
+struct push_front_impl;
+
+template <template <typename...> class Seq, typename T, typename... Ts>
+struct push_front_impl<Seq<Ts...>, T> {
+  using type = Seq<T, Ts...>;
+};
+}  // namespace detail
+
+template <typename Seq, typename T>
+using push_front = typename detail::push_front_impl<Seq, T>::type;
+{% endhighlight %}
+
+Here is an example of how to use `push_front`, though at this point
+you've probably figured out how this works.
+
+{% highlight cpp linenos %}
+static_assert(
+    std::is_same<push_front<typelist<double, char, bool, double>, char>,
+                 typelist<char, double, char, bool, double>>::value,
+    "The implementation of push_front is bad");
+{% endhighlight %}
+
+In this part of our adventure into the land of template
+metaprogramming we looked at what a typelist is and how some of the
+core metafunctions needed to use typelists are implemented. The goal
+of this post was to familiarize the reader with typelists and how they
+work. What was covered above should be enough to allow the reader to
+use one of the metaprogramming libraries discussed in the first
+paragraph to manipulate typelists. In my next post I will discuss
+either compile-time `for` loops or algorithms that operate on
+typelists. Both of these are essential building blocks of
+metaprogramming and will prove indispensable for converting runtime
+code to compile time.
+
+**Note**: I have shared my solutions to the exercises and all the
+final example code above on [GitHub][example_code].
+
+[brigand]: https://github.com/edouarda/brigand
+[metal]: https://github.com/brunocodutra/metal
+[mpl]: http://www.boost.org/doc/libs/1_62_0/libs/mpl/doc/index.html
+[hana]: https://github.com/boostorg/hana
+[niebler]: http://ericniebler.com/2014/11/13/tiny-metaprogramming-library/
+[dimov]: http://www.pdimov.com/cpp2/simple_cxx11_metaprogramming.html
+[sizeof...]: http://en.cppreference.com/w/cpp/language/sizeof...
+[tt-parameter]: http://en.cppreference.com/w/cpp/language/template_parameters
+[cppref_vector]: http://en.cppreference.com/w/cpp/container/vector
+[cppref_type_alias]: http://en.cppreference.com/w/cpp/language/type_alias
+[cppref_enable_if]: http://en.cppreference.com/w/cpp/types/enable_if
+[cppref_conditional]: http://en.cppreference.com/w/cpp/types/conditional
+[cppref_constexpr]: http://en.cppreference.com/w/cpp/language/constexpr
+[cppref_array]: http://en.cppreference.com/w/cpp/container/array
+[cppref_map]: http://en.cppreference.com/w/cpp/container/map
+[cppref_unordered_map]: http://en.cppreference.com/w/cpp/container/unordered_map
+[cppref_false_type]: http://en.cppreference.com/w/cpp/types/integral_constant
+[cppref_void_t]: http://en.cppreference.com/w/cpp/types/void_t
+[example_code]: https://github.com/nilsdeppe/template-metaprogramming-tutorials
