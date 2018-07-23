@@ -96,6 +96,11 @@ Now reboot your machine and make sure you've booted with the `linux-macbook`
 kernel by running `uname -r` in a terminal. As of this writing I get the output
 `4.12.14-1-macbook`.
 
+**Note (07-22-2018):** As of the Linux kernel version 4.17 adding `acpi-osi=` to
+the kernel parameters breaks the battery detection. See
+[here](https://wiki.archlinux.org/index.php/MacBookPro11,x#Kernel_parameters)
+for a discussion. You can simply omit this step now.
+
 ### Staying asleep
 
 The next thing to get working properly is sleep. In addition to requiring the
