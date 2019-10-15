@@ -10,6 +10,7 @@ is_post: true
 ---
 
 *Updated Feb. 10, 2018*<br>
+*Updated Oct. 14, 2019*<br>
 Just over a year ago I wrote a
 [post]({% post_url 2016-07-17-emacs-as-ide %}) about using Emacs is a C++
 IDE. Over the past year many small improvements have led me to an entirely
@@ -187,7 +188,7 @@ to modern C++. Luckily there's a remedy:
 (modern-c++-font-lock-global-mode t)
 {% endhighlight %}
 
-### YouCompleteMe - Fast Code Completion
+### YouCompleteMe - Fast Code Completion (UPDATE(14/10/19): Switching to lsp-mode+clangd)
 
 The two most important parts of code completion speed and accuracy.
 If either of these is not outstanding then the code
@@ -248,6 +249,23 @@ story is that if you use precompiled headers you might have to build
 YCMD using your system libclang by passing `--system-libclang` to
 the build script.
 
+### LSP mode and clangd (UPDATE 14/10/19)
+
+I've recently switched from [YCMD][ycmd] to using [lsp-mode][lsp-mode] and
+[clangd][clangd]. With the release of clang 9, [clangd][clangd] has received a
+lot of critical features (in my eyes) and is now at a point where I can use it
+in my day-to-day work. [lsp-mode][lsp-mode] uses the [Language Server Protocol
+(LSP)][lsp], which provides a language-agnostic standard for completion/syntax
+checking engines like [clangd][clangd] or the [python-language-server
+(pyls)][pyls] to communicate with an IDE. The configuration for
+[lsp-mode][lsp-mode] is quite simple and I don't see the need to provide
+customization points that I provided with YCMD. If I'm wrong please let me know
+in the comments or file an issue on the [GitHub
+repo][init-file-gist] where I keep my environment files. I still use company as
+the completion frontend so the GIFs are mostly up-to-date, except that
+[clangd][clangd] seems to be better at completion than [YCMD][ycmd] in my
+experience.
+
 ### Git Source Code Management
 
 I also perform all my git operations inside Emacs using [magit][magit],
@@ -275,11 +293,12 @@ load time. The result is that my Emacs startup time is down to ~0.6s from
 ~4.7s without loss of functionality. While I'd love to have it be 0.1s, 0.6s
 makes the startup time very tolerable. I won't say more about this other than
 that I've shared my most recent version of my `~/.emacs.el` file in the
-[Gist][init-file-gist].
+[~~Gist~~ GitHub repo here][init-file-gist].
 
 ### My init File/Installation
 
-I've shared my init file as a [Gist here][init-file-gist]. The only things
+I've shared my init file as a [~~Gist~~ GitHub repo here][init-file-gist]. The
+only things
 you will need to do to have it completely replace your current configuration
 are install [ycmd][ycmd] and change the path to where you installed ycmd
 (search for `/home/nils/Research/ycmd` in the `.emacs.el` file). To ensure
@@ -295,14 +314,19 @@ I'll now provide a step-by-step guide to installing my configuration.
 Prerequisites:
 
 - Emacs 24.5 or newer
-- [YCMD][ycmd] and its requirements (e.g. glibc version 2.14 or newer)
+- ~~[YCMD][ycmd] and its requirements (e.g. glibc version 2.14 or newer)~~
+- [clangd][clangd] for C/C++ completion (I recommend version 9 or newer)
+- [pyls][pyls] for python code completion and syntax checking
+- [bash-language-server][bls] if you want bash syntax checking and code
+  completion
+- [Rust language server][rls] if you want rust completion and syntax checking
 - [ripgrep][ripgrep] (optional, remove from init if you don't have it)
 
 Installation:
 
 1. Make a copy of your `~/.emacs` or `~/.emacs.el`, as well as `~/.emacs.d`
 2. Delete `~/.emacs`, `~/.emacs.el`, or `~/.emacs.d/init.el`, whichever you use
-3. Copy the [Gist][init-file-gist] to `~/.emacs.el`
+3. Copy the [~~Gist~~ GitHub repo .emacs.el][init-file-gist] to `~/.emacs.el`
 4. Start Emacs. If Emacs does not start installing packages immediately press
 `M-x` and run `list-packages`, then close and start Emacs again.
 5. If any packages fail to install automatically, press `M-x` and run
@@ -335,7 +359,7 @@ information.
 [git-gutter]: https://github.com/syohex/emacs-git-gutter
 [gtags]: https://www.gnu.org/software/global/
 [helm]: https://github.com/emacs-helm/helm
-[init-file-gist]: https://gist.github.com/nilsdeppe/7645c096d93b005458d97d6874a91ea9
+[init-file-gist]: https://github.com/nilsdeppe/MyEnvironment
 [ivy]: https://github.com/abo-abo/swiper
 [magit]: https://magit.vc/
 [magit-docs]: https://magit.vc/manual/magit.html
@@ -351,3 +375,9 @@ information.
 [ycmd-pch-issue]: https://github.com/Valloric/ycmd/issues/892
 [ein]: https://github.com/millejoh/emacs-ipython-notebook
 [use-package]: https://github.com/jwiegley/use-package
+[lsp-mode]: https://github.com/emacs-lsp/lsp-mode
+[clangd]: https://clang.llvm.org/extra/clangd/
+[lsp]: https://github.com/Microsoft/language-server-protocol/
+[pyls]: https://github.com/palantir/python-language-server
+[bls]: https://github.com/palantir/python-language-server
+[rls]: https://github.com/rust-lang/rls
