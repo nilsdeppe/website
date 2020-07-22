@@ -25,7 +25,7 @@
 
     &,
     &:visited {
-        #color: $grey-color-dark;
+        // color: $grey-color-dark;
         color: $grey-color-header;
     }
 }
@@ -39,7 +39,7 @@
     }
 
     .page-link {
-        #color: $text-color;
+        // color: $text-color;
         color: $grey-color-header;
         line-height: $base-line-height;
 
@@ -53,7 +53,7 @@
         position: absolute;
         top: 9px;
         right: 30px;
-        #background-color: $background-color;
+        // background-color: $background-color;
         background-color: $grey-color-dark;
         border: 1px solid $grey-color-light;
         border-radius: 5px;
@@ -189,7 +189,7 @@
 
 .post-meta {
     font-size: $small-font-size;
-    #color: $grey-color;
+    // color: $grey-color;
     color: $red-color-name;
 }
 
