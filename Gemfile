@@ -1,7 +1,6 @@
-# frozen_string_literal: true
-
 source "https://rubygems.org"
-
-gem "jekyll"
-
-gem 'jekyll-gallery-generator', :git => 'https://github.com/nilsdeppe/jekyll-gallery-generator.git'
+gem 'bundler'
+gem 'jekyll'
+gem 'jekyll-sitemap'
+gem "webrick", "~> 1.7"
+gem "rake", "~> 12.3.1"

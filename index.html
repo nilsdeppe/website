@@ -1,24 +1,142 @@
 ---
-layout: default
+layout: page
+title: Nils Deppe
+permalink: /
 ---
 
-<div class="home">
+<!-- Slider Start -->
+<section id="slider">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-2">
+        <div class="block">
+          <h1 class="animated fadeInUp">WELCOME</h1>
+          <p class="animated fadeInUp">
+              Hi, My name's Nils Deppe! I'm a computational astrophysicist
+              developing efficient, scalable software to solve challenging
+              technical problems. That's sort of vague, but I'm interested in
+              many different problems that all require creative, efficient,
+              and scalable software solutions. I enjoy spending my free time
+              time with my partner, hiking, listening to music, hanging out
+              with our cat, and playing Nintendo
+              Switch.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Wrapper Start -->
+<section id="intro">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-sm-12">
+        <div class="block">
+          <div class="section-title">
+            <h2>About Me</h2>
+            <p>I'm currently a Sherman Fairchild postdoctoral fellow in
+                computational astrophysics at
+                <a href="http://www.tapir.caltech.edu/">Caltech</a> and will be
+                starting as an Assistant Professor of Physics at
+                <a href="https://physics.cornell.edu/">Cornell University</a>
+                in July 2023.
+            </p>
+          </div>
+          <p>Before joining Caltech, I completed my Ph.D. in computational
+              astrophysics at Cornell University under the supervision of
+              <a href="https://astro.cornell.edu/saul-teukolsky">Prof.
+              Saul Teukolsky</a> and
+              <a href="https://astro.cornell.edu/saul-teukolsky">Dr. Lawrence
+                  Kidder</a>. My work mostly focused on developing and
+              implementing new <a href="https://arxiv.org/abs/2109.11645">
+                  high-order spectral methods for relativistic magnetohydrodynamics</a>
+              and solving the Einstein equations. In particular, my research
+              focuses on ensuring numerical relativity simulations are accurate
+              enough for next-generation gravitational wave observatories like
+              <a href="https://cosmicexplorer.org">Cosmic Explorer</a>,
+              <a href="https://www.et-gw.eu/">Einstein Telescope</a>, and
+              <a href="https://lisa.nasa.gov/">LISA</a>. I am a member of the
+              <a href="https://www.ligo.org/">LIGO Scientific Collaboration</a>,
+              the <a href="https://www.black-holes.org/">Simulating eXtreme
+                  Spacetimes collaboration</a>, and a core developer of the
+              next-generation numerical relativity code,
+              <a href="https://github.com/sxs-collaboration/spectre/">SpECTRE</a>.
+              <!-- SpECTRE uses the <a href="https://charmplusplus.org/">Charm++
+                   parallel runtime system</a> to enable
+                   <a href="https://en.wikipedia.org/wiki/Task_parallelism">
+                   task-based/message-driven parallelization</a> based on an
+                   <a href="https://en.wikipedia.org/wiki/Actor_model">Actor
+                   model</a>. Its parallelization, the
+                   <a href="https://arxiv.org/abs/2109.11645">high-order spectral
+                   methods I developed</a>, and the focus on
+                   <a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines">sound
+                   software engineering practices</a> (like
+                   <a href="https://en.wikipedia.org/wiki/Test-driven_development">
+                   test-driven development</a>) coupled together with modern C++
+                   (<a href="https://en.wikipedia.org/wiki/C%2B%2B17">C++17</a>)
+                   make SpECTRE unique among numerical relativity codes. -->
+          </p>
+          <p>My work on binary black hole merger simulations focuses on reducing
+              computational cost and increasing accuracy to meet the demands of
+              next-generation gravitational wave observatories. For this I use
+              SpECTRE as well as the Simulating eXtreme Spacetimes' current
+              production code,
+              <a href="https://www.black-holes.org/code/SpEC.html">SpEC</a>.
+              My work on single and binary neutron star simulations focuses
+              on improving simulation accuracy and including additional
+              microphysics. I also collaborate with graduate students
+              and postdocs using SpECTRE to study accretion disks around black
+              holes and
+              <a href="https://sites.google.com/msu.edu/michaelpajkos/home">
+                  stellar explosions/core-collapse supernovae</a>. While my
+              current research focuses on binary mergers, I've also worked on
+              critical behavior in gravitational collapse, stability
+              of anti-de Sitter spacetime, and gravitational wave extraction
+              from merger simulations.
+          </p>
+        </div>
+      </div><!-- .col-md-7 close -->
+      <div class="col-md-4 col-sm-12">
+        <div class="block">
+            <img class="img-circle img-responsive center-block"
+                 src="assets/images/NilsEditedSmall.jpg"
+                 alt="Headshot image of Nils Deppe">
+        </div>
+      </div><!-- .col-md-5 close -->
+    </div>
+  </div>
+</section>
 
-  <h1 class="page-heading">Posts</h1>
-
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend:site.baseurl }}">{{ post.title }}</a>
-        </h2>
-    {{ post.excerpt | remove: '<p>' | remove: '</p>'}}
-      </li>
-    {% endfor %}
-  </ul>
-
-  <p class="rss-subscribe"><a href="{{ "/feed.xml" | prepend: site.baseurl }}">Subscribe via RSS</a></p>
-
-</div>
+<section id="feature">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-6">
+                <div class="block">
+                <h2>Publications and Software</h2>
+                <p>You can find my publications and open-source software I've developed
+                    at the links below.</p>
+                {% if site.cv %}
+                <a href="{{ site.baseurl }}/{{ site.cv }}" target="_blank" title="CV"><i class="ai ai-cv ai-{{ site.icon_size }}"></i></a>
+                {% endif %}
+                {% if site.orcid_id %}
+                <a href="https://orcid.org/{{ site.orcid_id }}" target="_blank" title="ORCID"><i class="ai ai-orcid ai-{{ site.icon_size }}"></i></a>
+                {% endif %}
+                {% if site.arxiv %}
+                <a href="{{ site.arxiv }}" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-{{ site.icon_size }}"></i></a>
+                {% endif %}
+                {% if site.inspirehep_id %}
+                <a href="https://inspirehep.net/authors/{{ site.inspirehep_id }}?ui-citation-summary=true" target="_blank" title="INSPIRE"><i class="ai ai-inspire ai-{{ site.icon_size }}"></i></a>
+                {% endif %}
+                {% if site.github_username %}
+                <a href="https://github.com/{{ site.github_username }}" target="_blank" title="GitHub"><i class="fab fa-github fa-{{ site.icon_size }}"></i></a>
+                {% endif %}
+                {% if site.bitbucket_username %}
+                <a href="https://bitbucket.com/{{ site.bitbucket_username }}" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-{{ site.icon_size }}"></i></a>
+                {% endif %}
+                {% if site.linkedin_username %}
+                <a href="https://www.linkedin.com/in/{{ site.linkedin_username }}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-{{ site.icon_size }}"></i></a>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

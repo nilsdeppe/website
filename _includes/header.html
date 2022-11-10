@@ -1,30 +1,54 @@
-<header class="site-header">
+<!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="{{ site.baseurl }}/img/logo.png" alt="Logo">
+                 </a> -->
 
-  <div class="wrapper">
-
-    <a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a>
-
-    <nav class="site-nav">
-      <a href="#" class="menu-icon">
-        <svg viewBox="0 0 18 15">
-          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
-          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
-          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
-        </svg>
-      </a>
-
-  <div class="trigger">
-        <a class="page-link" href="/projects/">Projects</a>
-        <a class="page-link" href="/assets/photos/">Photography</a>
-        <a class="page-link" href="/about/">About</a>
-        <!-- {% for page in site.pages %} -->
-        <!--   {% if page.title %} -->
-        <!--   <a class="page-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a> -->
-        <!--   {% endif %} -->
-        <!-- {% endfor %} -->
-      </div>
-    </nav>
-
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="{{ site.baseurl }}/"><font size="6">{{ site.title }}</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          {% if site.cv %}
+          <a href="{{ site.baseurl }}/{{ site.cv }}" target="_blank" title="CV"><i class="ai ai-cv ai-{{ site.icon_size }}"></i></a>
+          {% endif %}
+          {% if site.arxiv %}
+          <a href="{{ site.arxiv }}" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-{{ site.icon_size }}"></i></a>
+          {% endif %}
+          {% if site.github_username %}
+          <a href="https://github.com/{{ site.github_username }}" target="_blank" title="GitHub"><i class="fab fa-github fa-{{ site.icon_size }}"></i></a>
+          {% endif %}
+          <!-- {% if site.bitbucket_username %}
+               <a href="https://bitbucket.com/{{ site.bitbucket_username }}" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-{{ site.icon_size }}"></i></a>
+               {% endif %} -->
+          {% if site.linkedin_username %}
+          <a href="https://www.linkedin.com/in/{{ site.linkedin_username }}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-{{ site.icon_size }}"></i></a>
+          {% endif %}
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="{{ site.baseurl }}/">Home</a></li>
+                  <li><a href="{{ site.baseurl }}/blog">Blog</a></li>
+                  <!-- <li><a href="{{ site.baseurl }}/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
   </div>
-
-</header>
+</div>
+</header><!-- header close -->

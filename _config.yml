@@ -1,80 +1,57 @@
+exclude:
+  - "/vendor/"
+  - "Gemfile"
+  - "Gemfile.lock"
+  - "README.md"
+  - "LICENSE.md"
+  - "*.gemspec"
+
+keep_files:
+  - "CNAME"
+  - ".git"
+  - ".gitignore"
+
 # Site settings
 title: Nils Deppe
 email: nilsdeppe@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
   I hope to share my excitement and knowledge of physics, C++, metaprogramming,
   high performance computing, and scientific computing here.
-
-baseurl: "" # the subpath of your site, e.g. /blog/
-# the base hostname & protocol for your site
+title_fontsize: 2
 url: "https://nilsdeppe.com"
-twitter_username: nilsdeppe
+# TODO: add research gate?
+cv: "assets/pdfs/cv.pdf"
+orcid_id: 0000-0003-4557-4115
+arxiv: https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200
 github_username:  nilsdeppe
 bitbucket_username: ndeppe
+linkedin_username: nilsdeppe
+inspirehep_id: 1794662
+# Getting 2x icon size to center required editing airspace.css to have:
+#
+# Need to adjust spacing also depending on title size. 8px seems to be okay
+#
+# header .navbar-default .navbar-icons {
+#   padding-top: 8px;
+# }
+icon_size: 2x
+footer_icon_size: 1x
 
-# Facebook things
-fb_appid: 337414769782635
-
-# my timezone
-timezone: America/New_York
+# Set this value to "" if you want your site to be root
+baseurl: ""
+cover: "/assets/cover.png"
 
 # Build settings
 markdown: kramdown
 highlighter: rouge
-keep_files: [.git,.gitignore]
 
-# gems
-plugins:
-  - jekyll-gallery-generator
+# Google analytics
+# ga_tracking_id: "UA-XXXX-1"
 
-# Default layouts
-defaults:
-  -
-    scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: "my-site"
-      author: "Nils"
-      is_post: true
-  -
-    scope:
-      path: "projects"
-      type: "pages" # previously `page` in Jekyll 2.2.
-    values:
-      layout: "project" # overrides previous default layout
-      author: "Nils"
+# Category descriptions (for archive pages)
+descriptions:
+  - cat: jekyll
+    desc: "Posts describing Jekyll setup techniques."
 
-# Settings for the photo gallery
-gallery:
-  # path to the gallery
-  dir: assets/photos
-  # title for gallery index
-  title: "Photography"
-  # title prefix for gallery page. title=title_prefix+gallery_name
-  title_prefix: "Photography: "
-  # field to control sorting of galleries for the index page
-  # (possible values are: title, date_time, best_image)
-  sort_field: "date_time"
-  # sizes for thumbnails
-  thumbnail_size:
-    x: 400
-    y: 400
-  # custom configuration for individual gallery
-  # best_image is image for the index page (defaults to last image)
-  # In order for the captions to work correctly you must make sure to add the following
-  # to the jekyll-gallery-generator.rb file:
-  # # Read file names to have tags under
-  # self.data["image_filenames"] = gallery_config["image_filenames"].split("::")
-  # self.data["image_names"] = gallery_config["image_names"].split("::")
-  # This must go in the function GalleryPage < ReadYamlPage
-  # and should be right below "self.data["images"] = @images"
-  galleries:
-    Family:
-      best_image: ezraStaringOff.jpg
-      image_filenames: "ezraStaringOff.jpg::ezraSmiling.jpg"
-      image_names: "Ezra sees something interesting::Nephew and I before dad's wedding"
-    Ithaca:
-      best_image: waterCascadillaHCl.jpg
-      image_filenames: ""
-      image_names: ""
+  - cat: dummy
+    desc: "Just some placeholder posts, lorem ipsum and the rest."

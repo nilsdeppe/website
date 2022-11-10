@@ -1,45 +1,27 @@
 <!DOCTYPE html>
-<html>
-{% include google_analytics.html %}
+<html class="no-js">
+  <head>
 
-<script type="text/javascript"
-src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    {% include head.html %}
 
-<!-- scale size of the font -->
-MathJax.Hub.Config({
-"HTML-CSS": { scale: 90}
-});
-
-<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
-MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
-      }
-});
-MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-
-</script>
-
-  {% include head.html %}
-
+  </head>
   <body>
+
 
     {% include header.html %}
 
-    <div class="page-content">
-      <div class="wrapper">
-        {{ content }}
-        {% include share-page.html %}
-      </div>
-    </div>
-    {% include comments.html %}
+
+    {{ content }}
+
+
+
+
+
+
+
+
+
     {% include footer.html %}
 
-  </body>
-
+    </body>
 </html>
