@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>The Missing for constexpr</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme meta -->
+<meta name="theme-name" content="airspace-jekyll" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/owl.carousel.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/airspace.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/ionicons.min.css" />
+<link rel="stylesheet" href="/css/animate.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/syntax.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/min/waypoints.min.js"></script>
+<script src="/js/jquery.counterup.js"></script>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- scale size of the font -->
+MathJax.Hub.Config({
+"HTML-CSS": { scale: 90}
+});
+
+<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
+MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+});
+MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+
+</script>
+
+
+<script src="/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="/img/logo.png" alt="Logo">
+                 </a> -->
+
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="/"><font size="6">Nils Deppe</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          <a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-2x"></i></a>
+          
+          
+          <a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-2x"></i></a>
+          
+          
+          <a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+          
+          <!-- 
+               <a href="https://bitbucket.com/ndeppe" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-2x"></i></a>
+                -->
+          
+          <a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+          
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <!-- <li><a href="/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
+  </div>
+</div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>The Missing for constexpr</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold"></span> on <span class="bold">December 9, 2017</span></p>
+            </div>
+            <hr />
+            <p><p>With C++17 we finally get <code class="language-plaintext highlighter-rouge">if constexpr</code>. However, I have started running
+into a lot of cases where I want a <code class="language-plaintext highlighter-rouge">for constexpr</code> that is guaranteed to be
+evaluated at compile time. My use case is effectively compile time
+indexing of a multi-index <code class="language-plaintext highlighter-rouge">tuple</code>-like datastructure. This means that
+arbitrary nesting (within instantiation depth limits at least) must be
+possible, and it must be possible to have an inner for loop index depend
+on an outer for loop index. We will use C++14 to implement <code class="language-plaintext highlighter-rouge">for constexpr</code>.</p>
+
+<h3 id="interface_design">Interface Design</h3>
+
+<p>First let’s think about the interface. A function template named
+<code class="language-plaintext highlighter-rouge">for_constexpr</code> which takes an invokable object as its only argument
+seems like a good start.
+We pass <code class="language-plaintext highlighter-rouge">std::integral_constant</code>s of the current loop iteration indices
+to the invokable object, which means generic
+lambas will work with our interface. What all that basically means
+is something like:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="n">for_constexpr</span><span class="p">(</span>
+    <span class="p">[](</span><span class="k">auto</span> <span class="n">I</span><span class="p">,</span> <span class="k">auto</span> <span class="n">J</span><span class="p">,</span> <span class="k">auto</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">J</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">K</span> <span class="o">&lt;&lt;</span> <span class="s">"   "</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">J</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span>
+                <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+    <span class="p">});</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Now we need to figure out how to set the bounds for the nested for loops
+and how to determine how many nestings there are. Ideally I’d like
+something like the following:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="n">for_constexpr</span><span class="o">&lt;</span><span class="n">for_bounds</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">for_bounds</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">for_bounds</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;&gt;</span><span class="p">(</span>
+    <span class="p">[](</span><span class="k">auto</span> <span class="n">I</span><span class="p">,</span> <span class="k">auto</span> <span class="n">J</span><span class="p">,</span> <span class="k">auto</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">J</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">K</span> <span class="o">&lt;&lt;</span> <span class="s">"   "</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">J</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span>
+                <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+    <span class="p">});</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>You might look at this and ask
+“Why not just pass the index bounds as <code class="language-plaintext highlighter-rouge">&lt;0, 3, 0, 3, 0, 2&gt;</code>?” Well, consider a
+different case where we only want the third index to loop from <code class="language-plaintext highlighter-rouge">J</code> to 2. How do
+we specify that case?
+That is, how do we write the loop structure:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Do stuff here</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>By passing a parameter pack of <code class="language-plaintext highlighter-rouge">for_bounds</code> we can intersperse <code class="language-plaintext highlighter-rouge">for_symmetric</code>
+types. A <code class="language-plaintext highlighter-rouge">for_symmetric</code>’s first template parameter is the numerical index
+(starting from 0) of the index we are symmetrizing over, and the second the upper bound. That is,
+we would write the above nested for loop construct as:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="n">for_constexpr</span><span class="o">&lt;</span><span class="n">for_bounds</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">for_bounds</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">for_symmetric</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;&gt;</span><span class="p">(</span>
+    <span class="p">[](</span><span class="k">auto</span> <span class="n">I</span><span class="p">,</span> <span class="k">auto</span> <span class="n">J</span><span class="p">,</span> <span class="k">auto</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">J</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">K</span> <span class="o">&lt;&lt;</span> <span class="s">"   "</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">J</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span>
+                <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+    <span class="p">});</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>We can similarly symmetrize over <code class="language-plaintext highlighter-rouge">I</code> using <code class="language-plaintext highlighter-rouge">for_symmetric&lt;0, 2&gt;</code>, or
+symmetrize the <code class="language-plaintext highlighter-rouge">J</code> index over <code class="language-plaintext highlighter-rouge">I</code> using:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="n">for_constexpr</span><span class="o">&lt;</span><span class="n">for_bounds</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">for_symmetric</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">for_bounds</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;&gt;</span><span class="p">(</span>
+    <span class="p">[](</span><span class="k">auto</span> <span class="n">I</span><span class="p">,</span> <span class="k">auto</span> <span class="n">J</span><span class="p">,</span> <span class="k">auto</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">J</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">K</span> <span class="o">&lt;&lt;</span> <span class="s">"   "</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">J</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span>
+                <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+    <span class="p">});</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Okay, we now have a nice interface that is scalable to any number of nested
+loops. What else do we need to consider? What about for loops that count
+down? Well, the user can just use <code class="language-plaintext highlighter-rouge">N - 1 - I</code> instead of <code class="language-plaintext highlighter-rouge">I</code> in the lambda
+(here <code class="language-plaintext highlighter-rouge">I</code> goes from <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">N - 1</code>). So at least our interface seems
+to be able to handle the type of
+loops we are interested in, now we just need to implement the thing.</p>
+
+<h3 id="single-loop">Single Loop</h3>
+
+<p>Before writing a bunch of template-heavy C++ we should write down our
+requirements.</p>
+
+<ol>
+  <li>
+    <p>As non-recursive as possible. Function recursion depth is
+\(\mathcal{O}(N)\) where \(N\) is the number of nested loops. Generating
+the <code class="language-plaintext highlighter-rouge">index_sequence</code> should be recursive to a depth of
+\(\mathcal{O}(\log(M))\) where \(M\) is the number of values in the sequence.</p>
+  </li>
+  <li>
+    <p>Bounds must not be required to start at zero.</p>
+  </li>
+  <li>
+    <p>A range of 10 numbers starting at one million must be as efficient
+as a range of 10 starting at zero.</p>
+  </li>
+  <li>
+    <p>Zero runtime recursion.</p>
+  </li>
+  <li>
+    <p>Able to specify symmetrized loops.</p>
+  </li>
+  <li>
+    <p>Avoid <code class="language-plaintext highlighter-rouge">std::enable_if</code></p>
+  </li>
+</ol>
+
+<p>Alright, so now that we have some constraints let’s first write <code class="language-plaintext highlighter-rouge">for_bounds</code>
+and <code class="language-plaintext highlighter-rouge">for_symmetric</code>. These are implemented as:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="kt">size_t</span> <span class="n">Lower</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">Upper</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">for_bounds</span> <span class="p">{</span>
+  <span class="k">static</span> <span class="k">constexpr</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">lower</span> <span class="o">=</span> <span class="n">Lower</span><span class="p">;</span>
+  <span class="k">static</span> <span class="k">constexpr</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">upper</span> <span class="o">=</span> <span class="n">Upper</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">size_t</span> <span class="n">Index</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">Upper</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">for_symmetric</span> <span class="p">{};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Let’s start our <code class="language-plaintext highlighter-rouge">for_constexpr</code> journey gently: a single for loop,
+no nesting, but arbitrary ranges.</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="k">namespace</span> <span class="n">for_constexpr_detail</span> <span class="p">{</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">size_t</span> <span class="n">lower</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">Is</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">for_constexpr_impl</span><span class="p">(</span><span class="n">F</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">Is</span><span class="p">...</span><span class="o">&gt;</span> <span class="cm">/*meta*/</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">{</span>
+      <span class="p">((</span><span class="kt">void</span><span class="p">)</span><span class="n">f</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">Is</span> <span class="o">+</span> <span class="n">lower</span><span class="o">&gt;</span><span class="p">{}),</span>
+       <span class="sc">'0'</span><span class="p">)...};</span>
+<span class="p">}</span>
+<span class="p">}</span>  <span class="c1">// namespace for_constexpr_detail</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Bounds0</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">for_constexpr</span><span class="p">(</span><span class="n">F</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">for_constexpr_detail</span><span class="o">::</span><span class="n">for_constexpr_impl</span><span class="o">&lt;</span><span class="n">Bounds0</span><span class="o">::</span><span class="n">lower</span><span class="o">&gt;</span><span class="p">(</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">),</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="n">Bounds0</span><span class="o">::</span><span class="n">upper</span> <span class="o">-</span> <span class="n">Bounds0</span><span class="o">::</span><span class="n">lower</span><span class="o">&gt;</span><span class="p">{});</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Let’s go over what is happening here. As always seems to be the case
+recently, the code is rather dense. The template parameters to
+<code class="language-plaintext highlighter-rouge">for_constexpr</code> are hopefully somewhat straightforward. The first is
+a <code class="language-plaintext highlighter-rouge">for_bounds</code> that must be explicitly specified, while the second is the
+deduced invokable. The <code class="language-plaintext highlighter-rouge">for_constexpr</code> function forwards on information
+to the <code class="language-plaintext highlighter-rouge">_impl</code>
+and generates an <code class="language-plaintext highlighter-rouge">index_sequence</code> from 0 to \(M - 1\) where \(M\) is
+<code class="language-plaintext highlighter-rouge">Bounds0::upper - Bounds0::lower</code>. This ensures that our second requirement
+above is satisfied. The <code class="language-plaintext highlighter-rouge">_impl</code> unpacks the <code class="language-plaintext highlighter-rouge">index_sequence</code> into an
+<code class="language-plaintext highlighter-rouge">initializer_list</code>, which is guaranteed to be evaluated left to right, so
+our index value is increasing upon each call. Adding <code class="language-plaintext highlighter-rouge">lower</code> bound to <code class="language-plaintext highlighter-rouge">Is</code>
+is necessary to increase the <code class="language-plaintext highlighter-rouge">Is</code> back to the range the user specified.
+And that’s it. That’s a single loop implementation of <code class="language-plaintext highlighter-rouge">for constexpr</code>
+that allows arbitrary ranges and is effectively non-recursive.</p>
+
+<h3 id="nested-loops-and-symmetrizing">Nested Loops and Symmetrizing</h3>
+
+<p>Now for the really fun stuff: nesting and symmetrizing loops. Let’s first
+look at the generalized <code class="language-plaintext highlighter-rouge">for_constexpr</code> before dealing with the <code class="language-plaintext highlighter-rouge">_impl</code>.
+It turns out we need two overloads: the single loop case and the multi-loop
+case (you’ll see why when we write the <code class="language-plaintext highlighter-rouge">_impl</code>s). These are:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Bounds0</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="p">&gt;</span>
+ <span class="kt">void</span> <span class="nf">for_constexpr</span><span class="p">(</span><span class="n">F</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">for_constexpr_detail</span><span class="o">::</span><span class="n">for_constexpr_impl</span><span class="o">&lt;</span><span class="n">Bounds0</span><span class="o">::</span><span class="n">lower</span><span class="o">&gt;</span><span class="p">(</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">),</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="n">Bounds0</span><span class="o">::</span><span class="n">upper</span> <span class="o">-</span> <span class="n">Bounds0</span><span class="o">::</span><span class="n">lower</span><span class="o">&gt;</span><span class="p">{});</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Bounds0</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Bounds1</span><span class="p">,</span> <span class="k">class</span><span class="o">...</span> <span class="nc">Bounds</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="p">&gt;</span>
+ <span class="kt">void</span> <span class="n">for_constexpr</span><span class="p">(</span><span class="n">F</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">for_constexpr_detail</span><span class="o">::</span><span class="n">for_constexpr_impl</span><span class="o">&lt;</span><span class="n">Bounds0</span><span class="o">::</span><span class="n">lower</span><span class="p">,</span> <span class="n">Bounds</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">Bounds1</span><span class="p">{},</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="n">Bounds0</span><span class="o">::</span><span class="n">upper</span> <span class="o">-</span> <span class="n">Bounds0</span><span class="o">::</span><span class="n">lower</span><span class="o">&gt;</span><span class="p">{});</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>In the nested loop case (bottom) we peel off the first two indices immediately,
+but handle them differently. The first index is immediately looped over, while
+the second (<code class="language-plaintext highlighter-rouge">Bounds1</code>) is passed as the second argument to the <code class="language-plaintext highlighter-rouge">_impl</code>. The
+reason for that is this way we can overload <code class="language-plaintext highlighter-rouge">_impl</code> on whether <code class="language-plaintext highlighter-rouge">Bounds1</code> is
+a <code class="language-plaintext highlighter-rouge">for_bounds</code> or a <code class="language-plaintext highlighter-rouge">for_symmetric</code>. Other than that, both are the same
+except that the nested version also forwards the remaining <code class="language-plaintext highlighter-rouge">Bounds...</code> as a
+parameter pack.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">_impl</code>s are a bit scarier this time around. Let’s first look at
+just the <code class="language-plaintext highlighter-rouge">for_bounds</code> implementations:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+</pre></td><td class="code"><pre><span class="c1">// Base case</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">size_t</span> <span class="n">lower</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">Is</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="p">,</span> <span class="k">class</span><span class="o">...</span> <span class="nc">IntegralConstants</span><span class="p">&gt;</span>
+<span class="n">ALWAYS_INLINE</span> <span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">for_constexpr_impl</span><span class="p">(</span>
+    <span class="n">F</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">Is</span><span class="p">...</span><span class="o">&gt;</span> <span class="cm">/*meta*/</span><span class="p">,</span> <span class="n">IntegralConstants</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">{</span>
+      <span class="p">((</span><span class="kt">void</span><span class="p">)</span><span class="n">f</span><span class="p">(</span><span class="n">v</span><span class="p">...,</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">Is</span> <span class="o">+</span> <span class="n">lower</span><span class="o">&gt;</span><span class="p">{}),</span>
+       <span class="sc">'0'</span><span class="p">)...};</span>
+<span class="p">}</span>
+
+<span class="c1">// Cases of second last loop</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">size_t</span> <span class="n">lower</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">BoundsNextLower</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">BoundsNextUpper</span><span class="p">,</span>
+          <span class="kt">size_t</span><span class="p">...</span> <span class="n">Is</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="p">,</span> <span class="k">class</span><span class="o">...</span> <span class="nc">IntegralConstants</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">for_constexpr_impl</span><span class="p">(</span>
+    <span class="n">F</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">for_bounds</span><span class="o">&lt;</span><span class="n">BoundsNextLower</span><span class="p">,</span> <span class="n">BoundsNextUpper</span><span class="o">&gt;</span> <span class="cm">/*meta*/</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">Is</span><span class="p">...</span><span class="o">&gt;</span> <span class="cm">/*meta*/</span><span class="p">,</span> <span class="n">IntegralConstants</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">{</span>
+      <span class="p">((</span><span class="kt">void</span><span class="p">)</span><span class="n">for_constexpr_impl</span><span class="o">&lt;</span><span class="n">BoundsNextLower</span><span class="o">&gt;</span><span class="p">(</span>
+           <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">),</span>
+           <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="n">BoundsNextUpper</span> <span class="o">-</span> <span class="n">BoundsNextLower</span><span class="o">&gt;</span><span class="p">{},</span>
+           <span class="n">v</span><span class="p">...,</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">Is</span> <span class="o">+</span> <span class="n">lower</span><span class="o">&gt;</span><span class="p">{}),</span>
+       <span class="sc">'0'</span><span class="p">)...};</span>
+<span class="p">}</span>
+
+<span class="c1">// Handle cases of more than two nested loops</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">size_t</span> <span class="n">lower</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Bounds1</span><span class="p">,</span> <span class="k">class</span><span class="o">...</span> <span class="nc">Bounds</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">BoundsNextLower</span><span class="p">,</span>
+          <span class="kt">size_t</span> <span class="n">BoundsNextUpper</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">Is</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="p">,</span>
+          <span class="k">class</span><span class="o">...</span> <span class="nc">IntegralConstants</span><span class="p">&gt;</span>
+<span class="kt">void</span> <span class="n">for_constexpr_impl</span><span class="p">(</span>
+    <span class="n">F</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">for_bounds</span><span class="o">&lt;</span><span class="n">BoundsNextLower</span><span class="p">,</span> <span class="n">BoundsNextUpper</span><span class="o">&gt;</span> <span class="cm">/*meta*/</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">Is</span><span class="p">...</span><span class="o">&gt;</span> <span class="cm">/*meta*/</span><span class="p">,</span> <span class="n">IntegralConstants</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">{</span>
+      <span class="p">((</span><span class="kt">void</span><span class="p">)</span><span class="n">for_constexpr_impl</span><span class="o">&lt;</span><span class="n">BoundsNextLower</span><span class="p">,</span> <span class="n">Bounds</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span>
+           <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">Bounds1</span><span class="p">{},</span>
+           <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="n">BoundsNextUpper</span> <span class="o">-</span> <span class="n">BoundsNextLower</span><span class="o">&gt;</span><span class="p">{},</span>
+           <span class="n">v</span><span class="p">...,</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">Is</span> <span class="o">+</span> <span class="n">lower</span><span class="o">&gt;</span><span class="p">{}),</span>
+       <span class="sc">'0'</span><span class="p">)...};</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Okay, so things are a bit more involved now. Let’s look at the base case
+first. The only difference in the base case is that now an additional
+parameter pack is used to forward the <code class="language-plaintext highlighter-rouge">std::integral_constant</code>s that are
+used to pass around the indices at compile time. These are in the same
+order as the <code class="language-plaintext highlighter-rouge">for_bounds</code> in the call to <code class="language-plaintext highlighter-rouge">for_constexpr</code>.</p>
+
+<p>The second function evaluates the second most nested loop, and then
+calls the base case. The body is otherwise almost identical to the general
+case, so let’s discuss that. The arguments to the general case are the invokable
+to later be called, the next <code class="language-plaintext highlighter-rouge">for_bounds</code>, the <code class="language-plaintext highlighter-rouge">index_sequence</code> over the
+current loop, and finally the indices from the outer loops. The <code class="language-plaintext highlighter-rouge">for_bounds</code>
+is taken
+as an argument to allow selecting between non-symmetrized and symmetrized
+loops (the symmetrized version takes a <code class="language-plaintext highlighter-rouge">for_symmetric</code> and is described
+below). The standard parameter pack expansion into an <code class="language-plaintext highlighter-rouge">initializer_list</code>
+is present in the body, and each element of the pack expansion involves
+another call to <code class="language-plaintext highlighter-rouge">for_constexpr_impl</code>, where the next <code class="language-plaintext highlighter-rouge">for_bounds</code> (or
+<code class="language-plaintext highlighter-rouge">for_symmetric</code>) is passed to the <code class="language-plaintext highlighter-rouge">_impl</code>. The indices of the loop are
+appended to the <code class="language-plaintext highlighter-rouge">v</code>s pack in the call to <code class="language-plaintext highlighter-rouge">for_constexpr_impl</code> to build
+the full list for the base case.</p>
+
+<p>The only difference between <code class="language-plaintext highlighter-rouge">for_bounds</code> and <code class="language-plaintext highlighter-rouge">for_symmetric</code> is that in
+the symmetric case the <code class="language-plaintext highlighter-rouge">BoundsNextLower</code> usages are replaced by:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">BoundsNextIndex</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span>
+                          <span class="n">IntegralConstants</span><span class="o">::</span><span class="n">value</span><span class="p">...,</span>
+                          <span class="n">Is</span> <span class="o">+</span> <span class="n">lower</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>where <code class="language-plaintext highlighter-rouge">BoundsNextIndex</code> is the <code class="language-plaintext highlighter-rouge">Index</code> template parameter of the
+<code class="language-plaintext highlighter-rouge">for_symmetric</code>. The code builds a <code class="language-plaintext highlighter-rouge">std::tuple&lt;size_t...&gt;</code> and then retrieves
+the element that was requested to be symmetrized over (the first argument to
+<code class="language-plaintext highlighter-rouge">for_symmetric</code>). That’s it, we have implemented nested arbitrary-range
+constexpr for loops, a <code class="language-plaintext highlighter-rouge">for_constexpr</code>. All examples in
+the <a href="#interface_design">Interface Design</a> section will now work.</p>
+
+<p>Finally, I’ll note that to achieve the “zero runtime recursion” goal
+the functions must all be decorated with <code class="language-plaintext highlighter-rouge">ALWAYS_INLINE</code>, defined as</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="cp">#define ALWAYS_INLINE __attribute__((always_inline)) inline</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>when using Clang and GCC. The lambda can also be inlined by using</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="cp">#define JUST_ALWAYS_INLINE __attribute__((always_inline))</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>As I’ve done with my last several posts, the entire code is
+available on <a href="https://github.com/nilsdeppe/template-metaprogramming-tutorials/blob/master/for_constexpr.cpp">GitHub</a>.</p>
+
+<h3 id="upper-and-lower-bounded-symmetric-loops">Upper and Lower Bounded Symmetric Loops</h3>
+
+<p>Near the final stages of the design I decided that it is
+straightforward to allow loops that range from 0 to the
+bounding loop and loops that range from the bounding loop
+to a specified upper bound. I described the latter above,
+however the code I share on <a href="https://github.com/nilsdeppe/template-metaprogramming-tutorials/blob/master/for_constexpr.cpp">GitHub</a> supports both
+types of bounded loops. The code has Doxygen comments that
+together with this post should be enough to make the code
+useful.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>In this post we implemented nested compile time for loops, a
+<code class="language-plaintext highlighter-rouge">for constexpr</code> in analogy to the <code class="language-plaintext highlighter-rouge">if constexpr</code> in C++17.
+The main achievement is that it allows trivial iteration over <code class="language-plaintext highlighter-rouge">std::tuple</code>s
+or generalized multi-index compile time containers. It also provides a fairly
+trivial way to do explicit loop unrolling (be sure to benchmark that the
+unrolled loop is faster!). The best summary
+I think is to show one of the motivating code blocks again:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="n">for_constexpr</span><span class="o">&lt;</span><span class="n">for_bounds</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">for_bounds</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">for_symmetric</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;&gt;</span><span class="p">(</span>
+    <span class="p">[](</span><span class="k">auto</span> <span class="n">I</span><span class="p">,</span> <span class="k">auto</span> <span class="n">J</span><span class="p">,</span> <span class="k">auto</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">J</span> <span class="o">&lt;&lt;</span> <span class="sc">','</span> <span class="o">&lt;&lt;</span> <span class="n">K</span> <span class="o">&lt;&lt;</span> <span class="s">"   "</span> <span class="o">&lt;&lt;</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">J</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span>
+                <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+    <span class="p">});</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>I’ve shared the code on <a href="https://github.com/nilsdeppe/template-metaprogramming-tutorials/blob/master/for_constexpr.cpp">GitHub</a> and I hope you enjoyed this post!</p>
+
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/blog">Back to blog</a>
+</p>
+
+
+<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'nilsdeppe'; // required: replace example with your forum shortname
+        // var disqus_developer = 1; // Comment out when the site is live
+        var disqus_identifier = "/posts/for-constexpr";
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            
+            <li><a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://orcid.org/0000-0003-4557-4115" target="_blank" title="ORCID"><i class="ai ai-orcid ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-1x"></i></a></li>
+            
+            
+            <li><a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-1x"></i></a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>

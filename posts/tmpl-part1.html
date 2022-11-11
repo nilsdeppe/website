@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Template Metaprogramming Part 1</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme meta -->
+<meta name="theme-name" content="airspace-jekyll" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/owl.carousel.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/airspace.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/ionicons.min.css" />
+<link rel="stylesheet" href="/css/animate.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/syntax.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/min/waypoints.min.js"></script>
+<script src="/js/jquery.counterup.js"></script>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- scale size of the font -->
+MathJax.Hub.Config({
+"HTML-CSS": { scale: 90}
+});
+
+<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
+MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+});
+MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+
+</script>
+
+
+<script src="/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="/img/logo.png" alt="Logo">
+                 </a> -->
+
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="/"><font size="6">Nils Deppe</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          <a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-2x"></i></a>
+          
+          
+          <a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-2x"></i></a>
+          
+          
+          <a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+          
+          <!-- 
+               <a href="https://bitbucket.com/ndeppe" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-2x"></i></a>
+                -->
+          
+          <a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+          
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <!-- <li><a href="/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
+  </div>
+</div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>Template Metaprogramming Part 1</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold"></span> on <span class="bold">January 14, 2017</span></p>
+            </div>
+            <hr />
+            <p><p>What is template metaprogramming? Why do I care about template
+metaprogramming? What is a typelist? These are the sorts of questions
+I asked myself when I first started looking at template
+metaprogramming seriously.</p>
+
+<p>In this series of posts I will do my best
+to answer these questions using practical (from my line of work,
+anyway) examples that will hopefully convince you of the merits of
+template metaprograming (TMP). I will try to answer the first two
+questions together. TMP is writing code that is executed by the
+compiler and manipulates types rather than data. TMP is even more
+powerful when combined with <a href="http://en.cppreference.com/w/cpp/language/constexpr">constant expressions</a>
+to do compile-time computations. I will restrict myself to using C++11
+since this is currently best supported on the HPC systems used in
+academic settings. Currently the Intel compiler is what is prohibiting
+us from fully adopting C++14.</p>
+
+<p>I will begin by discussing several runtime ideas that we need to
+implement at compile time in order to be able to have flexible
+metacode. TMP is functional programming in the sense that all
+metavariables or types and <a href="cppref_type_alias">type aliases</a> are
+immutable
+(const) and that all metafunctions return
+by value. In order to have flexible and useful metaprograms we want
+the idea of <code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">for</code> and <code class="language-plaintext highlighter-rouge">while</code>, so let’s start with <code class="language-plaintext highlighter-rouge">if</code>. I will
+cover loops in part 2. How do
+we implement an <code class="language-plaintext highlighter-rouge">if</code> in TMP?  Well we need a <code class="language-plaintext highlighter-rouge">bool</code> that can be true
+or false, so that could be one parameter to the metafunction. We also
+need the value that is returned if the bool is true and the return
+value if the bool is false. Okay, so our metafunction will need to take
+three parameters, so let’s start with that.</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">B</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">F</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">if_c</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">F</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">F</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">if_c</span><span class="o">&lt;</span><span class="nb">true</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">T</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>What is happening here? We use a struct as the metafunction that
+applies the <code class="language-plaintext highlighter-rouge">if</code> and call it <code class="language-plaintext highlighter-rouge">if_c</code> (recall that <code class="language-plaintext highlighter-rouge">if</code> is a
+keyword). Arguments are passed to the metafunction as template
+parameters, and returned by setting a member type alias or <code class="language-plaintext highlighter-rouge">static
+constexpr</code> variable. For <code class="language-plaintext highlighter-rouge">if_c</code> the general (unspecialized) definition
+takes three template parameters: a bool, the metavalue (type) to be
+returned if the bool is true and the type to be returned if the bool
+is false. The general definition sets its member
+metavariable <code class="language-plaintext highlighter-rouge">type</code> to the false evaluation and we provide a (partial)
+template specialization on line 5 where the bool is <code class="language-plaintext highlighter-rouge">true</code>. The
+specialization sets the metavariable <code class="language-plaintext highlighter-rouge">type</code> to the true evaluation
+template parameter. How does this actually perform a conditional
+check? Well the compiler must use a specialization of <code class="language-plaintext highlighter-rouge">if_c</code> if it
+exists, if not
+it attempts to instantiate and use the general definition. Thus, if
+the first template parameter is <code class="language-plaintext highlighter-rouge">true</code> then the specialization is
+used, otherwise the general definition is used. Why did we choose to
+make the specialization for the <code class="language-plaintext highlighter-rouge">true</code> case? This is an arbitrary
+choice (and is the same one made in libc++). What we have implemented
+here is
+actually already in the standard library (stdlib, either libc++ or
+stdlibc++) and is named <a href="http://en.cppreference.com/w/cpp/types/conditional"><code class="language-plaintext highlighter-rouge">std::conditional</code></a>.</p>
+
+<p>Okay, great, we’re done with a compile time <code class="language-plaintext highlighter-rouge">if</code>! Wait, not so fast!
+Sometimes in runtime code we use <code class="language-plaintext highlighter-rouge">if</code> statements to avoid evaluating
+one branch altogether but that isn’t what happens with
+<code class="language-plaintext highlighter-rouge">conditional</code>. When using <code class="language-plaintext highlighter-rouge">conditional</code> all template parameters must
+be evaluable, which isn’t always what we need. Furthermore, maybe we
+want to “branch” compilation depending on a conditional or simply
+avoid the compiler checking a branch altogether so our compile time
+stays low. By branch I mean maybe we want a function that has the
+same name but operates on
+either associative containers (<a href="http://en.cppreference.com/w/cpp/container/map"><code class="language-plaintext highlighter-rouge">std::map</code></a> or
+<a href="http://en.cppreference.com/w/cpp/container/unordered_map"><code class="language-plaintext highlighter-rouge">std::unordered_map</code></a>)
+or sequence containers (<a href="http://en.cppreference.com/w/cpp/container/array"><code class="language-plaintext highlighter-rouge">std::array</code></a> or
+<a href="http://en.cppreference.com/w/cpp/container/vector"><code class="language-plaintext highlighter-rouge">std::vector</code></a>). Well how do we
+do this? Clearly <code class="language-plaintext highlighter-rouge">conditional</code> isn’t the answer here, what we want is
+something that enables a (meta)function if a condition is met. This is
+exactly what <a href="http://en.cppreference.com/w/cpp/types/enable_if"><code class="language-plaintext highlighter-rouge">std::enable_if</code></a> does.</p>
+
+<p>Let’s now implement this second type of <code class="language-plaintext highlighter-rouge">if</code> statement. Here is our
+implementation:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">B</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">T</span> <span class="o">=</span> <span class="kt">void</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">enable_if</span> <span class="p">{};</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">enable_if</span><span class="o">&lt;</span><span class="nb">true</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">T</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>While shorter than <code class="language-plaintext highlighter-rouge">conditional</code> it is more subtle in its
+utility. First <code class="language-plaintext highlighter-rouge">enable_if</code> takes two template parameters, a bool and a
+type where the type is void by default and really serves as the method
+of enabling a (meta)function. Note that the template parameter <code class="language-plaintext highlighter-rouge">T</code> has
+a default value of <code class="language-plaintext highlighter-rouge">void</code> for all specializations too. Just like arguments
+to functions may only have their default value specified
+once, template parameters may only have their default value
+specified once. We again have the general definition handle the
+<code class="language-plaintext highlighter-rouge">false</code> case and supply a specialization for the <code class="language-plaintext highlighter-rouge">true</code> case with a
+member metavariable <code class="language-plaintext highlighter-rouge">type</code> set to the template parameter <code class="language-plaintext highlighter-rouge">T</code> (void by
+default). So how do we actually use <code class="language-plaintext highlighter-rouge">enable_if</code> and how does it work?
+Well let’s first look at a practical use and then I’ll explain how
+<code class="language-plaintext highlighter-rouge">enable_if</code> works.</p>
+
+<p>As our example let’s write a few type traits to check if a type is a
+<code class="language-plaintext highlighter-rouge">map</code> or <code class="language-plaintext highlighter-rouge">unordered_map</code>. The concepts are the same as what we used
+for <code class="language-plaintext highlighter-rouge">conditional</code> and <code class="language-plaintext highlighter-rouge">enable_if</code> and plays a central role in TMP. We
+first define a generic class template that inherits from
+<a href="http://en.cppreference.com/w/cpp/types/integral_constant"><code class="language-plaintext highlighter-rouge">std::false_type</code></a> and therefore has a member
+variable named <code class="language-plaintext highlighter-rouge">value</code> whose value is (hopefully not surprisingly)
+<code class="language-plaintext highlighter-rouge">false</code>. Next we define a template specialization that is
+specialized for a <code class="language-plaintext highlighter-rouge">map</code> and inherits from
+<a href="http://en.cppreference.com/w/cpp/types/integral_constant"><code class="language-plaintext highlighter-rouge">std::true_type</code></a>. This works because the
+compiler has to always choose the specialization if it can, just as
+with <code class="language-plaintext highlighter-rouge">conditional</code> and <code class="language-plaintext highlighter-rouge">enable_if</code> where the compiler selects the
+<code class="language-plaintext highlighter-rouge">true</code> specialization. Here are the implementations:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">is_std_map</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">false_type</span> <span class="p">{};</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">K</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">V</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">Comp</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">A</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">is_std_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">Comp</span><span class="p">,</span> <span class="n">A</span><span class="o">&gt;&gt;</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">true_type</span> <span class="p">{};</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">is_std_unordered_map</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">false_type</span> <span class="p">{};</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">K</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">V</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">Hash</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">KeyEqual</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">A</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">is_std_unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">K</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">Hash</span><span class="p">,</span> <span class="n">KeyEqual</span><span class="p">,</span> <span class="n">A</span><span class="o">&gt;&gt;</span>
+    <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">true_type</span> <span class="p">{};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>You may find it surprising that the specialization has more template
+parameters than the general definition. This is fine because the
+<code class="language-plaintext highlighter-rouge">&lt;std::map&lt;K, V, Comp, A&gt;&gt;</code> after the struct name on line 5 indicates
+that we have defined a specialization. Thus the compiler knows to
+first use this specialized definition if it is satisfied. Finally,
+what we have is that
+<code class="language-plaintext highlighter-rouge">is_std_map&lt;std::map&lt;int, double&gt;&gt;::value</code> is true while
+<code class="language-plaintext highlighter-rouge">is_std_map&lt;std::unordered_map&lt;int, double&gt;&gt;::value</code> is false. The
+implementation for <code class="language-plaintext highlighter-rouge">unordered_map</code> is essentially the same.</p>
+
+<p>Since both <code class="language-plaintext highlighter-rouge">map</code> and <code class="language-plaintext highlighter-rouge">unordered_map</code> have the same dereferenced
+iterator (a <code class="language-plaintext highlighter-rouge">pair</code>) we might only care if the type is either a <code class="language-plaintext highlighter-rouge">map</code>
+or <code class="language-plaintext highlighter-rouge">unordered_map</code> but not which one. Let’s write another type trait
+that checks if a type is either <code class="language-plaintext highlighter-rouge">map</code> or <code class="language-plaintext highlighter-rouge">unordered_map</code> and call it
+<code class="language-plaintext highlighter-rouge">is_map</code>. Again the
+general definition will need the type to check as a parameter, and
+inherit from <code class="language-plaintext highlighter-rouge">false_type</code>. Now how do we use our above type traits to
+specialize <code class="language-plaintext highlighter-rouge">is_map</code>? We use <code class="language-plaintext highlighter-rouge">enable_if</code>, that’s how! In order to use
+<code class="language-plaintext highlighter-rouge">enable_if</code> we must add a second template parameter that we will not
+use other than to perform the <code class="language-plaintext highlighter-rouge">enable_if</code> check. Therefore we can use
+an unnamed template parameter with a default value, which we’ll set to
+void. The reason for setting a default value is so that the user of
+our type trait does not need to specify a second “filler” template
+parameter. Let me show you the general definition and specialization
+together, then explain the specialization.</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="kt">void</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">is_map</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">false_type</span> <span class="p">{};</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">is_map</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if</span><span class="o">&lt;</span><span class="n">is_std_map</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span> <span class="n">or</span>
+                                         <span class="n">is_std_unordered_map</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&gt;</span>
+    <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">true_type</span> <span class="p">{};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>This might seem like a bit to swallow, but let’s break it down. The
+specialization only takes one template parameter, the type <code class="language-plaintext highlighter-rouge">T</code> that we
+want to check. The second parameter holds the <code class="language-plaintext highlighter-rouge">enable_if</code>
+statement, which in this case takes the result of a logical <code class="language-plaintext highlighter-rouge">or</code>
+between the result of <code class="language-plaintext highlighter-rouge">is_std_map&lt;T&gt;::value</code> and
+<code class="language-plaintext highlighter-rouge">is_std_unordered_map&lt;T&gt;::value</code>. If <code class="language-plaintext highlighter-rouge">T</code> is either a <code class="language-plaintext highlighter-rouge">map</code> or an
+<code class="language-plaintext highlighter-rouge">unordered_map</code> then the specialization of <code class="language-plaintext highlighter-rouge">enable_if</code> is used and it
+has a member metavariable <code class="language-plaintext highlighter-rouge">type</code>. In this case the compiler can
+compile the code and must prefer the specialization over the general
+definition. If the result of the logical <code class="language-plaintext highlighter-rouge">or</code> is <code class="language-plaintext highlighter-rouge">false</code> then the
+general definition of <code class="language-plaintext highlighter-rouge">enable_if</code> is used and the compiler cannot
+compile the code because the general <code class="language-plaintext highlighter-rouge">enable_if</code> does not have a
+metavariable named <code class="language-plaintext highlighter-rouge">type</code>. As a result the compiler ignores the
+specialization of <code class="language-plaintext highlighter-rouge">is_map</code> and falls back to the generic
+definition. Lastly, the <code class="language-plaintext highlighter-rouge">typename</code> keyword is required to tell the
+compiler that <code class="language-plaintext highlighter-rouge">type</code> is a metavariable (a type) rather than a
+variable with a value.</p>
+
+<p>So what have we discovered? Well we discovered that there are at least
+three different ways to perform if-else or switch statements at
+compile time. One is using <a href="cppref_conditional"><code class="language-plaintext highlighter-rouge">std::conditional</code></a>,
+another is using <a href="cppref_enable_if"><code class="language-plaintext highlighter-rouge">std::enable_if</code></a>, and lastly we
+can also use (partial) template specialization to have the compiler
+select a certain definition over all others. Comparing these to
+runtime concepts <code class="language-plaintext highlighter-rouge">conditional</code> is probably most like the ternary
+operator, <code class="language-plaintext highlighter-rouge">enable_if</code> like if-else statements, and (partial) template
+specialization like if-else and switch statements.</p>
+
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/blog">Back to blog</a>
+</p>
+
+
+<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'nilsdeppe'; // required: replace example with your forum shortname
+        // var disqus_developer = 1; // Comment out when the site is live
+        var disqus_identifier = "/posts/tmpl-part1";
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            
+            <li><a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://orcid.org/0000-0003-4557-4115" target="_blank" title="ORCID"><i class="ai ai-orcid ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-1x"></i></a></li>
+            
+            
+            <li><a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-1x"></i></a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>

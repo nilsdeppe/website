@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Using Emacs as a C++ IDE</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme meta -->
+<meta name="theme-name" content="airspace-jekyll" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/owl.carousel.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/airspace.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/ionicons.min.css" />
+<link rel="stylesheet" href="/css/animate.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/syntax.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/min/waypoints.min.js"></script>
+<script src="/js/jquery.counterup.js"></script>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- scale size of the font -->
+MathJax.Hub.Config({
+"HTML-CSS": { scale: 90}
+});
+
+<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
+MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+});
+MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+
+</script>
+
+
+<script src="/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="/img/logo.png" alt="Logo">
+                 </a> -->
+
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="/"><font size="6">Nils Deppe</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          <a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-2x"></i></a>
+          
+          
+          <a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-2x"></i></a>
+          
+          
+          <a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+          
+          <!-- 
+               <a href="https://bitbucket.com/ndeppe" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-2x"></i></a>
+                -->
+          
+          <a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+          
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <!-- <li><a href="/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
+  </div>
+</div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>Using Emacs as a C++ IDE</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold"></span> on <span class="bold">July 17, 2016</span></p>
+            </div>
+            <hr />
+            <p><p><strong>An updated version of this post is available
+<a href="/posts/emacs-c++-ide2">here</a>.</strong><br /><br />
+Last year I wrote a <a href="/posts/emacs-flymake">post</a>
+ about using <a href="http://www.emacswiki.org/emacs/FlyMake">Flymake</a> with Emacs to get on-the-fly
+ syntax checking. Recently I watched a <a href="https://www.youtube.com/watch?v=5FQwQ0QWBTU">cppcon lightning talk by
+Atila Neves</a> on his setup for using Emacs as a C++ IDE and was inspired
+to adapt this to my own needs. In this post I will guide you through
+the setup process, which will carry over to Aquamacs for the most part
+too. I’ll try to note any differences as they come up. This guide will
+ also use <a href="http://brew.sh/">Homebrew</a> for installing some additional software,
+ but on Ubuntu you should be able to get it from apt. Please note that
+ I take no credit for this setup at all. It is all thanks to the many
+developers and blog authors whose content I was able to use and
+piece together. I will do my best to cite any resources as I go. I
+apologize in advance for anything I missed.</p>
+
+<h3 id="additional-software-installation">Additional Software Installation</h3>
+
+<p>First we will install the necessary backends using <a href="http://brew.sh/">brew</a> and then
+move on to the actual Emacs setup. All of the packages listed here should
+be installed by running <code class="language-plaintext highlighter-rouge">brew install package</code>. I recommend that at this
+stage you run <code class="language-plaintext highlighter-rouge">brew update</code> to make sure you are getting the latest version
+of all the packages. Let us first install the package <a href="https://github.com/rizsotto/Bear">Bear</a> (Build
+EAR) for recording how your project is
+compiled. It won’t be necessary for all projects, but definitely for some.
+To install it, run <code class="language-plaintext highlighter-rouge">brew install bear</code>. If you use LaTeX I recommend you
+install the package <code class="language-plaintext highlighter-rouge">chktex</code> using brew as well.</p>
+
+<p>In order to be able to use <a href="https://github.com/Andersbakken/rtags">RTags</a> to navigate your project
+you should install <a href="http://llvm.org/">LLVM</a> using
+<code class="language-plaintext highlighter-rouge">brew install llvm --with-libcxx --with-clang --without-assertions --with-rtti</code>.
+I suggest you follow the RTags <a href="https://github.com/Andersbakken/rtags">website</a> for the most up-to-date
+installation instructions. It may look long, but it is rather straight forward
+to do. You can actually install RTags from brew by running <code class="language-plaintext highlighter-rouge">brew install rtags</code>,
+but note that you still need <a href="http://llvm.org/">LLVM</a>. Note that we will be changing the
+way we launch <code class="language-plaintext highlighter-rouge">rdm</code> later (if you don’t know what <code class="language-plaintext highlighter-rouge">rdm</code> is, see <a href="https://github.com/Andersbakken/rtags">here</a>).
+One really cool thing about <a href="https://github.com/Andersbakken/rtags">RTags</a> is that it is not specific to Emacs.
+You can use it with vim, sublime, Atom, and possibly other editors too.</p>
+
+<p>The last package I suggest you install is <code class="language-plaintext highlighter-rouge">clang-format</code>, which allows you to
+format parts or the entirety of your code to a a certain style. This is
+extremely useful for ensuring uniform style across a project and for
+maintaining readability. <a href="http://clang.llvm.org/docs/ClangFormat.html">ClangFormat</a> also is not tied to Emacs and can be used
+stand alone or in other editors.</p>
+
+<p>As a side note, if you want to try the clang-complete part of the IDE (I use
+Flycheck’s clang-mode), you will probably have to install the
+<code class="language-plaintext highlighter-rouge">emacs-clang-complete-async</code> package from brew or from the project’s
+<a href="https://github.com/Golevka/emacs-clang-complete-async">GitHub</a> page.</p>
+
+<h3 id="emacs-configuration">Emacs Configuration</h3>
+
+<p>Below I’ll go over my Emacs init file (<code class="language-plaintext highlighter-rouge">~/.emacs</code>) in a sort of section by section
+approach.</p>
+
+<h4 id="general-settings">General Settings</h4>
+
+<p>What often annoys me in Emacs is that I have to type “yes” or “no”. I’d much prefer
+to just type “y” and “n”. This can be done (thanks to the post <a href="http://aaronbedra.com/emacs.d/">here</a>)
+by adding the following to your init (<code class="language-plaintext highlighter-rouge">~/.emacs</code>) file:</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="c1">;; We don't want to type yes and no all the time so, do y and n</span>
+<span class="p">(</span><span class="nv">defalias</span> <span class="ss">'yes-or-no-p</span> <span class="ss">'y-or-n-p</span><span class="p">)</span></code></pre></figure>
+
+<p>I also find the <code class="language-plaintext highlighter-rouge">#...#</code> auto-save files annoying, so let’s disable that by adding</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="p">(</span><span class="k">setq</span> <span class="nv">auto-save-default</span> <span class="no">nil</span><span class="p">)</span></code></pre></figure>
+
+<p>On OSX you will have to set additional paths in Emacs so that it can find the
+packages you install from brew. Add the following to the start of your
+init file:</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="c1">;; Add these to the PATH so that proper executables are found</span>
+<span class="p">(</span><span class="nv">setenv</span> <span class="s">"PATH"</span> <span class="p">(</span><span class="nv">concat</span> <span class="p">(</span><span class="nv">getenv</span> <span class="s">"PATH"</span><span class="p">)</span> <span class="s">":/usr/texbin"</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">setenv</span> <span class="s">"PATH"</span> <span class="p">(</span><span class="nv">concat</span> <span class="p">(</span><span class="nv">getenv</span> <span class="s">"PATH"</span><span class="p">)</span> <span class="s">":/usr/bin"</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">setenv</span> <span class="s">"PATH"</span> <span class="p">(</span><span class="nv">concat</span> <span class="p">(</span><span class="nv">getenv</span> <span class="s">"PATH"</span><span class="p">)</span> <span class="s">":/usr/local/bin"</span><span class="p">))</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">exec-path</span> <span class="p">(</span><span class="nb">append</span> <span class="nv">exec-path</span> <span class="o">'</span><span class="p">(</span><span class="s">"/usr/texbin"</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">exec-path</span> <span class="p">(</span><span class="nb">append</span> <span class="nv">exec-path</span> <span class="o">'</span><span class="p">(</span><span class="s">"/usr/bin"</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">exec-path</span> <span class="p">(</span><span class="nb">append</span> <span class="nv">exec-path</span> <span class="o">'</span><span class="p">(</span><span class="s">"/usr/local/bin"</span><span class="p">)))</span></code></pre></figure>
+
+<p>Now, the easiest way to install all the packages we will
+use is to add the following to your init file:</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="p">(</span><span class="nb">require</span> <span class="ss">'package</span><span class="p">)</span> <span class="c1">;; You might already have this line</span>
+<span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">'package-archives</span>
+             <span class="o">'</span><span class="p">(</span><span class="s">"melpa"</span> <span class="o">.</span> <span class="s">"https://melpa.org/packages/"</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">when</span> <span class="p">(</span><span class="nb">&lt;</span> <span class="nv">emacs-major-version</span> <span class="mi">24</span><span class="p">)</span>
+  <span class="c1">;; For important compatibility libraries like cl-lib</span>
+  <span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">'package-archives</span> <span class="o">'</span><span class="p">(</span><span class="s">"gnu"</span> <span class="o">.</span> <span class="s">"http://elpa.gnu.org/packages/"</span><span class="p">)))</span>
+<span class="c1">;; You might already have this line</span>
+<span class="p">(</span><span class="nv">package-initialize</span><span class="p">)</span>
+<span class="c1">;; list the packages you want</span>
+<span class="p">(</span><span class="nb">defvar</span> <span class="nv">package-list</span><span class="p">)</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">package-list</span> <span class="o">'</span><span class="p">(</span><span class="nv">async</span> <span class="nv">auctex</span> <span class="nv">auto-complete</span> <span class="nv">autopair</span> <span class="nv">clang-format</span> <span class="nv">cmake-ide</span>
+                           <span class="nv">cmake-mode</span> <span class="nv">company</span> <span class="nv">company-irony</span>
+                           <span class="nv">company-irony-c-headers</span> <span class="nv">dash</span> <span class="nv">epl</span> <span class="nv">flycheck</span>
+                           <span class="nv">flycheck-irony</span> <span class="nv">flycheck-pyflakes</span>
+                           <span class="nv">google-c-style</span> <span class="nv">helm</span> <span class="nv">helm-core</span> <span class="nv">helm-ctest</span>
+                           <span class="nv">helm-flycheck</span> <span class="nv">helm-flyspell</span> <span class="nv">helm-ls-git</span> <span class="nv">helm-ls-hg</span>
+                           <span class="nv">hungry-delete</span> <span class="nv">irony</span>
+                           <span class="nv">let-alist</span> <span class="nv">levenshtein</span> <span class="nv">magit</span> <span class="nv">markdown-mode</span> <span class="nv">pkg-info</span>
+                           <span class="nv">popup</span> <span class="nv">rtags</span> <span class="nv">seq</span> <span class="nv">solarized-theme</span> <span class="nv">vlf</span> <span class="nv">web-mode</span>
+                           <span class="nv">window-numbering</span> <span class="nv">writegood-mode</span> <span class="nv">yasnippet</span><span class="p">))</span>
+<span class="c1">;; fetch the list of packages available</span>
+<span class="p">(</span><span class="nb">unless</span> <span class="nv">package-archive-contents</span>
+  <span class="p">(</span><span class="nv">package-refresh-contents</span><span class="p">))</span>
+<span class="c1">;; install the missing packages</span>
+<span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="nc">package</span> <span class="nv">package-list</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">unless</span> <span class="p">(</span><span class="nv">package-installed-p</span> <span class="nc">package</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">package-install</span> <span class="nc">package</span><span class="p">)))</span></code></pre></figure>
+
+<p>This will automatically install any packages listed in the
+<code class="language-plaintext highlighter-rouge">package-list</code> variable if it is not already installed.
+If you are using a recent version of Emacs (24.3 or newer)
+then everything should install without any issues.
+If you are using Aquamacs on OSX then you may need to comment
+out the lines below <code class="language-plaintext highlighter-rouge">;; install the missing packages</code> and install
+the packages yourself manually.</p>
+
+<h4 id="on-the-fly-syntax-checking-flycheck">On The Fly Syntax Checking: Flycheck</h4>
+
+<p>Compiling code or running through an interpreter takes time. Time is probably
+our most valuable personal resource. I’ve recently made the change from
+<a href="http://www.emacswiki.org/emacs/FlyMake">Flymake</a> to <a href="http://www.flycheck.org/en/latest/">Flycheck</a>. One of the reasons is that
+it can be integrated with
+a <code class="language-plaintext highlighter-rouge">compile_commands.json</code> file that is generated by <a href="https://github.com/rizsotto/Bear">Bear</a>. I also
+have to write some python code on occasion, and there too I don’t want to
+spend time running the code to check for errors. Flycheck offers an extension,
+<code class="language-plaintext highlighter-rouge">flycheck-pyflakes</code> that does python syntax checking really well. Combining
+these, I get a short section for my init file, but you will want to
+use <code class="language-plaintext highlighter-rouge">cmake-ide</code> to get the most out of it. Here is the relevant code:</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="c1">;; Require flycheck to be present</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'flycheck</span><span class="p">)</span>
+<span class="c1">;; Force flycheck to always use c++11 support. We use</span>
+<span class="c1">;; the clang language backend so this is set to clang</span>
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'c++-mode-hook</span>
+          <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="p">(</span><span class="k">setq</span> <span class="nv">flycheck-clang-language-standard</span> <span class="s">"c++11"</span><span class="p">)))</span>
+<span class="c1">;; Turn flycheck on everywhere</span>
+<span class="p">(</span><span class="nv">global-flycheck-mode</span><span class="p">)</span>
+
+<span class="c1">;; Use flycheck-pyflakes for python. Seems to work a little better.</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'flycheck-pyflakes</span><span class="p">)</span></code></pre></figure>
+
+<p>Now there are sometimes some annoying things with Flycheck. While working
+on a large (and quickly growing) project I found that I sometimes got
+bizarre errors such as not being able to find a certain type, specifically
+a class we wrote, or even that there were errors in one of the included STL
+headers. This seemed really strange to me, especially because RTags
+syntax checking did not find these errors (I use RTags and Flycheck for
+syntax checking of larger projects). To make things even stranger, the
+code compiles fine. So after much stumbling around I think I finally
+understand what the issue is. Flycheck seems to parse the code local
+to the buffer, and so if that code does not compile stand-alone then
+you get strange errors. This could be seen as a good thing since it
+will force developers to explicitly include headers they use rather
+than using functions or classes because they are included in a header
+file that’s being included. So the lesson here is that if you get
+strange errors, don’t look at the first error, look at all of them
+and see if it could be related to missing headers preventing Flycheck
+from analyzing the code locally.</p>
+
+<h4 id="cmake-ide-and-rtags">cmake-ide and RTags</h4>
+
+<p>Flycheck integrates nicely with the <code class="language-plaintext highlighter-rouge">cmake-ide</code> package. The nice thing
+about <code class="language-plaintext highlighter-rouge">cmake-ide</code> is that it also sets up RTags for your project. To enable
+RTags and cmake-ide, add the following to your init file:</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="c1">;; Load rtags and start the cmake-ide-setup process</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'rtags</span><span class="p">)</span>
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; Setup cmake-ide</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'cmake-ide</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">cmake-ide-setup</span><span class="p">)</span>
+<span class="c1">;; Set cmake-ide-flags-c++ to use C++11</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">cmake-ide-flags-c++</span> <span class="p">(</span><span class="nb">append</span> <span class="o">'</span><span class="p">(</span><span class="s">"-std=c++11"</span><span class="p">)))</span>
+<span class="c1">;; We want to be able to compile with a keyboard shortcut</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-c m"</span><span class="p">)</span> <span class="ss">'cmake-ide-compile</span><span class="p">)</span>
+
+<span class="c1">;; Set rtags to enable completions and use the standard keybindings.</span>
+<span class="c1">;; A list of the keybindings can be found at:</span>
+<span class="c1">;; http://syamajala.github.io/c-ide.html</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">rtags-autostart-diagnostics</span> <span class="no">t</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">rtags-diagnostics</span><span class="p">)</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">rtags-completions-enabled</span> <span class="no">t</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">rtags-enable-standard-keybindings</span><span class="p">)</span></code></pre></figure>
+
+<p>You might notice that I set a keyboard shortcut, <code class="language-plaintext highlighter-rouge">C-c m</code>, for compiling
+with cmake-ide.</p>
+
+<p>Now let me discuss RTags and what I had to do to get cmake-ide to behave the
+way I wanted it to. I’ll start with RTags. RTags needs the r-daemon (rdm) to
+be running to handle generating and finding the tags. This is reasonable and
+you can customize the behavior of the daemon a lot. Just look at the manual
+entry and you’ll see that it really allows for a lot of customization. One
+thing that troubled me was that by default when it re-indexes a project it
+runs the process <code class="language-plaintext highlighter-rouge">rp</code> on 8 threads and with a nice of <code class="language-plaintext highlighter-rouge">-1</code>. Now my notebook only
+has 4 physical cores, so with hyperthreading that means it’s running at full
+capacity for a thread that really should be a background thing I hardly notice.
+The reason this is annoying is because if you are working on a file that is
+a dependency of a large portion of your project RTags re-indexes a large portion
+of the project, or at least does a lot of work. Since cmake-ide starts the rdm
+on its own, I had to change the way it behaves. The other problems I encountered
+were that cmake-ide does not use multiple threads for building and also doesn’t
+seem to have an option for Build EAR. Because my changes to cmake-ide are
+currently hard-coded I have not contributed them back to the project, but let
+me tell you the way you can recompile cmake-ide to behave better.</p>
+
+<p>The first thing I changed was to have cmake-ide call make using Build EAR and
+to build using 8 threads so that I don’t have to wait very long for the build
+to finish. To do this you must find the <code class="language-plaintext highlighter-rouge">cmake-ide.el</code> file. It could be
+located in <code class="language-plaintext highlighter-rouge">~/.emacs.d/elpa/cmake-ide...</code> or if you’re using Aquamacs it will be
+in <code class="language-plaintext highlighter-rouge">~/Library/Preferences/Aquamacs Emacs/Packages</code>.
+I changed the line in the function
+<code class="language-plaintext highlighter-rouge">cmake-ide--get-compile-command</code> that says
+<code class="language-plaintext highlighter-rouge">((file-exists-p (expand-file-name "Makefile" dir)) (concat ...</code> to say
+<code class="language-plaintext highlighter-rouge">((file-exists-p (expand-file-name "Makefile" dir)) (concat "bear --append make -j8 -C " dir))</code>
+You can specify however many threads you want to build with and if you don’t
+want to build with Bear then simply remove <code class="language-plaintext highlighter-rouge">bear --append </code>. Next, to get
+rdm to run on only 2 cores and have a larger nice value I changed the function
+<code class="language-plaintext highlighter-rouge">cmake-ide-maybe-start-rdm</code> by adding <code class="language-plaintext highlighter-rouge">"-j 2" "-i 40" "-a 10"</code> after
+<code class="language-plaintext highlighter-rouge">cmake-ide-rdm-executable</code> in the <code class="language-plaintext highlighter-rouge">start-process</code> call. Here the <code class="language-plaintext highlighter-rouge">-a</code> specifies
+the niceness and <code class="language-plaintext highlighter-rouge">-i</code> the number of translation units to cache. Now you have
+recompile cmake-ide by doing <code class="language-plaintext highlighter-rouge">M-x</code> and then running <code class="language-plaintext highlighter-rouge">byte-force-recompile</code> and
+selecting the directory that <code class="language-plaintext highlighter-rouge">cmake-ide.el</code> is in. Do not specify the file
+itself, just the directory.</p>
+
+<p>The last piece of advice for using RTags is that you shouldn’t save very often.
+Every time you save a file it gets re-indexed so if you change something small
+and start thinking about the next line don’t immediately save, unless you want
+RTags to be re-indexing continually and using up your computing resources.</p>
+
+<p>RTags allows you to quickly navigate around your code. Here is an example
+of jumping straight to the header file where the class is declared that
+is actually intentionally performed a bit slower than you can do in practice:
+<br />
+<img src="/assets/images/RTagsNavigation.gif" alt="RTags Navigation" align="middle" />
+<br /></p>
+
+<p>Since I consider legible code part of having correct code I’ll mention
+<a href="http://clang.llvm.org/docs/ClangFormat.html">ClangFormat</a> here. ClangFormat automatically formats your code
+to conform to a specific style. There are several built-in presets but you
+can also add your own. ClangFormat will search up directories until it reaches
+a <code class="language-plaintext highlighter-rouge">.clang-format</code> file and then uses that. This means you can specify
+formatting for each project individually by placing a <code class="language-plaintext highlighter-rouge">.clang-format</code> file
+in the root directory of your project. Since it’s a text file you can even
+track it with git. One nice things is that we can actually call ClangFormat
+to format the selected line or region. For this to work add the following
+to your init file:</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="c1">;; clang-format can be triggered using C-M-tab</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'clang-format</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="nv">[C-M-tab]</span> <span class="ss">'clang-format-region</span><span class="p">)</span>
+<span class="c1">;; Create clang-format file using google style</span>
+<span class="c1">;; clang-format -style=google -dump-config &gt; .clang-format</span></code></pre></figure>
+
+<p>I use the keyboard shortcut <code class="language-plaintext highlighter-rouge">C-M-tab</code> but you may change this if you wish.</p>
+
+<h4 id="helm">Helm</h4>
+
+<p><a href="https://github.com/emacs-helm/helm">Helm</a> is a framework for incremental completions that allows fuzzy
+matching and a variety of other powerful features. For example, integrating
+helm with git allows you to search your project for files no matter which
+directory you are currently in. Helm’s search is also case-insensitive
+meaning you don’t have to deal with pesky CamelCase spelling of filenames.
+Helm also offers similar features for the command-prefix (Meta-x), the buffer
+list, mini buffer list, finding files, <a href="https://github.com/danlamanna/helm-ctest">ctest</a> (which you are using,
+right?) and many others that I have not yet explored. You can also
+integrate it with Flycheck and Flyspell to get nicer windowing and navigation
+with them. I’ll discuss Flyspell in more detail below, but for now,
+here is my helm configuration:</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; Set up helm</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; Load helm and set M-x to helm, buffer to helm, and find files to herm</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'helm-config</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'helm</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'helm-ls-git</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'helm-ctest</span><span class="p">)</span>
+<span class="c1">;; Use C-c h for helm instead of C-x c</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-c h"</span><span class="p">)</span> <span class="ss">'helm-command-prefix</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-unset-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-x c"</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"M-x"</span><span class="p">)</span> <span class="ss">'helm-M-x</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-x b"</span><span class="p">)</span> <span class="ss">'helm-mini</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-x C-b"</span><span class="p">)</span> <span class="ss">'helm-buffers-list</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-x C-f"</span><span class="p">)</span> <span class="ss">'helm-find-files</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-c t"</span><span class="p">)</span> <span class="ss">'helm-ctest</span><span class="p">)</span>
+<span class="p">(</span><span class="k">setq</span>
+ <span class="nv">helm-split-window-in-side-p</span>           <span class="no">t</span>
+   <span class="c1">; open helm buffer inside current window,</span>
+   <span class="c1">; not occupy whole other window</span>
+ <span class="nv">helm-move-to-line-cycle-in-source</span>     <span class="no">t</span>
+   <span class="c1">; move to end or beginning of source when</span>
+   <span class="c1">; reaching top or bottom of source.</span>
+ <span class="nv">helm-ff-search-library-in-sexp</span>        <span class="no">t</span>
+   <span class="c1">; search for library in `require' and `declare-function' sexp.</span>
+ <span class="nv">helm-scroll-amount</span>                    <span class="mi">8</span>
+   <span class="c1">; scroll 8 lines other window using M-&lt;next&gt;/M-&lt;prior&gt;</span>
+ <span class="nv">helm-ff-file-name-history-use-recentf</span> <span class="no">t</span>
+ <span class="c1">;; Allow fuzzy matches in helm semantic</span>
+ <span class="nv">helm-semantic-fuzzy-match</span> <span class="no">t</span>
+ <span class="nv">helm-imenu-fuzzy-match</span>    <span class="no">t</span><span class="p">)</span>
+<span class="c1">;; Have helm automaticaly resize the window</span>
+<span class="p">(</span><span class="nv">helm-autoresize-mode</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">rtags-use-helm</span> <span class="no">t</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'helm-flycheck</span><span class="p">)</span> <span class="c1">;; Not necessary if using ELPA package</span>
+<span class="p">(</span><span class="nv">eval-after-load</span> <span class="ss">'flycheck</span>
+  <span class="o">'</span><span class="p">(</span><span class="nv">define-key</span> <span class="nv">flycheck-mode-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-c ! h"</span><span class="p">)</span> <span class="ss">'helm-flycheck</span><span class="p">))</span></code></pre></figure>
+
+<p>To activate helm-flycheck use the keyboard shortcut <code class="language-plaintext highlighter-rouge">C-c ! h</code> and
+to use helm-ctest <code class="language-plaintext highlighter-rouge">C-c t</code>. When in helm-ctest you can type the name
+or partial name of a test to limit the tests disabled. To run a test
+press enter (I use <code class="language-plaintext highlighter-rouge">C-m</code>) and to select several tests to run use
+press <code class="language-plaintext highlighter-rouge">C-space</code> on each test you want to execute, then press enter.
+The tests will run and you will get immediate feedback on whether
+or not they passed.</p>
+
+<h4 id="code-completion-company-irony-and-semantic">Code Completion: Company, Irony and Semantic</h4>
+
+<p><strong>Note:</strong> This part of the post is still somewhat in progress. I’m happy
+with the current behavior but may find bugs and improvements as
+time goes on. If there are any, I’ll post updates here.</p>
+
+<p>First thing, <code class="language-plaintext highlighter-rouge">company</code> stands for “Complete Anything” and so you can
+probably guess we will leverage it as our backend for code completion.
+It is also useful for all around completion. The other nice thing is
+we can use <code class="language-plaintext highlighter-rouge">company</code> to get STL and C library header completion,
+query RTags for completions, ask clang to give completions for the
+entire STL, and still use Yasnippet for custom completions to save
+us typing out mundane things like for loops.</p>
+
+<p>Let’s start with getting Yasnippet set up. Yasnippet comes with several
+useful snippets for code completion, but to really get the most out
+of it you will want to use the snippets from <a href="https://github.com/AndreaCrotti/yasnippet-snippets">here</a></p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; Package: yasnippet</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'yasnippet</span><span class="p">)</span>
+<span class="c1">;; To get a bunch of extra snippets that come in super handy see:</span>
+<span class="c1">;; https://github.com/AndreaCrotti/yasnippet-snippets</span>
+<span class="c1">;; or use:</span>
+<span class="c1">;; git clone https://github.com/AndreaCrotti/yasnippet-snippets.git ~/.emacs.d/yassnippet-snippets/</span>
+<span class="p">(</span><span class="nv">add-to-list</span> <span class="ss">'yas-snippet-dirs</span> <span class="s">"~/.emacs.d/yasnippet-snippets/"</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">yas-global-mode</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">yas-reload-all</span><span class="p">)</span></code></pre></figure>
+
+<p>I’ve found that there are some missing that I will add and also
+that some seem to add incorrect code or don’t work.</p>
+
+<p>Now let’s load up company and the backends we will want to use.
+I’ve generally found that semantic completion is quite slow
+and gives irrelevant results. However, semantic is really nice
+for navigating around a file using helm. The shortcut I’ve set
+is <code class="language-plaintext highlighter-rouge">C-c h i</code>. For navigating between files I still recommend RTags.
+I also provide functions <code class="language-plaintext highlighter-rouge">my-enable-semantic</code> and <code class="language-plaintext highlighter-rouge">my-disable-semantic</code>
+to enable and disable semantic completion so you can easily change
+it if you wish. The code in my init file is:</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; Set up code completion with company and irony</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'company</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'company-rtags</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-company-mode</span><span class="p">)</span>
+
+<span class="c1">;; Enable semantics mode for auto-completion</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'cc-mode</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'semantic</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-semanticdb-minor-mode</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-semantic-idle-scheduler-mode</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">semantic-mode</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">;; Setup irony-mode to load in c-modes</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'irony</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'company-irony-c-headers</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'cl</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'c++-mode-hook</span> <span class="ss">'irony-mode</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'c-mode-hook</span> <span class="ss">'irony-mode</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'objc-mode-hook</span> <span class="ss">'irony-mode</span><span class="p">)</span>
+
+<span class="c1">;; irony-mode hook that is called when irony is triggered</span>
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">my-irony-mode-hook</span> <span class="p">()</span>
+  <span class="s">"Custom irony mode hook to remap keys."</span>
+  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">irony-mode-map</span> <span class="nv">[remap</span> <span class="nv">completion-at-point]</span>
+    <span class="ss">'irony-completion-at-point-async</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">define-key</span> <span class="nv">irony-mode-map</span> <span class="nv">[remap</span> <span class="nv">complete-symbol]</span>
+    <span class="ss">'irony-completion-at-point-async</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'irony-mode-hook</span> <span class="ss">'my-irony-mode-hook</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'irony-mode-hook</span> <span class="ss">'irony-cdb-autosetup-compile-options</span><span class="p">)</span>
+
+<span class="c1">;; company-irony setup, c-header completions</span>
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'irony-mode-hook</span> <span class="ss">'company-irony-setup-begin-commands</span><span class="p">)</span>
+<span class="c1">;; Remove company-semantic because it has higher precedance than company-clang</span>
+<span class="c1">;; Using RTags completion is also faster than semantic, it seems. Semantic</span>
+<span class="c1">;; also provides a bunch of technically irrelevant completions sometimes.</span>
+<span class="c1">;; All in all, RTags just seems to do a better job.</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">company-backends</span> <span class="p">(</span><span class="nb">delete</span> <span class="ss">'company-semantic</span> <span class="nv">company-backends</span><span class="p">))</span>
+<span class="c1">;; Enable company-irony and several other useful auto-completion modes</span>
+<span class="c1">;; We don't use rtags since we've found that for large projects this can cause</span>
+<span class="c1">;; async timeouts. company-semantic (after company-clang!) works quite well</span>
+<span class="c1">;; but some knowledge some knowledge of when best to trigger is still necessary.</span>
+<span class="p">(</span><span class="nv">eval-after-load</span> <span class="ss">'company</span>
+  <span class="o">'</span><span class="p">(</span><span class="nv">add-to-list</span>
+    <span class="ss">'company-backends</span> <span class="o">'</span><span class="p">(</span><span class="nv">company-irony-c-headers</span>
+                        <span class="nv">company-irony</span> <span class="nv">company-yasnippet</span>
+                        <span class="nv">company-clang</span> <span class="nv">company-rtags</span><span class="p">)</span>
+    <span class="p">)</span>
+  <span class="p">)</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">my-disable-semantic</span> <span class="p">()</span>
+  <span class="s">"Disable the company-semantic backend."</span>
+  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">setq</span> <span class="nv">company-backends</span> <span class="p">(</span><span class="nb">delete</span> <span class="o">'</span><span class="p">(</span><span class="nv">company-irony-c-headers</span>
+                                   <span class="nv">company-irony</span> <span class="nv">company-yasnippet</span>
+                                   <span class="nv">company-clang</span> <span class="nv">company-rtags</span>
+                                   <span class="nv">company-semantic</span><span class="p">)</span> <span class="nv">company-backends</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">add-to-list</span>
+   <span class="ss">'company-backends</span> <span class="o">'</span><span class="p">(</span><span class="nv">company-irony-c-headers</span>
+                       <span class="nv">company-irony</span> <span class="nv">company-yasnippet</span>
+                       <span class="nv">company-clang</span> <span class="nv">company-rtags</span><span class="p">))</span>
+  <span class="p">)</span>
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">my-enable-semantic</span> <span class="p">()</span>
+  <span class="s">"Enable the company-semantic backend."</span>
+  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">setq</span> <span class="nv">company-backends</span> <span class="p">(</span><span class="nb">delete</span> <span class="o">'</span><span class="p">(</span><span class="nv">company-irony-c-headers</span>
+                                   <span class="nv">company-irony</span> <span class="nv">company-yasnippet</span>
+                                   <span class="nv">company-clang</span><span class="p">)</span> <span class="nv">company-backends</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">add-to-list</span>
+   <span class="ss">'company-backends</span> <span class="o">'</span><span class="p">(</span><span class="nv">company-irony-c-headers</span>
+                       <span class="nv">company-irony</span> <span class="nv">company-yasnippet</span> <span class="nv">company-clang</span><span class="p">))</span>
+  <span class="p">)</span>
+
+<span class="c1">;; Zero delay when pressing tab</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">company-idle-delay</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">define-key</span> <span class="nv">c-mode-map</span> <span class="nv">[</span><span class="p">(</span><span class="nv">tab</span><span class="p">)</span><span class="nv">]</span> <span class="ss">'company-complete</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">define-key</span> <span class="nv">c++-mode-map</span> <span class="nv">[</span><span class="p">(</span><span class="nv">tab</span><span class="p">)</span><span class="nv">]</span> <span class="ss">'company-complete</span><span class="p">)</span>
+<span class="c1">;; Delay when idle because I want to be able to think</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">company-idle-delay</span> <span class="mf">0.2</span><span class="p">)</span>
+
+<span class="c1">;; Prohibit semantic from searching through system headers. We want</span>
+<span class="c1">;; company-clang to do that for us.</span>
+<span class="p">(</span><span class="nv">setq-mode-local</span> <span class="nv">c-mode</span> <span class="nv">semanticdb-find-default-throttle</span>
+                 <span class="o">'</span><span class="p">(</span><span class="nv">local</span> <span class="nv">project</span> <span class="nv">unloaded</span> <span class="nv">recursive</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">setq-mode-local</span> <span class="nv">c++-mode</span> <span class="nv">semanticdb-find-default-throttle</span>
+                 <span class="o">'</span><span class="p">(</span><span class="nv">local</span> <span class="nv">project</span> <span class="nv">unloaded</span> <span class="nv">recursive</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nv">semantic-remove-system-include</span> <span class="s">"/usr/include/"</span> <span class="ss">'c++-mode</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">semantic-remove-system-include</span> <span class="s">"/usr/local/include/"</span> <span class="ss">'c++-mode</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'semantic-init-hooks</span>
+          <span class="ss">'semantic-reset-system-include</span><span class="p">)</span></code></pre></figure>
+
+<p>To start company completion just press tab. I’ve found that sometimes
+it will timeout and not offer any completions. When this happens
+I find that most of the time pressing tab again gives the completions.
+Sometimes it may appear to hang for a brief period of time. This I
+believe occurs when RTags is being queried for completions. You can
+navigate the completions menu using <code class="language-plaintext highlighter-rouge">M-n</code> and <code class="language-plaintext highlighter-rouge">M-p</code> then pressing
+enter to select the desired completion. Note that return types
+in C++ are denoted using the postfix syntax <code class="language-plaintext highlighter-rouge">--&gt; type</code>.</p>
+
+<p>Directory local variables can be very useful for setting behaviors for
+individual projects. For example, setting the build path, CMake flags,
+or compiler flags is best done by using directory local
+variables. These are set in a file called <code class="language-plaintext highlighter-rouge">.dir-locals.el</code> and Emacs
+searches up the directory tree until it finds one so you only need to
+add it to the root directory of your project. Here is an example of
+how to set the directory local variables for a project</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="p">((</span><span class="no">nil</span> <span class="o">.</span> <span class="p">((</span><span class="nv">cmake-ide-build-dir</span> <span class="o">.</span> <span class="s">"../build/"</span><span class="p">))))</span>
+<span class="p">((</span><span class="no">nil</span> <span class="o">.</span> <span class="p">((</span><span class="k">setq</span> <span class="nv">helm-ctest-dir</span> <span class="s">"..//build/Tests/"</span><span class="p">))))</span>
+<span class="p">((</span><span class="no">nil</span> <span class="o">.</span> <span class="p">((</span><span class="nv">cmake-compile-command</span> <span class="o">.</span> <span class="s">"-DCMAKE_VARIABLE=blah"</span><span class="p">))))</span>
+<span class="p">((</span><span class="no">nil</span> <span class="o">.</span> <span class="p">((</span><span class="nv">cmake-ide-clang-flags-c++</span> <span class="o">.</span> <span class="s">"-I/usr/local/include -I/usr/include -I/path/to/my/include/"</span><span class="p">))))</span>
+<span class="p">((</span><span class="no">nil</span> <span class="o">.</span> <span class="p">((</span><span class="nv">company-clang-arguments</span> <span class="o">.</span> <span class="p">(</span><span class="s">"-I/usr/local/include -I/usr/include -I/path/to/my/include/"</span><span class="p">)))))</span></code></pre></figure>
+
+<p>Without setting directory local variables the code completion and
+syntax checking tools may not know how to properly compile your code,
+which means they also cannot function properly since they compile your
+code to see if what you are changing is functional. What I have
+noticed is that sometimes you need to restart Emacs (Aquamacs) in
+order for the directory local variables to properly take effect. This
+seems to be true if you open a source file of your project before
+adding the <code class="language-plaintext highlighter-rouge">.dir-locals.el</code> file.</p>
+
+<p>Before moving on I want to show you some of the useful things that
+you can auto-complete using this infrastructure.
+If you know the first few letters of a function you can quickly complete
+the entire member function name with the correct arguments:<br />
+<img src="/assets/images/FastComplete.gif" alt="Member Function and  Variable Completion" align="middle" />
+<br />
+If you cannot remember the member functions then you can get a full list
+too. This is a bit finicky sometimes, but here is an example of what
+the list looks like:<br />
+<img src="/assets/images/FullComplete.gif" alt="Member Function List" align="middle" />
+<br />
+Finally, you can use the snippets from Yasnippet to get an entire class
+template complete with move and copy constructors and assignment operators.
+<br />
+<img src="/assets/images/FullClass.gif" alt="Class Completion" align="middle" />
+<br />
+This is just an example. You can add any snippets
+and shortcuts you want, which is what makes Yasnippet so great.</p>
+
+<h4 id="spell-check-flyspell">Spell Check: Flyspell</h4>
+
+<p>Something that I find to be quite useful is on-the-fly spell checking.
+<a href="https://www.emacswiki.org/emacs/FlySpell">Flyspell</a> offers this for all your buffers and restricts
+itself to comments when checking your code. Nobody wants an embarrassing
+spelling mistake in their comment and this fixes that. The code I
+use to set up Flyspell is:</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; Flyspell Mode for Spelling Corrections</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="p">(</span><span class="nb">require</span> <span class="ss">'flyspell</span><span class="p">)</span>
+<span class="c1">;; The welcome message is useless and can cause problems</span>
+<span class="p">(</span><span class="k">setq</span> <span class="nv">flyspell-issue-welcome-flag</span> <span class="no">nil</span><span class="p">)</span>
+<span class="c1">;; Fly spell keyboard shortcuts so no mouse is needed</span>
+<span class="c1">;; Use helm with flyspell</span>
+<span class="p">(</span><span class="nv">define-key</span> <span class="nv">flyspell-mode-map</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"&lt;f8&gt;"</span><span class="p">)</span> <span class="ss">'helm-flyspell-correct</span><span class="p">)</span>
+<span class="c1">;; (global-set-key (kbd "&lt;f8&gt;") 'ispell-word)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-S-&lt;f8&gt;"</span><span class="p">)</span> <span class="ss">'flyspell-mode</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-M-&lt;f8&gt;"</span><span class="p">)</span> <span class="ss">'flyspell-buffer</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"C-&lt;f8&gt;"</span><span class="p">)</span> <span class="ss">'flyspell-check-previous-highlighted-word</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"M-&lt;f8&gt;"</span><span class="p">)</span> <span class="ss">'flyspell-check-next-highlighted-word</span><span class="p">)</span>
+<span class="c1">;; Set the way word highlighting is done</span>
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">flyspell-check-next-highlighted-word</span> <span class="p">()</span>
+  <span class="s">"Custom function to spell check next highlighted word."</span>
+  <span class="p">(</span><span class="nv">interactive</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">flyspell-goto-next-error</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">ispell-word</span><span class="p">)</span>
+  <span class="p">)</span>
+
+<span class="c1">;; Spell check comments in c++ and c common</span>
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'c++-mode-hook</span>  <span class="ss">'flyspell-prog-mode</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'c-mode-common-hook</span> <span class="ss">'flyspell-prog-mode</span><span class="p">)</span>
+
+<span class="c1">;; Enable flyspell in text mode</span>
+<span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">fboundp</span> <span class="ss">'prog-mode</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">add-hook</span> <span class="ss">'prog-mode-hook</span> <span class="ss">'flyspell-prog-mode</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="nv">hook</span> <span class="o">'</span><span class="p">(</span><span class="nv">lisp-mode-hook</span> <span class="nv">emacs-lisp-mode-hook</span> <span class="nv">scheme-mode-hook</span>
+                  <span class="nv">clojure-mode-hook</span> <span class="nv">ruby-mode-hook</span> <span class="nv">yaml-mode</span>
+                  <span class="nv">python-mode-hook</span> <span class="nv">shell-mode-hook</span> <span class="nv">php-mode-hook</span>
+                  <span class="nv">css-mode-hook</span> <span class="nv">haskell-mode-hook</span> <span class="nv">caml-mode-hook</span>
+                  <span class="nv">nxml-mode-hook</span> <span class="nv">crontab-mode-hook</span> <span class="nv">perl-mode-hook</span>
+                  <span class="nv">tcl-mode-hook</span> <span class="nv">javascript-mode-hook</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">add-hook</span> <span class="nv">hook</span> <span class="ss">'flyspell-prog-mode</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="nv">hook</span> <span class="o">'</span><span class="p">(</span><span class="nv">text-mode-hook</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">add-hook</span> <span class="nv">hook</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="p">(</span><span class="nv">flyspell-mode</span> <span class="mi">1</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="nv">hook</span> <span class="o">'</span><span class="p">(</span><span class="nv">change-log-mode-hook</span> <span class="nv">log-edit-mode-hook</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">add-hook</span> <span class="nv">hook</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="p">(</span><span class="nv">flyspell-mode</span> <span class="mi">-1</span><span class="p">))))</span></code></pre></figure>
+
+<p>For a list of corrections I again use helm (<code class="language-plaintext highlighter-rouge">helm-flyspell</code>).
+To pull up the options move the cursor over the word you
+want to correct and then type <code class="language-plaintext highlighter-rouge">F8</code> (on a Mac you must use the
+<code class="language-plaintext highlighter-rouge">fn</code> key). Here is an example of what this setup looks like
+in action:
+<br />
+<img src="/assets/images/CommentSpelling.gif" alt="Spelling Correction in Comment" align="middle" />
+<br /></p>
+
+<h4 id="miscellaneous">Miscellaneous</h4>
+
+<p>In order to keep this post to a somewhat reasonable length I’ll end
+here with <a href="https://github.com/magit/magit">Magit</a> and cmake-mode. My Magit configuration is</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"M-g M-s"</span><span class="p">)</span> <span class="ss">'magit-status</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">global-set-key</span> <span class="p">(</span><span class="nv">kbd</span> <span class="s">"M-g M-c"</span><span class="p">)</span> <span class="ss">'magit-checkout</span><span class="p">)</span></code></pre></figure>
+
+<p>and to load cmake-mode I use</p>
+
+<figure class="highlight"><pre><code class="language-elisp" data-lang="elisp"><span class="p">(</span><span class="nb">require</span> <span class="ss">'cmake-mode</span><span class="p">)</span></code></pre></figure>
+
+<p>I have customized my Emacs configuration a great deal more. My current
+init file is ~650 lines long, whatever that’s worth. I have a header
+that shows the current function and the path to the current file,
+but this required customizing the font a great deal to make it
+legible and nice. I’ve uploaded a complete version of my Emacs file
+<a href="/assets/init.el">here</a> and will eventually make a public copy on
+either GitHub or BitBucket. If you want you can simply copy the
+entire contents of <code class="language-plaintext highlighter-rouge">init.el</code> into your <code class="language-plaintext highlighter-rouge">~/.emacs</code> file and you should
+automatically have the entire configuration set the way I do.</p>
+
+<p>I hope you found this guide useful and
+please email me with any questions, feedback and/or suggestions.</p>
+
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/blog">Back to blog</a>
+</p>
+
+
+<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'nilsdeppe'; // required: replace example with your forum shortname
+        // var disqus_developer = 1; // Comment out when the site is live
+        var disqus_identifier = "/posts/emacs-c++-ide";
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            
+            <li><a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://orcid.org/0000-0003-4557-4115" target="_blank" title="ORCID"><i class="ai ai-orcid ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-1x"></i></a></li>
+            
+            
+            <li><a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-1x"></i></a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>

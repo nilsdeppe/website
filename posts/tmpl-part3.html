@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>TMP Part 3 - Tuple Iteration With Recursion</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme meta -->
+<meta name="theme-name" content="airspace-jekyll" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/owl.carousel.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/airspace.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/ionicons.min.css" />
+<link rel="stylesheet" href="/css/animate.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/syntax.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/min/waypoints.min.js"></script>
+<script src="/js/jquery.counterup.js"></script>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- scale size of the font -->
+MathJax.Hub.Config({
+"HTML-CSS": { scale: 90}
+});
+
+<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
+MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+});
+MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+
+</script>
+
+
+<script src="/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="/img/logo.png" alt="Logo">
+                 </a> -->
+
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="/"><font size="6">Nils Deppe</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          <a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-2x"></i></a>
+          
+          
+          <a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-2x"></i></a>
+          
+          
+          <a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+          
+          <!-- 
+               <a href="https://bitbucket.com/ndeppe" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-2x"></i></a>
+                -->
+          
+          <a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+          
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <!-- <li><a href="/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
+  </div>
+</div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>TMP Part 3 - Tuple Iteration With Recursion</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold"></span> on <span class="bold">August 24, 2017</span></p>
+            </div>
+            <hr />
+            <p><p>A fairly common task one encounters is iterating over a <code class="language-plaintext highlighter-rouge">std::tuple</code>.
+I’m going to keep this post fairly brief and go over how not to iterate
+over a tuple. We’ll discuss how you should iterate over a tuple in the
+next <a href="/posts/tmpl-part4">post</a>.</p>
+
+<p>The most naive way to iterate over a tuple is via recursive function calls
+using SFINAE to end the recursion. Here is one way to implement a transform
+over a tuple with recursion:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="kt">size_t</span> <span class="n">Index</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Elements</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">Func</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">,</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">Index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">&gt;</span><span class="o">*</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="o">&gt;</span>
+<span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">tuple_transform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Elements</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">tuple</span><span class="p">,</span>
+                                      <span class="n">Func</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">Index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tuple</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">Index</span><span class="o">&gt;</span><span class="p">{},</span>
+       <span class="n">args</span><span class="p">...);</span>
+<span class="p">}</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">size_t</span> <span class="n">Index</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Elements</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">Func</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">,</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">Index</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">&gt;</span><span class="o">*</span> <span class="o">=</span> <span class="nb">nullptr</span><span class="o">&gt;</span>
+<span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">tuple_transform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Elements</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">tuple</span><span class="p">,</span>
+                                      <span class="n">Func</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">tuple_transform</span><span class="o">&lt;</span><span class="n">Index</span> <span class="o">-</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tuple</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">...);</span>
+  <span class="n">func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">Index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tuple</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">Index</span><span class="o">&gt;</span><span class="p">{},</span>
+       <span class="n">args</span><span class="p">...);</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>If you prefer, you can write the code such that the function counts up instead of
+down, but aside from that this is pretty much what we’re stuck with in C++11/14.
+In C++17, constexpr-if can be used so that we only have one function, but
+nevertheless we are doing recursion.</p>
+
+<p>With the above could you can do both a
+<a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function)"><code class="language-plaintext highlighter-rouge">fold</code></a>, and a
+<a href="https://en.wikipedia.org/wiki/Map_(higher-order_function)"><code class="language-plaintext highlighter-rouge">transform</code></a>
+(referred to as <code class="language-plaintext highlighter-rouge">map</code> in functional languages). Here is an example of using
+a fold to compute the sum of elements in a tuple (yes, yes, in this case a
+<code class="language-plaintext highlighter-rouge">std::vector</code> would work fine, humor me for the purposes of this example).</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="k">const</span> <span class="k">auto</span> <span class="n">my_tupull</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.8</span><span class="p">,</span> <span class="mf">20.9</span><span class="p">);</span>
+<span class="kt">double</span> <span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="n">tuple_transform</span><span class="o">&lt;</span><span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">my_tupull</span><span class="p">,</span> <span class="p">[](</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">element</span><span class="p">,</span> <span class="k">auto</span> <span class="cm">/*index*/</span><span class="p">,</span>
+                                 <span class="kt">double</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">)</span> <span class="p">{</span> <span class="n">state</span> <span class="o">+=</span> <span class="n">element</span><span class="p">;</span> <span class="p">},</span>
+                   <span class="n">sum_value</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Expected: 26.1   Computed: "</span> <span class="o">&lt;&lt;</span> <span class="n">sum_value</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="n">tuple_transform</span><span class="o">&lt;</span><span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">my_tupull</span><span class="p">,</span>
+                   <span class="p">[](</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">element</span><span class="p">,</span> <span class="k">auto</span> <span class="n">index</span><span class="p">,</span> <span class="kt">double</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">)</span> <span class="p">{</span>
+                     <span class="k">if</span> <span class="p">(</span><span class="n">index</span><span class="p">.</span><span class="n">value</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                       <span class="n">state</span> <span class="o">+=</span> <span class="n">element</span><span class="p">;</span>
+                     <span class="p">}</span>
+                   <span class="p">},</span>
+                   <span class="n">sum_value</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Expected: 19.1   Computed: "</span> <span class="o">&lt;&lt;</span> <span class="n">sum_value</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>A transform can be performed similarly but the compile time integral
+value must be extracted from <code class="language-plaintext highlighter-rouge">index</code> using <code class="language-plaintext highlighter-rouge">decltype(index)::value</code>. The
+compile time <code class="language-plaintext highlighter-rouge">index</code> can then be used to index a second tuple as follows:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="k">const</span> <span class="k">auto</span> <span class="n">my_tupull</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.8</span><span class="p">,</span> <span class="mf">20.9</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">my_tupull</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">out_tupull</span><span class="p">;</span>
+<span class="n">tuple_transform</span><span class="o">&lt;</span><span class="mi">3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">my_tupull</span><span class="p">,</span>
+                   <span class="p">[](</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">element</span><span class="p">,</span> <span class="k">auto</span> <span class="n">index</span><span class="p">,</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">out_tuple</span><span class="p">)</span> <span class="p">{</span>
+                     <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">index_v</span> <span class="o">=</span> <span class="k">decltype</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">::</span><span class="n">value</span><span class="p">;</span>
+                     <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index_v</span><span class="o">&gt;</span><span class="p">(</span><span class="n">out_tuple</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">element</span><span class="p">;</span>
+                   <span class="p">},</span>
+                   <span class="n">out_tupull</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Expected: (-2, -7, 3.8, -20.9)   Computed: "</span> <span class="o">&lt;&lt;</span> <span class="n">out_tupull</span>
+          <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The lines of interest are 5 and 6. On 5 we assign the value held in the
+<code class="language-plaintext highlighter-rouge">std::integral_constant</code> to a constexpr variable, and on line 6 we use the
+constexpr variable to retrieve an element from the tuple.</p>
+
+<p>As I mentioned at the beginning, this post is fairly short and I don’t go into
+much detail because this is the way you <em>shouldn’t</em> iterate over a tuple. I’m
+posting the correct way to iterate over a tuple at the same time
+<a href="/posts/tmpl-part4">here</a> so you can compare them both.</p>
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/blog">Back to blog</a>
+</p>
+
+
+<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'nilsdeppe'; // required: replace example with your forum shortname
+        // var disqus_developer = 1; // Comment out when the site is live
+        var disqus_identifier = "/posts/tmpl-part3";
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            
+            <li><a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://orcid.org/0000-0003-4557-4115" target="_blank" title="ORCID"><i class="ai ai-orcid ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-1x"></i></a></li>
+            
+            
+            <li><a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-1x"></i></a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>

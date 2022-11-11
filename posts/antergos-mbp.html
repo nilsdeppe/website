@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Antergos/Arch Linux on MacBook Pro 11,4</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme meta -->
+<meta name="theme-name" content="airspace-jekyll" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/owl.carousel.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/airspace.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/ionicons.min.css" />
+<link rel="stylesheet" href="/css/animate.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/syntax.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/min/waypoints.min.js"></script>
+<script src="/js/jquery.counterup.js"></script>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- scale size of the font -->
+MathJax.Hub.Config({
+"HTML-CSS": { scale: 90}
+});
+
+<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
+MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+});
+MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+
+</script>
+
+
+<script src="/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="/img/logo.png" alt="Logo">
+                 </a> -->
+
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="/"><font size="6">Nils Deppe</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          <a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-2x"></i></a>
+          
+          
+          <a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-2x"></i></a>
+          
+          
+          <a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+          
+          <!-- 
+               <a href="https://bitbucket.com/ndeppe" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-2x"></i></a>
+                -->
+          
+          <a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+          
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <!-- <li><a href="/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
+  </div>
+</div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>Antergos/Arch Linux on MacBook Pro 11,4</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold"></span> on <span class="bold">December 9, 2017</span></p>
+            </div>
+            <hr />
+            <p><p>I’ve been wanting to run a Linux distro on my MacBook Pro for about 6 years
+now. About a year ago I decided to give it another go and had a lot of success.
+After doing some research on the topic I came to the conclusion that
+<a href="https://www.archlinux.org/">Arch Linux</a> is the most promising distro, at least in terms documentation
+for MacBook Pros. To make the installation
+easier I decided to go with <a href="https://antergos.com/">Antergos</a> for the installation process.
+This post will cover replacing macOS on your MacBook Pro 11,4. After following
+this post you will only have Antergos installed on your system.</p>
+
+<h3 id="pre-installation">Pre-installation</h3>
+
+<p>The first thing
+you should do is make a bootable clone of your internal SSD to an external
+hard drive. For this you can boot into recovery mode (hold Command+R on startup)
+and use Disk Utility’s “Restore” feature. Make sure you have the correct source
+and destination selected, that is, ensure you don’t erase your internal drive
+before making
+a backup. Making the backup may take a while– for me it took approximately two
+hours for 190GB to an old hard drive over Firewire 800. I would recommend
+verifying that you are able to boot from the external drive, just to be on the
+safe side. Another prerequisite is either having a thunderbolt to
+ethernet adapter or downloading and copying the wifi driver to a USB stick.
+I have not done the latter and cannot offer guidance on it.</p>
+
+<p>With at least a bootable backup in place, let’s get to installing Arch Linux.
+First you should boot into macOS and turn the volume all the way down. This will
+disable the startup sound, which will no longer be possible once Antergos is
+installed. Now download an Antergos ISO and copy it to a USB drive. I would
+recommend getting the full live image, which still fits on a 2GB flash drive.
+You can find instructions on how to create a bootable USB flash drive from
+the <a href="https://antergos.com/wiki/install/create-a-working-live-usb/">Antergos website</a>. Once the USB drive is ready, reboot
+from macOS (again, make sure your volume is off) and hold down the left
+alt/option key to see a list of EFI devices you can boot from. Select the
+USB drive and wait for the installer to load.</p>
+
+<h3 id="first-post-installation-steps">First post-installation steps</h3>
+
+<p>The main installation process for Antergos is as straightforward as it is
+for Ubuntu and macOS. Once you have completed the installation you should visit
+the <a href="https://wiki.archlinux.org/index.php/MacBookPro11,x">Arch Linux wiki for MBP 11,4</a>, which is what I used to
+get things up and running initially. First install <code class="language-plaintext highlighter-rouge">yaourt</code> by
+running <code class="language-plaintext highlighter-rouge">sudo pacman -S yaourt</code>. <code class="language-plaintext highlighter-rouge">yaourt</code> allows you to install community
+packages, which greatly increases the number of available packages but
+comes with the risk of installing malicious packages (from my experience, this
+risk is extremely low). The first thing I installed was the <a href="https://wiki.archlinux.org/index.php/MacBookPro11,x#Wi-Fi">wifi</a> driver.
+However, I believe it has now been integrated into the kernel. In case I’m
+incorrect you can install the driver by running <code class="language-plaintext highlighter-rouge">yaourt -S broadcom-wl-dkms</code>
+and rebooting. Next I installed the <a href="https://wiki.archlinux.org/index.php/MacBookPro11,x#Web_cam">webcam driver</a>
+by running <code class="language-plaintext highlighter-rouge">yaourt -S bcwc-pcie-dkms</code> and again rebooted. Then I installed
+the <a href="https://wiki.archlinux.org/index.php/MacBookPro11,x#Backlight_keys_.2F_Suspend_support">modified Linux kernel for MacBooks</a>, which you can install
+in one of two ways. Pre-built binaries are downloadable from pacman by
+adding the following to <code class="language-plaintext highlighter-rouge">/etc/pacman.conf</code>:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre>[linux-macbook]
+SigLevel = Optional TrustAll
+Server = http://libpcap.net/repo/linux-macbook
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>and running <code class="language-plaintext highlighter-rouge">sudo pacman -Sy linux-macbook</code>. Alternatively, you can build
+the kernel yourself (warning, this can take over an hour) by running
+<code class="language-plaintext highlighter-rouge">yaourt -S linux-macbook</code>.</p>
+
+<p>Once the <code class="language-plaintext highlighter-rouge">linux-macbook</code> kernel is compiled you need to modify GRUB (the
+menu that lets you select the OS and kernel upon boot) to boot
+using the patched kernel by default. I found that the easiest way to get
+that to work was to append:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="c"># To be able to boot the linux-macbook kernel by default we disable submenu</span>
+<span class="c"># We also changed GRUB_DEFAULT=2 because this is the entry corresponding</span>
+<span class="c"># to linux-macbook kernel (counting starts at 0).</span>
+<span class="nv">GRUB_DISABLE_SUBMENU</span><span class="o">=</span>y
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>to <code class="language-plaintext highlighter-rouge">/etc/default/grub</code>. This removes the normal submenu hierarchy in GRUB.
+I then set the default menu item by specifying <code class="language-plaintext highlighter-rouge">GRUB_DEFAULT=2</code> in
+<code class="language-plaintext highlighter-rouge">/etc/default/grub</code>. The reason for the number <code class="language-plaintext highlighter-rouge">2</code> is that the <code class="language-plaintext highlighter-rouge">linux-macbook</code>
+kernel was the third entry from the top when I booted into GRUB without the
+submenu. Finally, while we are editing GRUB we should add <code class="language-plaintext highlighter-rouge">acpi-osi=</code> to line 4,
+which starts with <code class="language-plaintext highlighter-rouge">GRUB_CMDLINE_LINUX_DEFAULT=</code>. Make sure to add <code class="language-plaintext highlighter-rouge">acpi-osi=</code>
+inside the quotation marks. To update GRUB run
+<code class="language-plaintext highlighter-rouge">sudo grub-mkconfig -o /boot/grub/grub.cfg</code>.
+Now reboot your machine and make sure you’ve booted with the <code class="language-plaintext highlighter-rouge">linux-macbook</code>
+kernel by running <code class="language-plaintext highlighter-rouge">uname -r</code> in a terminal. As of this writing I get the output
+<code class="language-plaintext highlighter-rouge">4.12.14-1-macbook</code>.</p>
+
+<p><strong>Note (07-22-2018):</strong> As of the Linux kernel version 4.17 adding <code class="language-plaintext highlighter-rouge">acpi-osi=</code> to
+the kernel parameters breaks the battery detection. See
+<a href="https://wiki.archlinux.org/index.php/MacBookPro11,x#Kernel_parameters">here</a>
+for a discussion. You can simply omit this step now.</p>
+
+<h3 id="staying-asleep">Staying asleep</h3>
+
+<p>The next thing to get working properly is sleep. In addition to requiring the
+patched Linux kernel, I also had to disable wakeup from USB 3.0, which would
+cause repeated waking of my MacBook after closing the lid. I will discuss a
+summarized version of <a href="https://joshtronic.com/2017/03/13/getting-suspend-in-linux-working-on-a-macbook-pro/">this blog post.</a></p>
+
+<p>First create a new systemd unit by creating the file
+<code class="language-plaintext highlighter-rouge">/etc/systemd/system/mbp_fix_sleep.service</code> and add the following to it:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>[Unit]
+Description=Fix sleep on MBP
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "echo XHC1 &gt; /proc/acpi/wakeup"
+RemainAfterExit=true
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>then run <code class="language-plaintext highlighter-rouge">systemctl daemon-reload &amp;&amp; systemctl enable mbp_fix_sleep</code> to
+enable at boot and <code class="language-plaintext highlighter-rouge">systemctl start mbp_fix_sleep</code> to have it take
+effect immediately. You should now be able to close the lid and have your
+MacBook remain asleep. If you have trouble, try rebooting, and making sure
+that when you run <code class="language-plaintext highlighter-rouge">less /proc/acpi/wakeup</code> that <code class="language-plaintext highlighter-rouge">XHC1</code> is disabled. If you
+continue to have trouble you can try disabling lid sleep/wake by replacing
+the <code class="language-plaintext highlighter-rouge">ExecStart</code> line above with</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre>ExecStart=/bin/bash -c "echo XHC1 &gt; /proc/acpi/wakeup &amp;&amp; echo LID0 &gt; /proc/acpi/wakeup"
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Rerun the <code class="language-plaintext highlighter-rouge">systemctl</code> commands above, and see if things now work. If sleep
+still does not work unfortunately I cannot offer more advice since the
+above worked for me.</p>
+
+<h3 id="hidpi-with-second-display">HiDPI with second display</h3>
+
+<p>I like to use a dual-monitor setup on occasion, which is currently not
+supported by X11, so you need to change to running <a href="https://wayland.freedesktop.org/">Wayland</a>.
+A word of
+caution, Wayland is still under heavy development, but has proven to
+stable and very usable for me. I haven’t encountered any issues. As far as I’m
+aware even LibreOffice should now be working under Wayland. The biggest
+obstacle I’ve faced is that if you want to do custom key remapping you’ll
+need to use xkb directly instead of something else like xmodmap. However,
+I’ll have a list at the end of this section of issues and solutions I’ve
+encountered.</p>
+
+<p>To get Wayland working you must switch from using lightdm to gdm. To install
+gdm run <code class="language-plaintext highlighter-rouge">sudo pacman -Sy gdm</code>. Next we need to disable lightdm and enable gdm.
+To do this run <code class="language-plaintext highlighter-rouge">sudo systemctl disable lightdm &amp;&amp; sudo systemctl enable gdm</code>
+and reboot. To verify that you are running Wayland run
+<code class="language-plaintext highlighter-rouge">echo $XDG_SESSION_TYPE</code>. If Wayland is running you’ll see <code class="language-plaintext highlighter-rouge">wayland</code>
+and if X11 is running you’ll see <code class="language-plaintext highlighter-rouge">x11</code>.</p>
+
+<h4 id="issues-and-solutions">Issues and Solutions</h4>
+
+<ul>
+  <li><em>GParted GUI not working:</em> from <a href="gparted_gui_fix">here</a> run
+<code class="language-plaintext highlighter-rouge">xhost +SI:localuser:root &amp;&amp; sudo gpartedbin</code></li>
+  <li><em>Screen sharing in Chrome does not work with non-Chrome windows.</em> This is
+because of a security vulnerability that is used for screen sharing under
+X11 being absent in Wayland. PipeWire is designed to solve this problem but
+I have not yet tried it.</li>
+  <li>The custom keyboard shortcut method is described below.</li>
+</ul>
+
+<h3 id="disable-red-audio-light">Disable red audio light</h3>
+
+<p>Disable the red light by running:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="nb">sudo echo </span>1 <span class="o">&gt;</span> /sys/module/snd_hda_intel/parameters/power_save
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>as root. To have this be run at startup automatically create the file
+<code class="language-plaintext highlighter-rouge">/etc/systemd/system/mbp_spdif.service</code> with the contents:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>[Unit]
+Description=Disable S/PDIF red light in audio jack
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "echo 1 &gt; /sys/module/snd_hda_intel/parameters/power_save"
+
+[Install]
+WantedBy=multi-user.target
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>then run <code class="language-plaintext highlighter-rouge">systemctl daemon-reload &amp;&amp; systemctl enable mbp_spdif</code> to enable at
+boot and <code class="language-plaintext highlighter-rouge">systemctl start mbp_spdif</code> to have it take effect immediately.
+This is necessary because the sound card is not in power save mode
+by default (see <a href="https://chromabits.com/posts/2015/12/28/fedora-23-on-mbp/">here</a>). Note that the light does come
+back on when playing audio, even if it’s through the built-in speakers and not
+the audio jack.</p>
+
+<h3 id="bluetooth-headset">Bluetooth Headset</h3>
+
+<p>If you are having trouble with bluetooth headsets or headphones, give
+<a href="https://wiki.archlinux.org/index.php/Bluetooth_headset">this page</a> a read.</p>
+
+<h3 id="parallel-yaourt-builds">Parallel yaourt builds</h3>
+
+<p>You can speed up the build process of packages by building in parallel. To
+enable building in parallel edit <code class="language-plaintext highlighter-rouge">/etc/makepkg.conf</code> by searching for
+<code class="language-plaintext highlighter-rouge">MAKEFLAGS</code> and if the line is commented out then uncomment it. The make flag
+<code class="language-plaintext highlighter-rouge">-jNumberOfCores</code> is how you control on how many cores to build. I have
+8 hyperthreads and find that <code class="language-plaintext highlighter-rouge">-j6</code> allows me to continue working uninterrupted
+while building packages.</p>
+
+<h3 id="emacs-shortcuts-everywhere">Emacs shortcuts everywhere</h3>
+
+<p>To get Emacs shortcuts everywhere follow the instructions from the Arch Linux
+wiki <a href="https://wiki.archlinux.org/index.php/GTK%2B#Emacs_keybindings">here</a>.
+First add the following:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>[Settings]
+gtk-key-theme-name = Emacs
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>to the file <code class="language-plaintext highlighter-rouge">~/.config/gtk-3.0/settings.ini</code>. Then run</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+</pre></td><td class="code"><pre>gsettings <span class="nb">set </span>org.gnome.desktop.interface gtk-key-theme <span class="s2">"Emacs"</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="reduce-title-bar-size">Reduce title bar size</h3>
+
+<p>To reduce the size of the title bar edit <code class="language-plaintext highlighter-rouge">~/.config/gtk-3.0/gtk.css</code>
+adding</p>
+
+<figure class="highlight"><pre><code class="language-css" data-lang="css"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="nt">window</span><span class="nc">.ssd</span> <span class="nt">headerbar</span><span class="nc">.titlebar</span> <span class="p">{</span>
+    <span class="nl">padding-top</span><span class="p">:</span> <span class="m">3px</span><span class="p">;</span>
+    <span class="nl">padding-bottom</span><span class="p">:</span> <span class="m">3px</span><span class="p">;</span>
+    <span class="nl">min-height</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">font-size</span><span class="p">:</span> <span class="m">0.7em</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nt">window</span><span class="nc">.ssd</span> <span class="nt">headerbar</span><span class="nc">.titlebar</span> <span class="nt">button</span><span class="nc">.titlebutton</span> <span class="p">{</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span>
+    <span class="nl">min-height</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">min-width</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h3 id="custom-keyboard-shortcuts">Custom keyboard shortcuts</h3>
+
+<p>Custom keyboard shortcuts can be added using <code class="language-plaintext highlighter-rouge">AutoKey</code>. To install run
+<code class="language-plaintext highlighter-rouge">yaourt -S autokey-py3</code>. Once installed open up AutoKey, which will live in the
+system tray. You can open the main window from the system tray icon. Let’s map
+<code class="language-plaintext highlighter-rouge">C-m</code> to <code class="language-plaintext highlighter-rouge">enter</code>, like any sane person would want to. To do this open
+<code class="language-plaintext highlighter-rouge">My Phrases</code> and add a new phrase. In the white text box you should have only
+<code class="language-plaintext highlighter-rouge">&lt;enter&gt;</code>. Next, set the <code class="language-plaintext highlighter-rouge">Hotkey:</code> below to <code class="language-plaintext highlighter-rouge">&lt;ctrl&gt;+m</code>. You will also want to
+add <code class="language-plaintext highlighter-rouge">AutoKey</code> as a startup application by adding it to
+<code class="language-plaintext highlighter-rouge">Tweak Tool</code>-&gt;<code class="language-plaintext highlighter-rouge">Startup Applications</code>. While <code class="language-plaintext highlighter-rouge">AutoKey</code> isn’t supported on
+Wayland, I have observed that <code class="language-plaintext highlighter-rouge">C-m</code> works as return if I switch caps lock
+to something other than “Disabled” and then back to “Disabled” in
+<code class="language-plaintext highlighter-rouge">Tweak Tool</code>-&gt;<code class="language-plaintext highlighter-rouge">Keyboard &amp; Mouse</code>-&gt;<code class="language-plaintext highlighter-rouge">Additional Layout Options</code>.</p>
+
+<h3 id="gnome-extensions">Gnome extensions</h3>
+
+<p>I use the following Gnome extensions:</p>
+<ul>
+  <li>AlternateTab</li>
+  <li>Caffeine (had troubles under Wayland for a while, haven’t retried)</li>
+  <li>Dask to Dock</li>
+  <li>Removable Drive Menu</li>
+  <li>Remove Drop Arrows</li>
+  <li>TopIcons Plus</li>
+  <li>User themes</li>
+</ul>
+
+<h3 id="gnome-appearance">Gnome appearance</h3>
+
+<p>I use the following appearance configuration:</p>
+<ul>
+  <li>Global Dark Theme</li>
+  <li>GTK+: Adwaita-dark</li>
+  <li>Icons: Numix</li>
+  <li>Shell theme: Lexis</li>
+</ul>
+
+<h1 id="scientific-computing-on-arch-linux">Scientific Computing on Arch Linux</h1>
+
+<p>Since many scientific libraries either have some fortran code or call fortran
+code that’s in a library we need to install <code class="language-plaintext highlighter-rouge">gfortran</code>. This is done by running
+<code class="language-plaintext highlighter-rouge">sudo pacman -S gfortran</code>. If you also would like to use the clang compiler for
+C and C++ you can install it and extras like <a href="http://clang.llvm.org/extra/clang-tidy/">Clang-Tidy</a> and
+<a href="https://clang.llvm.org/docs/ClangFormat.html">ClangFormat</a> by running <code class="language-plaintext highlighter-rouge">sudo pacman -S clang</code> and
+<code class="language-plaintext highlighter-rouge">sudo pacman -S clang-tools-extra</code>. You can install <a href="https://libcxx.llvm.org/">libc++</a> from AUR using
+<code class="language-plaintext highlighter-rouge">yaourt -S libc++ &amp;&amp; yaourt -S libc++abi</code>. You may have to add the missing
+gpg key to your trusted list using <code class="language-plaintext highlighter-rouge">gpg --recv-keys &lt;the-key&gt;</code>. You should then
+be able to link libc++ instead of stdlibc++.</p>
+
+<p>Now that we have the basics set up that we need for compiling code we can worry
+about how to actually manage different installations of libraries for different
+compilers. I personally really like what <a href="https://github.com/spack/spack">Spack</a> has done, which allows
+you to easily install use modules. In order to use modules we need to first
+install <a href="https://aur.archlinux.org/packages/lmod/">lmod</a> using <code class="language-plaintext highlighter-rouge">yaourt -S lmod</code>. You’ll then need to add</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="c"># Load LMod for modules support</span>
+<span class="nb">.</span> /etc/profile.d/modules.sh
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>to your <code class="language-plaintext highlighter-rouge">~/.bashrc</code> file. You are now ready to follow the installation
+instructions for <a href="https://github.com/spack/spack">Spack</a>, which as of this writing required cloning
+the GitHub repository. To “install” it for use everywhere add the following
+to your <code class="language-plaintext highlighter-rouge">~/.bashrc</code> file</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="c"># Add Spack bin path</span>
+<span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/path/to/spack/bin
+<span class="c"># Source Spack env</span>
+<span class="nb">.</span> /path/to/spack/share/spack/setup-env.sh
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>replacing <code class="language-plaintext highlighter-rouge">/path/to</code> with the path to where you cloned Spack.
+You can now use Spack to manage (nearly) all of your scientific package needs.
+For example, installing OpenBLAS and GSL was really simple. I suggest reading
+the <a href="http://spack.readthedocs.io/en/latest/">Spack documentation</a> to learn more.</p>
+
+<h3 id="installing-packages">Installing packages</h3>
+
+<p>I found it very easy to install a variety of applications that I use. For
+example, I use <a href="https://slack.com/">Slack</a> for work and installing it was as easy as
+running <code class="language-plaintext highlighter-rouge">yaourt -S slack-desktop</code> (though I’ve switched to using
+<a href="https://meetfranz.com/">Franz</a>). Another application I use frequently is
+<a href="https://www.spotify.com/us/">Spotify</a>, which I was able to install using <code class="language-plaintext highlighter-rouge">yaourt -S spotify</code>.
+I’ve also had no trouble using <a href="http://www.zsh.org/">Zsh</a> and <a href="https://github.com/robbyrussell/oh-my-zsh">oh-my-zsh</a>
+instead of bash. You can
+search the Arch Linux user repository (AUR) <a href="https://aur.archlinux.org/">online</a> to see if the
+packages you need are available.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>In this post I went over how to setup Arch Linux/Antergos on a MacBook Pro
+11,4, though I expect models close to that will be similar. I’ve been using
+this setup for about one year now and am really happy with it. I have
+absolutely no desire to switch back to macOS. I find that for the type of
+work I do that the Linux environment is simply a much better fit.
+Thanks for reading and I hope you found the post useful!</p>
+
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/blog">Back to blog</a>
+</p>
+
+
+<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'nilsdeppe'; // required: replace example with your forum shortname
+        // var disqus_developer = 1; // Comment out when the site is live
+        var disqus_identifier = "/posts/antergos-mbp";
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            
+            <li><a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://orcid.org/0000-0003-4557-4115" target="_blank" title="ORCID"><i class="ai ai-orcid ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-1x"></i></a></li>
+            
+            
+            <li><a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-1x"></i></a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>

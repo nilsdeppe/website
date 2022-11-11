@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Containerized Development With Singularity</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme meta -->
+<meta name="theme-name" content="airspace-jekyll" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/owl.carousel.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/airspace.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/ionicons.min.css" />
+<link rel="stylesheet" href="/css/animate.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/syntax.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/min/waypoints.min.js"></script>
+<script src="/js/jquery.counterup.js"></script>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- scale size of the font -->
+MathJax.Hub.Config({
+"HTML-CSS": { scale: 90}
+});
+
+<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
+MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+});
+MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+
+</script>
+
+
+<script src="/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="/img/logo.png" alt="Logo">
+                 </a> -->
+
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="/"><font size="6">Nils Deppe</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          <a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-2x"></i></a>
+          
+          
+          <a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-2x"></i></a>
+          
+          
+          <a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+          
+          <!-- 
+               <a href="https://bitbucket.com/ndeppe" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-2x"></i></a>
+                -->
+          
+          <a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+          
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <!-- <li><a href="/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
+  </div>
+</div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>Containerized Development With Singularity</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold"></span> on <span class="bold">July 1, 2018</span></p>
+            </div>
+            <hr />
+            <p><p>I’ve been wanting to try using containers for managing different development
+environments for a while now. <a href="https://www.docker.com/">Docker</a> is a well known
+container software, but I’ve found it not be well-suited for
+development. <a href="http://singularity.lbl.gov/">Singularity</a> is an alternative that
+is designed for high performance computing and not microservices. It integrates
+more readily with the host OS, while being more secure than
+Docker. Interestingly, in some applications Singularity containers actually
+<a href="https://arxiv.org/abs/1709.10140">perform better than bare-metal</a>(the native
+OS). In this post I will outline what I’ve done to use Singularity for a
+container-based development environment.</p>
+
+<p>Singularity containers use <a href="http://singularity.lbl.gov/docs-recipes">recipes</a>,
+which can derive off of a variety of
+different sources, such as Docker containers or Singularity
+containers. Singularity recipes are analogous to Docker files. Setting up a
+development environment requires being aware of a few subtleties:</p>
+<ul>
+  <li>You can share the host init file for your shell (<code class="language-plaintext highlighter-rouge">~/.bashrc</code>, for example) by
+launching the Singularity container using <code class="language-plaintext highlighter-rouge">singularity exec ubuntu.simg
+/bin/bash</code>. However, since the configuration in the container is different
+from the host you may need to tweak your init files to work in both
+environments.</li>
+  <li>Having a modules (see <a href="https://lmod.readthedocs.io/en/latest/">LMod</a>) system
+both inside and outside the container can lead to difficulty. You need to run
+<code class="language-plaintext highlighter-rouge">module purge</code> before starting the Singularity container.</li>
+  <li>You can run a different OS in the container than the host under almost all
+circumstances. The only exception is when you need to install software that is
+compatible with the host kernel since that may not be available from the
+container OS’s package manager. The Linux
+<a href="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a> utility is the
+example I encountered.</li>
+  <li>The locale inside the container must be set to the locale of the host OS.
+Without setting the locale correctly certain fonts like
+<a href="https://github.com/powerline/fonts">Powerline</a> won’t work and perl gives
+warnings about the incorrect locale settings. Unfortunately, setting the
+locale is OS dependent, but I will show how to do it for Ubuntu and Arch
+Linux.</li>
+</ul>
+
+<h4 id="sharing-init-files">Sharing init files</h4>
+<p>To enable my <code class="language-plaintext highlighter-rouge">~/.zshrc</code> to work both inside and outside the container I have the
+container set the environment variable <code class="language-plaintext highlighter-rouge">IN_CONTAINER=true</code>. In Singularity
+recipes this is achieved using:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>%environment
+    <span class="nb">export </span><span class="nv">IN_CONTAINER</span><span class="o">=</span><span class="nb">true</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Inside my <code class="language-plaintext highlighter-rouge">~/.zshrc</code> I have the following function that returns true if
+evaluated inside a container:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="c"># Check if we are running inside a container</span>
+in_container<span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$IN_CONTAINER</span> <span class="o">==</span> <span class="s2">"true"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+        return </span>0
+    <span class="k">fi
+    return </span>1
+<span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>I then use the <code class="language-plaintext highlighter-rouge">in_container</code> function throughout my <code class="language-plaintext highlighter-rouge">~/.zshrc</code> file to control
+exactly what is executed inside the container and outside.</p>
+
+<h4 id="using-modules">Using modules</h4>
+<p>In order to use modules both inside and outside the container I set
+up an alias that purges the modules, drops into a container, and reloads the
+modules after I exit the container. Here is what I do:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="code"><pre><span class="k">if</span> <span class="o">!</span> in_container<span class="p">;</span> <span class="k">then</span>
+    <span class="c"># Load modules for host OS</span>
+    load_modules<span class="o">()</span> <span class="o">{</span>
+        module load <span class="se">\</span>
+               blaze-3.2-gcc-7.2.0-mnkglif <span class="se">\</span>
+               brigand-master-gcc-6.3.1-pcaobur <span class="se">\</span>
+               libxsmm-1.8.1-gcc-6.3.1-mevsuzx <span class="se">\</span>
+               openblas-0.2.19-gcc-6.3.1-if6giqo <span class="se">\</span>
+               gsl-2.3-gcc-6.3.1-hsntrnj <span class="se">\</span>
+               yaml-cpp-master-gcc-6.3.1-gmc3k4n <span class="se">\</span>
+               catch-2.1.0-gcc-7.3.0-do5wfi3 <span class="se">\</span>
+               kvasir-mpl-develop-gcc-7.2.0-hr2lgqe
+    <span class="o">}</span>
+    load_modules
+
+    <span class="c"># Drop into a Singularity dev environment, reset modules after</span>
+    container<span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"arch"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+            </span>module purge <span class="o">&amp;&amp;</span> <span class="se">\</span>
+                singularity <span class="nb">exec</span> <span class="se">\</span>
+                            ~/Research/singularity/arch.simg <span class="se">\</span>
+                            /bin/zsh <span class="o">&amp;&amp;</span> <span class="se">\</span>
+                load_modules
+        <span class="k">elif</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"ubuntu"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+            </span>module purge <span class="o">&amp;&amp;</span> <span class="se">\</span>
+                singularity <span class="nb">exec</span> <span class="se">\</span>
+                            ~/Research/singularity/ubuntu.simg <span class="se">\</span>
+                            /bin/zsh <span class="o">&amp;&amp;</span> <span class="se">\</span>
+                load_modules
+        <span class="k">fi</span>
+    <span class="o">}</span>
+<span class="k">fi</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>The <code class="language-plaintext highlighter-rouge">container</code> function can be called to drop into a Singularity container of
+your choice. In my case they all load Zsh as the default shell, but you can
+change this back to bash if you prefer. Since the system modules can interfere
+with the modules in the container we first purge the system modules, then launch
+the container, and after exit reload the host modules.</p>
+
+<h4 id="dealing-with-kernel-dependencies">Dealing with kernel dependencies</h4>
+<p>For my work I really care about performance of code, and so optimization is
+something I spend a fair amount of my time doing. This means I need to be able
+to use Linux perf to see how software and hardware are interacting. Since
+you cannot use perf version that is older than your kernel version, using perf
+might require you to use the same OS inside and outside the container. For
+example, I cannot use perf if I use an Ubuntu container since there is no
+perf available that is compatible with the kernel version. Using an Arch Linux container
+allows me to easily install a recent version of perf that is compatible with my
+kernel. The good news is that for most people the OS won’t matter, and if it
+does the solution is fairly straightforward: use the same OS as your host.</p>
+
+<h4 id="setting-the-localepowerline-fonts-support">Setting the locale/Powerline fonts support</h4>
+<p>If the locale inside the Singularity container is not set correctly then fonts
+like <a href="https://github.com/powerline/fonts">Powerline</a> won’t work. I use the
+<a href="https://github.com/agnoster/agnoster-zsh-theme">Agnoster Zsh theme</a>, which uses
+Powerline fonts. Setting the locale is OS dependent so you’ll need to figure out
+how to do it for the OS you’re using in the container. Here is what is necessary
+for an Ubuntu recipe:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>%post
+    <span class="c"># In order to get locales working properly inside a Singularity container</span>
+    <span class="c"># we need to do the following:</span>
+    apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> <span class="se">\</span>
+            locales language-pack-fi language-pack-en
+            <span class="nb">export </span><span class="nv">LANGUAGE</span><span class="o">=</span>en_US.UTF-8 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+            <span class="nb">export </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+            <span class="nb">export </span><span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+            locale-gen en_US.UTF-8 <span class="o">&amp;&amp;</span> <span class="se">\</span>
+            dpkg-reconfigure locales
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>and what is necessary for an Arch Linux recipe:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>%post
+    <span class="c"># Use US english UTF-8 locale</span>
+    <span class="nb">sed</span> <span class="nt">-i</span> <span class="s1">'s/#en_US.UTF-8/en_US.UTF-8/g'</span> /etc/locale.gen
+    locale-gen en_US.UTF-8
+    pacman <span class="nt">-Sy</span> <span class="nt">--noconfirm</span> zsh
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<h4 id="tweaking-recipe-files-and-incremental-builds">Tweaking recipe files and incremental builds</h4>
+<p>One nice feature of Singularity containers (similar to Docker containers) is
+that incremental builds will use the existing image to run
+the recipe rather than an empty one. Let me give an example. Say I’m building
+the recipe called <code class="language-plaintext highlighter-rouge">Ubuntu.sh</code>, then I would run <code class="language-plaintext highlighter-rouge">sudo singularity build
+ubuntu.simg Ubuntu.sh</code>. If I want to add a new package using <code class="language-plaintext highlighter-rouge">apt-get</code> I
+can comment out all the commands under the <code class="language-plaintext highlighter-rouge">%post</code> section that built the
+existing image and only have the new commands. Then when I run <code class="language-plaintext highlighter-rouge">sudo singularity
+build ubuntu.simg Ubuntu.sh</code>, the additional command will be run and the new
+image is much faster to build.</p>
+
+<p>Specifically, say the example recipe file below is built.</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>Bootstrap: docker
+From: ubuntu:18.04
+
+%post
+    apt-get <span class="nt">-y</span> update
+    apt-get <span class="nt">-y</span> <span class="nb">install </span>wget
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>If the line <code class="language-plaintext highlighter-rouge">apt-get -y install emacs</code> is added to the file like:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>Bootstrap: docker
+From: ubuntu:18.04
+
+%post
+    apt-get <span class="nt">-y</span> update
+    apt-get <span class="nt">-y</span> <span class="nb">install </span>wget
+    apt-get <span class="nt">-y</span> <span class="nb">install </span>emacs
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>When the image is rebuilt only the new command will be executed and the result
+added to the image.</p>
+
+<h4 id="summary">Summary</h4>
+<p>In this post I describe some of the troubles with using Singularity containers
+for daily development and how to overcome them. Specifically, I address how to
+use modules, deal with kernel dependencies, and set the locale to get Powerline
+fonts to work inside Singularity. I’m sharing the container recipes that I use
+for development on <a href="https://github.com/nilsdeppe/MyEnvironment">GitHub</a>. Overall
+Singularity containers are a nice way to develop software, especially if the
+development is shared by many people and there is a long list of
+dependencies. For the project I work on mainly,
+<a href="https://github.com/sxs-collaboration/spectre">SpECTRE</a>, we’ve been using
+Docker containers for nearly a year now and just adopted Singularity as an
+alternative to make local development easier.</p>
+
+<p>I hope you find this post helpful and please feel free to ask any questions in
+the comments below.</p>
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/blog">Back to blog</a>
+</p>
+
+
+<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'nilsdeppe'; // required: replace example with your forum shortname
+        // var disqus_developer = 1; // Comment out when the site is live
+        var disqus_identifier = "/posts/containerized-dev";
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            
+            <li><a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://orcid.org/0000-0003-4557-4115" target="_blank" title="ORCID"><i class="ai ai-orcid ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-1x"></i></a></li>
+            
+            
+            <li><a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-1x"></i></a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>

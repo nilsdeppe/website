@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Template Metaprogramming Part 2</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme meta -->
+<meta name="theme-name" content="airspace-jekyll" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/owl.carousel.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/airspace.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/ionicons.min.css" />
+<link rel="stylesheet" href="/css/animate.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/syntax.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/min/waypoints.min.js"></script>
+<script src="/js/jquery.counterup.js"></script>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- scale size of the font -->
+MathJax.Hub.Config({
+"HTML-CSS": { scale: 90}
+});
+
+<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
+MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+});
+MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+
+</script>
+
+
+<script src="/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="/img/logo.png" alt="Logo">
+                 </a> -->
+
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="/"><font size="6">Nils Deppe</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          <a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-2x"></i></a>
+          
+          
+          <a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-2x"></i></a>
+          
+          
+          <a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+          
+          <!-- 
+               <a href="https://bitbucket.com/ndeppe" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-2x"></i></a>
+                -->
+          
+          <a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+          
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <!-- <li><a href="/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
+  </div>
+</div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>Template Metaprogramming Part 2</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold"></span> on <span class="bold">January 29, 2017</span></p>
+            </div>
+            <hr />
+            <p><p>We continue on our adventure of template metaprogramming. We explore
+the concept of compile-time data structures such as a typelist, map,
+and a set. This is done using the <a href="https://github.com/edouarda/brigand">brigand</a> template
+metaprogramming library (TMPL). However, there are several other
+options available. I outline them in a table below along with the C++
+standard each requires. Giving credit where it is due, the original
+inspiration for some these libraries were blog posts by
+<a href="http://ericniebler.com/2014/11/13/tiny-metaprogramming-library/">Eric Niebler</a> and <a href="http://www.pdimov.com/cpp2/simple_cxx11_metaprogramming.html">Peter Dimov</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Library</th>
+      <th style="text-align: center">C++ Support Required</th>
+      <th style="text-align: center">Comments</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="http://www.boost.org/doc/libs/1_62_0/libs/mpl/doc/index.html">Boost.MPL</a></td>
+      <td style="text-align: center">C++03</td>
+      <td style="text-align: center">Only use if C++11 is not supported</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/edouarda/brigand">brigand</a></td>
+      <td style="text-align: center">C++11</td>
+      <td style="text-align: center">Personal preference, fast, lightweight</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/brunocodutra/metal">metal</a></td>
+      <td style="text-align: center">C++14</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/boostorg/hana">Boost.Hana</a></td>
+      <td style="text-align: center">C++14</td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>In <a href="/posts/tmpl-part1">part one</a> of this series
+of posts on TMP we explored the idea of <code class="language-plaintext highlighter-rouge">if</code> statements at compile
+time. In order to truly study loops in metaprogramming we need some
+sort of “data structure”. I put this in quotes because our data really
+is types, or as I previously referred to them, metavariables. Maybe
+the term “metadata structures” is appropriate. Regardless of what we
+call them, we need containers to store our metavariables.</p>
+
+<p>The first, and simplest container we will look at is a typelist. Here
+is what a typelist looks like:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span> <span class="nc">Ts</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">typelist</span> <span class="p">{};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Okay, great, right? If you’re like me then you might be confused on
+exactly what good this does us. Well, <code class="language-plaintext highlighter-rouge">typelist</code> is a variadic
+template, which means it can take any number of types as template
+parameters. For example, <code class="language-plaintext highlighter-rouge">typelist&lt;int, bool, char&gt;</code> and
+<code class="language-plaintext highlighter-rouge">typelist&lt;double, float, std::vector&lt;double&gt;&gt;</code> are two typelists. So
+the typelist stores the types as template parameters. Alright, cool,
+so I can create a metavariable by writing <code class="language-plaintext highlighter-rouge">using my_list =
+typelist&lt;int, bool, char&gt;;</code>, that’s great but how do I <em>use</em> this?
+Well for that we need
+to write some helper metafunctions. Let’s compile a list of things we
+might want to do with a typelist. For inspiration let’s look at the
+member functions of <a href="http://en.cppreference.com/w/cpp/container/vector">std::vector</a>. We probably want the
+following:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">at</code></li>
+  <li><code class="language-plaintext highlighter-rouge">front</code></li>
+  <li><code class="language-plaintext highlighter-rouge">back</code></li>
+  <li><code class="language-plaintext highlighter-rouge">size</code></li>
+  <li><code class="language-plaintext highlighter-rouge">clear</code></li>
+  <li><code class="language-plaintext highlighter-rouge">erase</code> (both at a specific location and all occurrences of a
+  particular type)</li>
+  <li><code class="language-plaintext highlighter-rouge">push_back</code></li>
+  <li><code class="language-plaintext highlighter-rouge">pop_back</code></li>
+  <li><code class="language-plaintext highlighter-rouge">push_front</code></li>
+  <li><code class="language-plaintext highlighter-rouge">pop_front</code></li>
+  <li><code class="language-plaintext highlighter-rouge">swap</code></li>
+</ul>
+
+<p>We won’t cover all of these but we will get through enough to make you
+feel comfortable using typelist as a metadata structure.</p>
+
+<p>Because the above ordering is not very pedagogical let’s start with
+<code class="language-plaintext highlighter-rouge">size</code>. How would we implement such a thing? Well what we want to do
+is get the number of template parameters in the variadic template
+<code class="language-plaintext highlighter-rouge">typelist</code> so we should be able to use the <code class="language-plaintext highlighter-rouge">sizeof...()</code> operator to
+get the size of the parameter pack <code class="language-plaintext highlighter-rouge">Ts</code>. One approach then is to
+create a <code class="language-plaintext highlighter-rouge">static constexpr</code> member variable as follows,</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span> <span class="nc">Ts</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">typelist</span> <span class="p">{</span>
+  <span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Ts</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>then we can get the size of a <code class="language-plaintext highlighter-rouge">typelist</code> by doing
+<code class="language-plaintext highlighter-rouge">list::size()</code>. However, in TMP we want to use metafunctions that
+return types, not values. Since <code class="language-plaintext highlighter-rouge">list::size()</code> returns a value let’s
+look for another option. One method would be simply to use a type
+alias,</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span> <span class="nc">Ts</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">typelist</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">size</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Ts</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Now we can retrieve the size of a <code class="language-plaintext highlighter-rouge">typelist</code> using <code class="language-plaintext highlighter-rouge">using list_size =
+typename my_list::size;</code> Okay, that seems pretty good, but can we be
+more generic? Having the <code class="language-plaintext highlighter-rouge">size</code> member can only work for typelists and
+also complicates our implementation of a typelist. So how can we be
+more generic? What we need is a metafunction that takes a typelist as
+its argument (denoted by <code class="language-plaintext highlighter-rouge">Seq</code>, short for sequence, in the code
+below) and returns the size in a <code class="language-plaintext highlighter-rouge">std::integral_constant</code>. Something
+like</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">size</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">,</span> <span class="p">(</span><span class="n">number</span> <span class="n">of</span> <span class="n">elements</span>
+  <span class="n">in</span> <span class="n">Seq</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>works. So then the question is how to get the number of elements from
+the
+sequence. What the actual thing we want to do is get the template
+parameters of a template parameter. That is, <code class="language-plaintext highlighter-rouge">Seq</code> is a template
+parameter to <code class="language-plaintext highlighter-rouge">size</code>, but <code class="language-plaintext highlighter-rouge">Seq</code> also has template parameters, and these
+are what we want access to. The answer is the rarely seen
+<a href="http://en.cppreference.com/w/cpp/language/template_parameters">template-template parameter</a>, which we will come across
+in some frequency while discussing TMP. Here is our new implementation
+of <code class="language-plaintext highlighter-rouge">size</code></p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">size</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">Seq</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Ts</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">size</span><span class="o">&lt;</span><span class="n">Seq</span><span class="o">&lt;</span><span class="n">Ts</span><span class="p">...</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Ts</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>That seems pretty good, but we still need to use the <code class="language-plaintext highlighter-rouge">typename</code>
+keyword to get access to the <code class="language-plaintext highlighter-rouge">type</code> member metavariable. While this
+isn’t terrible, it adds a lot of syntactic noise that is not
+necessary and that we would like to avoid. To avoid this syntactic
+noise we can use a type alias as follows:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="k">namespace</span> <span class="n">detail</span> <span class="p">{</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">size_impl</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">Seq</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Ts</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">size_impl</span><span class="o">&lt;</span><span class="n">Seq</span><span class="o">&lt;</span><span class="n">Ts</span><span class="p">...</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Ts</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="p">}</span>  <span class="c1">// namespace detail</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">&gt;</span>
+<span class="k">using</span> <span class="n">size</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">detail</span><span class="o">::</span><span class="n">size_impl</span><span class="o">&lt;</span><span class="n">Seq</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Then, for example we can write <code class="language-plaintext highlighter-rouge">using result = size&lt;typelist&lt;double,
+bool&gt;&gt;;</code> and have <code class="language-plaintext highlighter-rouge">result::value == 2</code>. That’s pretty good and easy to
+use, so let’s stick with that.</p>
+
+<p>Next let’s implement <code class="language-plaintext highlighter-rouge">front</code> as a metafunction. Just like with <code class="language-plaintext highlighter-rouge">size</code>
+we want access to the template parameters of the typelist, so we need
+a template-template parameter. However, this time we want to single
+out the first template parameter of the typelist. We will make life
+easier by immediately sticking the implementation in a <code class="language-plaintext highlighter-rouge">detail</code>
+namespace and use a type alias.</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="k">namespace</span> <span class="n">detail</span> <span class="p">{</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">front_impl</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">Seq</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Ts</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">front_impl</span><span class="o">&lt;</span><span class="n">Seq</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Ts</span><span class="p">...</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">T</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="p">}</span>  <span class="c1">// namespace detail</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">&gt;</span>
+<span class="k">using</span> <span class="n">front</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">detail</span><span class="o">::</span><span class="n">front_impl</span><span class="o">&lt;</span><span class="n">Seq</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>What’s happening here is that we use the template parameter <code class="language-plaintext highlighter-rouge">T</code> on
+lines 5 and 6 to deduce the first template parameter in the
+sequence. We can then trivially return the first type in the typelist
+via the type alias on line 7. That’s it for <code class="language-plaintext highlighter-rouge">front</code>. Hopefully you’ll
+agree that this wasn’t 
+too bad to implement. However, if you’re really paying attention
+you’ll have noticed that the above implementation won’t work with an
+empty typelist. However, I’ll leave it as an exercise to the reader
+dream up ways of handling empty typelists (hint: use a
+compile-time<code class="language-plaintext highlighter-rouge">'if</code> statement implemented using partial template
+specialization. I’ve shared my solution on
+<a href="https://github.com/nilsdeppe/template-metaprogramming-tutorials">GitHub</a>). Here is a sample usage of <code class="language-plaintext highlighter-rouge">front</code>:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="k">static_assert</span><span class="p">(</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">front</span><span class="o">&lt;</span><span class="n">typelist</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="kt">char</span><span class="p">,</span> <span class="kt">bool</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>
+    <span class="s">"The implementation of front is bad"</span><span class="p">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Now let’s turn our attention to <code class="language-plaintext highlighter-rouge">pop_front</code> (<code class="language-plaintext highlighter-rouge">push_front</code> will be very
+similar). Given a typelist we want to remove the first element. Well
+this is almost the same as <code class="language-plaintext highlighter-rouge">front</code> except that instead
+of returning the first element, we return a typelist of all the
+elements except the first one. Here is the implementation:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="k">namespace</span> <span class="n">detail</span> <span class="p">{</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">pop_front_impl</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">Seq</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Ts</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">pop_front_impl</span><span class="o">&lt;</span><span class="n">Seq</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Ts</span><span class="p">...</span><span class="o">&gt;&gt;</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">Seq</span><span class="o">&lt;</span><span class="n">Ts</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="p">}</span>  <span class="c1">// namespace detail</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">&gt;</span>
+<span class="k">using</span> <span class="n">pop_front</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">detail</span><span class="o">::</span><span class="n">pop_front_impl</span><span class="o">&lt;</span><span class="n">Seq</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>On lines 5 and 6 we again deduce the first element and the remaining
+separately. On line 7 we then return <code class="language-plaintext highlighter-rouge">Seq&lt;Ts...&gt;</code>, or
+<code class="language-plaintext highlighter-rouge">typelist&lt;Ts...&gt;</code> to be concrete. Again, what’s shown above will fail
+for an empty typelist and I’ll leave it to the reader to find a
+solution (mine is available on <a href="https://github.com/nilsdeppe/template-metaprogramming-tutorials">GitHub</a>). Here is an
+example of how to use <code class="language-plaintext highlighter-rouge">pop_front</code>:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">pop_front</span><span class="o">&lt;</span><span class="n">typelist</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="kt">char</span><span class="p">,</span> <span class="kt">bool</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+                           <span class="n">typelist</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="kt">bool</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span>
+              <span class="s">"The implementation of pop_front is bad"</span><span class="p">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Finally, I’ll leave you with an implementation of <code class="language-plaintext highlighter-rouge">push_front</code> to
+think about. Hopefully with a bit of thought it will make sense given
+what else we’ve discussed. The implementations of some of the other
+metafunctions we outlined above are more intricate and would deserve
+their own post. But that’s enough digression, here is an
+implementation of <code class="language-plaintext highlighter-rouge">push_front</code> (I’ll leave it as an exercise to write
+<code class="language-plaintext highlighter-rouge">push_back</code>):</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="k">namespace</span> <span class="n">detail</span> <span class="p">{</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">push_front_impl</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="o">...</span><span class="p">&gt;</span> <span class="k">class</span> <span class="nc">Seq</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Ts</span><span class="p">&gt;</span>
+<span class="k">struct</span> <span class="nc">push_front_impl</span><span class="o">&lt;</span><span class="n">Seq</span><span class="o">&lt;</span><span class="n">Ts</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">Seq</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Ts</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="p">}</span>  <span class="c1">// namespace detail</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Seq</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+<span class="k">using</span> <span class="n">push_front</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">detail</span><span class="o">::</span><span class="n">push_front_impl</span><span class="o">&lt;</span><span class="n">Seq</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Here is an example of how to use <code class="language-plaintext highlighter-rouge">push_front</code>, though at this point
+you’ve probably figured out how this works.</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="k">static_assert</span><span class="p">(</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">push_front</span><span class="o">&lt;</span><span class="n">typelist</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="kt">char</span><span class="p">,</span> <span class="kt">bool</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">,</span> <span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span>
+                 <span class="n">typelist</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="kt">char</span><span class="p">,</span> <span class="kt">bool</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span>
+    <span class="s">"The implementation of push_front is bad"</span><span class="p">);</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>In this part of our adventure into the land of template
+metaprogramming we looked at what a typelist is and how some of the
+core metafunctions needed to use typelists are implemented. The goal
+of this post was to familiarize the reader with typelists and how they
+work. What was covered above should be enough to allow the reader to
+use one of the metaprogramming libraries discussed in the first
+paragraph to manipulate typelists. In my next post I will discuss
+either compile-time <code class="language-plaintext highlighter-rouge">for</code> loops or algorithms that operate on
+typelists. Both of these are essential building blocks of
+metaprogramming and will prove indispensable for converting runtime
+code to compile time.</p>
+
+<p><strong>Note</strong>: I have shared my solutions to the exercises and all the
+final example code above on <a href="https://github.com/nilsdeppe/template-metaprogramming-tutorials">GitHub</a>.</p>
+
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/blog">Back to blog</a>
+</p>
+
+
+<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'nilsdeppe'; // required: replace example with your forum shortname
+        // var disqus_developer = 1; // Comment out when the site is live
+        var disqus_identifier = "/posts/tmpl-part2";
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            
+            <li><a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://orcid.org/0000-0003-4557-4115" target="_blank" title="ORCID"><i class="ai ai-orcid ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-1x"></i></a></li>
+            
+            
+            <li><a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-1x"></i></a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>

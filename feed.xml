@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Nils Deppe</title>
+    <description>I hope to share my excitement and knowledge of physics, C++, metaprogramming, high performance computing, and scientific computing here.
+</description>    
+    <link>https://nilsdeppe.com</link>
+    <atom:link href="https://nilsdeppe.com/feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>Containerized Development With Singularity</title>
+                
+        
+          <description>&lt;p&gt;I’ve been wanting to try using containers for managing different development
+environments for a while now. &lt;a href=&quot;https://www.docker.com/&quot;&gt;Docker&lt;/a&gt; is a well known
+container software, but I’ve found it not be well-suited for
+development. &lt;a href=&quot;http://singularity.lbl.gov/&quot;&gt;Singularity&lt;/a&gt; is an alternative that
+is designed for high performance computing and not microservices. It integrates
+more readily with the host OS, while being more secure than
+Docker. Interestingly, in some applications Singularity containers actually
+&lt;a href=&quot;https://arxiv.org/abs/1709.10140&quot;&gt;perform better than bare-metal&lt;/a&gt;(the native
+OS). In this post I will outline what I’ve done to use Singularity for a
+container-based development environment.&lt;/p&gt;
+</description>
+        
+        <pubDate>Sun, 01 Jul 2018 12:00:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/containerized-dev</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/containerized-dev</guid>
+      </item>
+    
+      <item>
+        <title>Using Emacs as a C++ IDE - Take 2</title>
+                
+        
+          <description>&lt;p&gt;&lt;em&gt;Updated Feb. 10, 2018&lt;/em&gt;&lt;br /&gt;
+&lt;em&gt;Updated Oct. 14, 2019&lt;/em&gt;&lt;br /&gt;
+Just over a year ago I wrote a
+&lt;a href=&quot;/posts/emacs-c++-ide&quot;&gt;post&lt;/a&gt; about using Emacs is a C++
+IDE. Over the past year many small improvements have led me to an entirely
+different configuration that I find to be much faster and easier to use.
+In this post I will show screencasts of the features I’m using
+and provide my entire init file at the end. There should be enough comments
+in the init file to make it clear what’s going on. If not leave a comment
+and I’ll try to explain.&lt;/p&gt;
+</description>
+        
+        <pubDate>Wed, 27 Dec 2017 17:00:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/emacs-c++-ide2</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/emacs-c++-ide2</guid>
+      </item>
+    
+      <item>
+        <title>The Missing for constexpr</title>
+                
+        
+          <description>&lt;p&gt;With C++17 we finally get &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;if constexpr&lt;/code&gt;. However, I have started running
+into a lot of cases where I want a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;for constexpr&lt;/code&gt; that is guaranteed to be
+evaluated at compile time. My use case is effectively compile time
+indexing of a multi-index &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tuple&lt;/code&gt;-like datastructure. This means that
+arbitrary nesting (within instantiation depth limits at least) must be
+possible, and it must be possible to have an inner for loop index depend
+on an outer for loop index. We will use C++14 to implement &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;for constexpr&lt;/code&gt;.&lt;/p&gt;
+</description>
+        
+        <pubDate>Sat, 09 Dec 2017 12:00:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/for-constexpr</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/for-constexpr</guid>
+      </item>
+    
+      <item>
+        <title>Antergos/Arch Linux on MacBook Pro 11,4</title>
+                
+        
+          <description>&lt;p&gt;I’ve been wanting to run a Linux distro on my MacBook Pro for about 6 years
+now. About a year ago I decided to give it another go and had a lot of success.
+After doing some research on the topic I came to the conclusion that
+&lt;a href=&quot;https://www.archlinux.org/&quot;&gt;Arch Linux&lt;/a&gt; is the most promising distro, at least in terms documentation
+for MacBook Pros. To make the installation
+easier I decided to go with &lt;a href=&quot;https://antergos.com/&quot;&gt;Antergos&lt;/a&gt; for the installation process.
+This post will cover replacing macOS on your MacBook Pro 11,4. After following
+this post you will only have Antergos installed on your system.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sat, 09 Dec 2017 10:00:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/antergos-mbp</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/antergos-mbp</guid>
+      </item>
+    
+      <item>
+        <title>Lambdas and Overloads and Type Traits, Oh My!</title>
+                
+        
+          <description>&lt;p&gt;In this post I will discuss overloading generic lambdas in C++14, using SFINAE
+with lambdas, using tagged dispatch for “pseudo-SFINAE”, and finally using
+overloading and SFINAE to create local type traits inside functions. All of
+these are useful when writing generic code. Overloading generic lambdas,
+for example, proves to be extremely useful when implementing a stream operator
+for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::tuple&lt;/code&gt;. I’m sure you can think of reasons why a type trait is useful
+only in the current scope and writing a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;struct&lt;/code&gt; elsewhere for it is overkill
+(e.g. checking for the existence of a member function of a template parameter).&lt;/p&gt;
+</description>
+        
+        <pubDate>Sun, 10 Sep 2017 12:00:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/local-type-traits</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/local-type-traits</guid>
+      </item>
+    
+      <item>
+        <title>Variadic Using and How to Use It</title>
+                
+        
+          <description>&lt;p&gt;C++17 allows parameter pack expansion inside &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;using&lt;/code&gt; statements. This feature
+is sometimes called &lt;em&gt;variadic-using&lt;/em&gt; and the paper is
+&lt;a href=&quot;http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0195r2.html&quot;&gt;here&lt;/a&gt;.
+Unfortunately, I found searching for “variadic using” with Google to not be all
+that helpful. In this post I will provide a concrete example of what this
+feature can be used for, since it might seem like a bit of a strange idea at
+first.&lt;/p&gt;
+</description>
+        
+        <pubDate>Sat, 02 Sep 2017 00:21:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/variadic-using</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/variadic-using</guid>
+      </item>
+    
+      <item>
+        <title>TMP Part 4 - Recursion Free Tuple Iteration</title>
+                
+        
+          <description>&lt;p&gt;This post is a follow up to
+&lt;a href=&quot;/posts/tmpl-part3&quot;&gt;iterating over tuples&lt;/a&gt;,
+but this time we do not use runtime or compile time recursion, so the
+resulting code is cleaner and faster. There are two different types of
+iteration, one where you keep a “state” and one where you do not. By
+state I mean, for example, the partial sum of all elements  already
+processed in a reduction, accumulation, or fold.
+&lt;a href=&quot;http://en.cppreference.com/w/cpp/language/parameter_pack&quot;&gt;Parameter pack&lt;/a&gt;
+expansion is the fastest and preferred method of iteration. However,
+it has the drawback that it cannot keep state at compile time (or at least
+I haven’t figured out how, yet). That means parameter pack expansion works well
+in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;transform&lt;/code&gt;s at compile time but not &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fold&lt;/code&gt;s. Interestingly enough, we can
+use parameter pack expansion for runtime iteration with state. This is something
+I have spent a fair amount of time thinking about and I now have a solution I’m
+very happy with. Let’s dive in!&lt;/p&gt;
+</description>
+        
+        <pubDate>Fri, 25 Aug 2017 00:05:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/tmpl-part4</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/tmpl-part4</guid>
+      </item>
+    
+      <item>
+        <title>TMP Part 3 - Tuple Iteration With Recursion</title>
+                
+        
+          <description>&lt;p&gt;A fairly common task one encounters is iterating over a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;std::tuple&lt;/code&gt;.
+I’m going to keep this post fairly brief and go over how not to iterate
+over a tuple. We’ll discuss how you should iterate over a tuple in the
+next &lt;a href=&quot;/posts/tmpl-part4&quot;&gt;post&lt;/a&gt;.&lt;/p&gt;
+</description>
+        
+        <pubDate>Thu, 24 Aug 2017 00:01:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/tmpl-part3</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/tmpl-part3</guid>
+      </item>
+    
+      <item>
+        <title>Template Metaprogramming Part 2</title>
+                
+        
+          <description>&lt;p&gt;We continue on our adventure of template metaprogramming. We explore
+the concept of compile-time data structures such as a typelist, map,
+and a set. This is done using the &lt;a href=&quot;https://github.com/edouarda/brigand&quot;&gt;brigand&lt;/a&gt; template
+metaprogramming library (TMPL). However, there are several other
+options available. I outline them in a table below along with the C++
+standard each requires. Giving credit where it is due, the original
+inspiration for some these libraries were blog posts by
+&lt;a href=&quot;http://ericniebler.com/2014/11/13/tiny-metaprogramming-library/&quot;&gt;Eric Niebler&lt;/a&gt; and &lt;a href=&quot;http://www.pdimov.com/cpp2/simple_cxx11_metaprogramming.html&quot;&gt;Peter Dimov&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sun, 29 Jan 2017 12:00:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/tmpl-part2</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/tmpl-part2</guid>
+      </item>
+    
+      <item>
+        <title>Template Metaprogramming Part 1</title>
+                
+        
+          <description>&lt;p&gt;What is template metaprogramming? Why do I care about template
+metaprogramming? What is a typelist? These are the sorts of questions
+I asked myself when I first started looking at template
+metaprogramming seriously.&lt;/p&gt;
+</description>
+        
+        <pubDate>Sat, 14 Jan 2017 22:00:00 +0000</pubDate>
+        <link>https://nilsdeppe.com/posts/tmpl-part1</link>
+        <guid isPermaLink="true">https://nilsdeppe.com/posts/tmpl-part1</guid>
+      </item>
+    
+  </channel>
+</rss>

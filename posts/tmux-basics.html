@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Terminal Multiplexer (tmux) on OSX</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme meta -->
+<meta name="theme-name" content="airspace-jekyll" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/owl.carousel.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/airspace.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/ionicons.min.css" />
+<link rel="stylesheet" href="/css/animate.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/syntax.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/min/waypoints.min.js"></script>
+<script src="/js/jquery.counterup.js"></script>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- scale size of the font -->
+MathJax.Hub.Config({
+"HTML-CSS": { scale: 90}
+});
+
+<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
+MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+});
+MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+
+</script>
+
+
+<script src="/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="/img/logo.png" alt="Logo">
+                 </a> -->
+
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="/"><font size="6">Nils Deppe</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          <a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-2x"></i></a>
+          
+          
+          <a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-2x"></i></a>
+          
+          
+          <a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+          
+          <!-- 
+               <a href="https://bitbucket.com/ndeppe" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-2x"></i></a>
+                -->
+          
+          <a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+          
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <!-- <li><a href="/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
+  </div>
+</div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>Terminal Multiplexer (tmux) on OSX</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold"></span> on <span class="bold">November 7, 2015</span></p>
+            </div>
+            <hr />
+            <p><p>I recently started using <a href="http://tmux.github.io/">tmux</a> and have found that it has improved my
+workflow. Being an Emacs (<a href="http://aquamacs.org/">Aquamacs</a>) user most of my work is done inside
+Emacs with little to no need for a separate terminal. However, much of my
+work requires connecting to remote systems via SSH and so I’d often have
+several tabs open connected to different servers. Of course if I switched to
+a different desktop these tabs would no longer be there, which was rather
+inconvenient. <a href="http://tmux.github.io/">tmux</a> has made this aspect and my entire terminal experience
+much better. Even if you think you don’t do much, I recommend trying out
+<a href="http://tmux.github.io/">tmux</a>.</p>
+
+<p>I would recommend installing tmux via <a href="http://brew.sh/">brew</a>. Once you have installed
+brew open up the terminal (or <a href="https://www.iterm2.com/">iTerm</a>) and run <code class="language-plaintext highlighter-rouge">brew doctor</code> to ensure
+everything is okay. You should fix any issues reported. Then run <code class="language-plaintext highlighter-rouge">brew update</code>
+and finally <code class="language-plaintext highlighter-rouge">brew install tmux</code> to install tmux. You should also (essentially
+non-optional) install the <a href="https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard/">tmux OSX pasteboard</a> by running
+<code class="language-plaintext highlighter-rouge">brew install reattach-to-user-namespace</code> (not that this may not be
+needed on OSX 10.10 or newer). If everything went correctly
+running <code class="language-plaintext highlighter-rouge">tmux</code> should work. Then type <code class="language-plaintext highlighter-rouge">exit</code> in tmux and we will start
+customizing things.</p>
+
+<p>The first thing you will want to do is install the plugin manager from
+<a href="https://github.com/tmux-plugins/tpm">here</a>. To do this run
+<code class="language-plaintext highlighter-rouge">git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm</code>
+in your terminal. Now you will need to edit the tmux configuration file,
+<code class="language-plaintext highlighter-rouge">~/.tmux.conf</code> using your favorite editor (I recommend <a href="http://aquamacs.org/">Aquamacs</a>).</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># reload ~/.tmux.conf using PREFIX r</span>
+<span class="nb">bind </span>r source-file ~/.tmux.conf <span class="se">\;</span> display <span class="s2">"Reloaded!"</span>
+
+<span class="c"># Use non-Emacs shortcut for sending prefix</span>
+<span class="nb">set</span> <span class="nt">-g</span> prefix M-<span class="sb">`</span>
+<span class="nb">bind </span>M-<span class="sb">`</span> send-prefix
+
+<span class="c"># Plugin manager:</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tpm'</span>
+<span class="c"># The sensible plugin</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-sensible'</span>
+
+<span class="c"># Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)</span>
+run <span class="s1">'~/.tmux/plugins/tpm/tpm'</span></code></pre></figure>
+
+<p>The first command allows us to reload the config file using <code class="language-plaintext highlighter-rouge">PREFI + r</code>. The
+next two commands set the <code class="language-plaintext highlighter-rouge">PREFIX</code> to meta-prime, which, if you have used
+screen, is the equivalent of <code class="language-plaintext highlighter-rouge">C-a</code>. The idea is that you “tell” tmux you want
+it to interpret the following keypresses as commands. To install the plugins
+start tmux and run <code class="language-plaintext highlighter-rouge">PREFIX + I</code>. Once this is complete tmux will tell
+you to press the
+escape key to get back to the shell. Note that we also installed the
+plugin <a href="https://github.com/tmux-plugins/tmux-sensible">sensible</a> which offers some “tmux options that should be
+acceptable to everyone.”
+Of course you are welcome to remove the plugin or customize the settings to
+whatever you prefer. If you’re using OSX and had to install
+<code class="language-plaintext highlighter-rouge">reattach-to-user-namespace</code> then you will want to install <code class="language-plaintext highlighter-rouge">sensible</code>,
+which I included in the above config entry.</p>
+
+<p>Now that we have a good core we can start with more plugins and some
+customization. Since I use a MacBook I like to have the battery percentage
+displayed at the bottom. I know, I know, it’s also in the menu bar, but hey,
+I spend more time looking at the bottom of the terminal screen than the
+menu bar. The plugin I used is described <a href="https://github.com/tmux-plugins/tmux-battery">here</a>. Because I run a
+decent number of simulations on my computer I also like to
+monitor the CPU usage, for which I use <a href="https://github.com/tmux-plugins/tmux-cpu">this</a> plugin.
+To install both of these, add the following to your <code class="language-plaintext highlighter-rouge">.tmux.conf</code> file
+and press <code class="language-plaintext highlighter-rouge">PREFIX + I</code></p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># Battery status indicator</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-battery'</span>
+<span class="c"># CPU monitoring</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-cpu'</span></code></pre></figure>
+
+<p>Below is a sample of a configuration for the
+status bar that displays the current session name,
+window and pane number, date and time,
+CPU and battery, as well as a centered list of window names. After
+adding these you will need to run <code class="language-plaintext highlighter-rouge">PREFIX + r</code> to reload the config
+file.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">set-option <span class="nt">-g</span> status-utf8 on
+<span class="nb">set</span> <span class="nt">-g</span> status-justify centre
+<span class="c"># grey status bar with cyan writing</span>
+set-option <span class="nt">-g</span> status-bg colour235
+set-option <span class="nt">-g</span> status-fg cyan
+set-option <span class="nt">-g</span> status-interval 5
+set-option <span class="nt">-g</span> status-left-length 30
+<span class="c"># [Session Name:Window Index:Pane Index]</span>
+set-option <span class="nt">-g</span> status-left <span class="s1">'[#[fg=green]#S#[fg=cyan]:#[fg=yellow]#I#[fg=cyan]:#[fg=magenta]#P#[fg=cyan]]'</span>
+<span class="nb">set</span> <span class="nt">-g</span> status-right <span class="s1">'B:#{battery_percentage} #{battery_remain} C:#{cpu_percentage} | %a %h-%d %H:%M '</span></code></pre></figure>
+
+<p>Now that we have a basic environment configured with commonly needed information
+readily available to us we will worry about how to have tmux remember our
+sessions through reboots. Ideally I’d like to have my environment completely
+restored after a reboot. To this end I use <a href="https://gist.github.com/spicycode/1229612">tmux-resurrect</a> and
+<a href="https://github.com/tmux-plugins/tmux-continuum">tmux-continuum</a>. To install and configure these add the following to
+your <code class="language-plaintext highlighter-rouge">.tmux.conf</code> and run <code class="language-plaintext highlighter-rouge">PREFIX + I</code>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># auto save and auto restore sessions</span>
+<span class="c"># Load the main plugins</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-resurrect'</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-continuum'</span>
+<span class="c"># Enable restore last environment on start</span>
+<span class="nb">set</span> <span class="nt">-g</span> @continuum-restore <span class="s1">'on'</span>
+<span class="c"># Start tmux on boot</span>
+<span class="nb">set</span> <span class="nt">-g</span> @continuum-boot <span class="s1">'on'</span>
+<span class="nb">set</span> <span class="nt">-g</span> @continuum-boot-options <span class="s1">'iterm'</span></code></pre></figure>
+
+<p>While this is all handy there are other plugins that are very useful.
+Two of my favourites are <a href="https://github.com/tmux-plugins/tmux-copycat">copycat</a> and <a href="https://github.com/tmux-plugins/tmux-yank">yank</a>. These make
+copying text from the terminal easy by having predefined regex searches
+and allowing custom regex searches. Once you have highlighted the text
+you want you can use <code class="language-plaintext highlighter-rouge">y</code> to copy, <code class="language-plaintext highlighter-rouge">SHIFT + y</code> to insert selection into
+the command line, and <code class="language-plaintext highlighter-rouge">M + y</code> to copy to clipboard and insert into the
+command line. If you use <a href="https://github.com/tmux-plugins/tmux-open">open</a> you can also open the highlighted
+file or URL using <code class="language-plaintext highlighter-rouge">o</code> or <code class="language-plaintext highlighter-rouge">C + o</code> for opening in <code class="language-plaintext highlighter-rouge">$EDITOR</code>. To install
+these plugins add the following to your config file and run <code class="language-plaintext highlighter-rouge">PREFIX + I</code>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># copycat plugin</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-copycat'</span>
+<span class="c"># tmux-yank plugin</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-yank'</span>
+<span class="c"># tmux-open, o opens, C-o in $EDITOR</span>
+<span class="nb">set</span> <span class="nt">-g</span> @plugin <span class="s1">'tmux-plugins/tmux-open'</span></code></pre></figure>
+
+<p>Finally, there is a cheat sheet available <a href="https://gist.github.com/andreyvit/2921703">here</a>. You can find
+sample configuration files that I found helpful <a href="https://gist.github.com/spicycode/1229612">here</a> and
+<a href="http://zanshin.net/2013/09/05/my-tmux-configuration/">here</a>.</p>
+
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/blog">Back to blog</a>
+</p>
+
+
+<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'nilsdeppe'; // required: replace example with your forum shortname
+        // var disqus_developer = 1; // Comment out when the site is live
+        var disqus_identifier = "/posts/tmux-basics";
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            
+            <li><a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://orcid.org/0000-0003-4557-4115" target="_blank" title="ORCID"><i class="ai ai-orcid ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-1x"></i></a></li>
+            
+            
+            <li><a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-1x"></i></a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>

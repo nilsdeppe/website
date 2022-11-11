@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>TMP Part 4 - Recursion Free Tuple Iteration</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- theme meta -->
+<meta name="theme-name" content="airspace-jekyll" />
+
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/owl.carousel.css" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/airspace.css" />
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="stylesheet" href="/css/ionicons.min.css" />
+<link rel="stylesheet" href="/css/animate.css" />
+<link rel="stylesheet" href="/css/responsive.css" />
+<link rel="stylesheet" href="/css/syntax.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+
+<!-- Js -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/plugins.js"></script>
+<script src="/js/min/waypoints.min.js"></script>
+<script src="/js/jquery.counterup.js"></script>
+<script type="text/javascript"
+src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- scale size of the font -->
+MathJax.Hub.Config({
+"HTML-CSS": { scale: 90}
+});
+
+<!-- Some markdown fixes from http://cwoebker.com/posts/latex-math-magic -->
+MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+});
+MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+
+</script>
+
+
+<script src="/js/main.js"></script>
+
+<!--
+/*
+ * Airspace
+ * Ported to Jekyll by Andrew Lee
+ * https://github.com/ndrewtl/airspace-jekyll
+ * Designed and Developed by ThemeFisher
+ * https://themefisher.com/
+ *
+ */
+-->
+
+
+  </head>
+  <body>
+
+
+    <!-- Header Start -->
+<header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <!-- header Nav Start -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <!-- <a class="navbar-brand" href="index.html">
+                 <img src="/img/logo.png" alt="Logo">
+                 </a> -->
+
+          <ul class="nav navbar-icons">
+          <!-- Some hack to get the site title in the header -->
+          <a href="/"><font size="6">Nils Deppe</font></a>&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          <a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-2x"></i></a>
+          
+          
+          <a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-2x"></i></a>
+          
+          
+          <a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-2x"></i></a>
+          
+          <!-- 
+               <a href="https://bitbucket.com/ndeppe" target="_blank" title="BitBucket"><i class="fab fa-bitbucket fa-2x"></i></a>
+                -->
+          
+          <a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+          
+          </ul>
+          </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <!-- <li><a href="/work">Research</a></li> -->
+              </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    </div>
+  </div>
+</div>
+</header><!-- header close -->
+
+
+
+    <div class="post">
+  <!-- Wrapper Start -->
+  <section id="intro" style="border: 1px dotted #ddd;">
+    <div class="container">
+      <div class="row">
+        <div>
+          <div class="block">
+            <h1>TMP Part 4 - Recursion Free Tuple Iteration</h1>
+            <div class="post-info-wrapper">
+              <p class="italic">By <span class="bold"></span> on <span class="bold">August 25, 2017</span></p>
+            </div>
+            <hr />
+            <p><p>This post is a follow up to
+<a href="/posts/tmpl-part3">iterating over tuples</a>,
+but this time we do not use runtime or compile time recursion, so the
+resulting code is cleaner and faster. There are two different types of
+iteration, one where you keep a “state” and one where you do not. By
+state I mean, for example, the partial sum of all elements  already
+processed in a reduction, accumulation, or fold.
+<a href="http://en.cppreference.com/w/cpp/language/parameter_pack">Parameter pack</a>
+expansion is the fastest and preferred method of iteration. However,
+it has the drawback that it cannot keep state at compile time (or at least
+I haven’t figured out how, yet). That means parameter pack expansion works well
+in <code class="language-plaintext highlighter-rouge">transform</code>s at compile time but not <code class="language-plaintext highlighter-rouge">fold</code>s. Interestingly enough, we can
+use parameter pack expansion for runtime iteration with state. This is something
+I have spent a fair amount of time thinking about and I now have a solution I’m
+very happy with. Let’s dive in!</p>
+
+<h3 id="a-tuple-fold">A Tuple Fold</h3>
+
+<p>We have a <code class="language-plaintext highlighter-rouge">std::tuple</code> and want to iterate over the elements of it by performing
+either a fold or a transform. These are distinct because, for a transform, the
+current index of the iteration must be passed as a template parameter. I will
+come back to this important point in a bit. First, let’s implement a fold
+and a counted fold. For this section I will use C++14 because it makes the
+discussion and code more concise, but everything can readily be implemented
+in C++11 by removing <code class="language-plaintext highlighter-rouge">constexpr</code> in some places and implementing an
+<code class="language-plaintext highlighter-rouge">integer_sequence</code>. The code I show here is shared on
+<a href="https://github.com/nilsdeppe/template-metaprogramming-tutorials">GitHub</a>.</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre><span class="k">namespace</span> <span class="n">tuple_impl_detail</span> <span class="p">{</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">ReverseIteration</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Elements</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">N_naryOp</span><span class="p">,</span>
+          <span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">Is</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">tuple_fold_impl</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Elements</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">tupull</span><span class="p">,</span> <span class="n">N_naryOp</span><span class="o">&amp;&amp;</span> <span class="n">op</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">Is</span><span class="p">...</span><span class="o">&gt;</span> <span class="cm">/*meta*/</span><span class="p">,</span>
+    <span class="n">Args</span><span class="o">&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">(</span>
+        <span class="k">noexcept</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">{</span>
+    <span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span>
+         <span class="n">op</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="p">(</span><span class="n">ReverseIteration</span> <span class="o">?</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Elements</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Is</span> <span class="o">:</span> <span class="n">Is</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span>
+                <span class="n">tupull</span><span class="p">),</span>
+            <span class="n">args</span><span class="p">...)),</span>
+     <span class="sc">'0'</span><span class="p">)...})))</span> <span class="p">{</span>
+  <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">tuple_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Elements</span><span class="p">);</span>
+  <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">{</span>
+      <span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span>
+           <span class="n">op</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="p">(</span><span class="n">ReverseIteration</span> <span class="o">?</span> <span class="n">tuple_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Is</span> <span class="o">:</span> <span class="n">Is</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tupull</span><span class="p">),</span>
+              <span class="n">args</span><span class="p">...)),</span>
+       <span class="sc">'0'</span><span class="p">)...});</span>
+<span class="p">}</span>
+<span class="p">}</span> <span class="c1">// namespace tuple_impl_detail</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">ReverseIteration</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Elements</span><span class="p">,</span>
+          <span class="k">typename</span> <span class="nc">N_naryOp</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">tuple_fold</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Elements</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">tuple</span><span class="p">,</span> <span class="n">N_naryOp</span><span class="o">&amp;&amp;</span> <span class="n">op</span><span class="p">,</span>
+    <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">(</span><span class="k">noexcept</span><span class="p">(</span><span class="n">tuple_impl_detail</span><span class="o">::</span>
+                                          <span class="n">tuple_fold_impl</span><span class="o">&lt;</span><span class="n">ReverseIteration</span><span class="o">&gt;</span><span class="p">(</span>
+                                              <span class="n">tuple</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">N_naryOp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">op</span><span class="p">),</span>
+                                              <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span>
+                                                  <span class="k">sizeof</span><span class="p">...(</span><span class="n">Elements</span><span class="p">)</span><span class="o">&gt;</span><span class="p">{},</span>
+                                              <span class="n">args</span><span class="p">...)))</span> <span class="p">{</span>
+  <span class="n">tuple_impl_detail</span><span class="o">::</span><span class="n">tuple_fold_impl</span><span class="o">&lt;</span><span class="n">ReverseIteration</span><span class="o">&gt;</span><span class="p">(</span>
+      <span class="n">tuple</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">N_naryOp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">op</span><span class="p">),</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">Elements</span><span class="p">)</span><span class="o">&gt;</span><span class="p">{},</span> <span class="n">args</span><span class="p">...);</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>There’s a lot happening here, so I’ll go over it piece by piece.
+First, let’s look at the arguments passed to <code class="language-plaintext highlighter-rouge">tuple_fold</code>. We take a const
+reference to a <code class="language-plaintext highlighter-rouge">std::tuple</code> since we aren’t modifying its state, then we
+take an invokable (with some constraints that I’ll explain), and finally
+a list of arguments by forwarding references. Because the call to <code class="language-plaintext highlighter-rouge">op</code>s
+may have a different first argument for each iteration <code class="language-plaintext highlighter-rouge">op</code> must be a function
+object with a call operator template, or a generic lambda in C++14. In the case
+that all elements are of the same type you could also pass a function. Next,
+taking <code class="language-plaintext highlighter-rouge">args...</code> by forwarding
+reference is required so that an rvalue reference can be passed to <code class="language-plaintext highlighter-rouge">tuple_fold</code>.
+Finally, the first template parameter of <code class="language-plaintext highlighter-rouge">tuple_fold</code> controls whether we iterate from
+left to right (the default) or from right to left (<code class="language-plaintext highlighter-rouge">ReverseIteration == true</code>).
+Let’s ignore the <code class="language-plaintext highlighter-rouge">noexcept</code> business until later.</p>
+
+<h3 id="indexing-and-evaluation-order">Indexing and Evaluation Order</h3>
+
+<p>Okay, now that we know what the function receives as arguments and parameters,
+let’s look at the body. The only thing there is a call to the implementation,
+since in order to index the <code class="language-plaintext highlighter-rouge">std::tuple</code> we need a parameter pack of <code class="language-plaintext highlighter-rouge">size_t</code>s
+ranging from 0 to <code class="language-plaintext highlighter-rouge">sizeof...(Elements)-1</code>. C++14 has the handy
+<a href="http://en.cppreference.com/w/cpp/utility/integer_sequence"><code class="language-plaintext highlighter-rouge">std::index_sequence</code></a>
+and
+<a href="http://en.cppreference.com/w/cpp/utility/integer_sequence"><code class="language-plaintext highlighter-rouge">std::make_index_sequence</code></a>
+to help us with generating such parameter packs.
+<code class="language-plaintext highlighter-rouge">std::make_index_sequence</code> takes a single template parameter <code class="language-plaintext highlighter-rouge">N</code> and generates
+a <code class="language-plaintext highlighter-rouge">std::index_sequnece</code> from <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">N - 1</code>. The helper function is then able
+to match a parameter pack to the <code class="language-plaintext highlighter-rouge">std::index_sequence</code>, which is the parameter
+pack we need to index the <code class="language-plaintext highlighter-rouge">std::tuple</code>. This parameter pack is named <code class="language-plaintext highlighter-rouge">Is</code> in
+<code class="language-plaintext highlighter-rouge">tuple_fold_impl</code>. We can now call <code class="language-plaintext highlighter-rouge">std::get&lt;Is&gt;(tupull)...</code> to generate
+<code class="language-plaintext highlighter-rouge">std::get&lt;0&gt;(tupull), std::get&lt;1&gt;(tupull)</code>, etc. In other words, being able to
+generate a comma separated list of the <code class="language-plaintext highlighter-rouge">std::get</code> calls
+allows us to apply <code class="language-plaintext highlighter-rouge">op</code> to all elements in a tuple using
+<code class="language-plaintext highlighter-rouge">op(std::get&lt;Is&gt;(tupull), args...)...</code>. Hopefully this makes some sense.</p>
+
+<p>Now we need to figure out how to guarantee the runtime order of evaluation
+of the calls. Luckily <code class="language-plaintext highlighter-rouge">std::initializer_list</code> has the wonderful property of
+guaranteeing left-to-right evaluation. However, we need to create the
+<code class="language-plaintext highlighter-rouge">initializer_list</code> with a uniform type, so let’s just choose a <code class="language-plaintext highlighter-rouge">char</code> (it’s
+only 1 byte in size). We can use the comma operator to discard the result of
+the <code class="language-plaintext highlighter-rouge">op(std::get&lt;Is&gt;(tupull), args...)</code> calls. However, we need to make
+sure that the result of the <code class="language-plaintext highlighter-rouge">op</code> call is <code class="language-plaintext highlighter-rouge">void</code>. Otherwise, if the user
+overloaded the comma operator for <code class="language-plaintext highlighter-rouge">char</code> and the return type of <code class="language-plaintext highlighter-rouge">op</code>, we will
+have unexpected code being executed as part of our <code class="language-plaintext highlighter-rouge">tuple_fold</code> implementation.
+With all of this is mind we can almost
+write line 14 of the above code block. The last <code class="language-plaintext highlighter-rouge">static_cast&lt;void&gt;</code> around the
+<code class="language-plaintext highlighter-rouge">initializer_list</code> on line 14 is there to avoid unused
+variable warnings, and <code class="language-plaintext highlighter-rouge">(ReverseIteration ? tuple_size - 1 - Is : Is)</code> controls
+left-to-right and right-to-left evaluation order.</p>
+
+<h3 id="exception-handling">Exception Handling</h3>
+
+<p>Phew, that was a lot, but we are not done yet! What about the <code class="language-plaintext highlighter-rouge">noexcept</code> stuff?
+Well, we want our <code class="language-plaintext highlighter-rouge">tuple_fold</code> function to be <code class="language-plaintext highlighter-rouge">noexcept</code> if all the calls
+to <code class="language-plaintext highlighter-rouge">op</code> are noexcept. Unfortunately, <code class="language-plaintext highlighter-rouge">noexcept</code> doubles as a specifier
+and as an operator to calculate whether a code block is <code class="language-plaintext highlighter-rouge">noexcept</code>.
+This is why we have <code class="language-plaintext highlighter-rouge">noexcept(noexcept(....))</code>: the inner <code class="language-plaintext highlighter-rouge">noexcept</code> is a call
+to the <code class="language-plaintext highlighter-rouge">noexcept</code> operator, while the outer is the <code class="language-plaintext highlighter-rouge">noexcept</code> specifier on a
+function taking the returned boolean of the <code class="language-plaintext highlighter-rouge">noexcept</code> operator. I’ll note
+briefly that for <code class="language-plaintext highlighter-rouge">tuple_counted_fold</code> you pass the <code class="language-plaintext highlighter-rouge">Is</code> as the second parameter
+to the invokable <code class="language-plaintext highlighter-rouge">op</code> (I’ll go over why this isn’t a transform below).</p>
+
+<p>So we’ve done quite a bit of work here, and the result is extremely dense code.
+What is so awesome about <code class="language-plaintext highlighter-rouge">tuple_fold</code>? Well the thing to appreciate is that
+we are iterating over the <code class="language-plaintext highlighter-rouge">std::tuple</code> <em>without any recursion</em>. This means we
+can operate on arbitrary large tuples and never encounter compile time or
+runtime recursion depth limits. Unfortunately, if you are using the <code class="language-plaintext highlighter-rouge">std::tuple</code>
+implementation in stdlibc++ this won’t help you all that much because their
+<code class="language-plaintext highlighter-rouge">std::tuple</code> implementation is recursive. However, with libcxx you can go wild
+and iterate over tuples with thousands of elements. I’ve actually found a use
+for this, but that’s for another time.</p>
+
+<p>Now, I lied a little bit when I said the implementation is completely compile
+time recursion free. The generation of the <code class="language-plaintext highlighter-rouge">index_sequence</code> requires recursion.
+However, even compile time recursion can be improved with a technique called
+fast tracking (more on this in a different post). In practice, creating an
+<code class="language-plaintext highlighter-rouge">index_sequence</code> of two hundred thousand elements takes ~30 seconds with GCC
+7.1.1 and libstdc++. With Clang 4.0.1 and libstdc++ the compile time is about
+the same. However, with Clang and libcxx it compiles instantaneously. The reason
+is that Clang has a compiler intrinsic that can generate <code class="language-plaintext highlighter-rouge">index_sequence</code>s
+extremely quickly and libcxx takes advantage of this. Using the compiler
+builtin an <code class="language-plaintext highlighter-rouge">index_sequence</code> of 200,000 elements is generated in under a second.
+If we intentionally fall back to the TMP method of generating the
+<code class="language-plaintext highlighter-rouge">index_sequence</code>, libcxx is still a factor of roughly two and a half faster than
+libstdc++.</p>
+
+<h3 id="tuple-transform">Tuple Transform</h3>
+
+<p>Why did I call the above function a fold? The reason is because we are
+unable to index a second tuple inside <code class="language-plaintext highlighter-rouge">op</code>, which is necessary for a transform.
+All we are able to do is some sort of reduction operation, so <code class="language-plaintext highlighter-rouge">tuple_fold</code> is
+a <code class="language-plaintext highlighter-rouge">std::tuple</code> implementation of <code class="language-plaintext highlighter-rouge">std::accumulate</code> (feel free to rename
+the function to <code class="language-plaintext highlighter-rouge">tuple_accumulate</code> if you prefer). In order to perform a
+transform we must pass the current <code class="language-plaintext highlighter-rouge">Index</code> as a template parameter to the
+invokable. At first glance it looks like this means that <code class="language-plaintext highlighter-rouge">tuple_transform</code>’s
+<code class="language-plaintext highlighter-rouge">op</code> must be a function object with a call operator template whose first
+template parameter is a non-type template parameter of type <code class="language-plaintext highlighter-rouge">size_t</code>, the current
+<code class="language-plaintext highlighter-rouge">Index</code>. With
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0428r0.pdf">this</a>
+proposal you will also be able to use lambdas, e.g.
+<code class="language-plaintext highlighter-rouge">[]&lt;size_t Index&gt;(const auto&amp; element, ...) {...}</code>. However, we are able to work
+around this issue by having a generic lambda that takes the current element as
+its first argument and a <code class="language-plaintext highlighter-rouge">std::integral_constant&lt;size_t, Index&gt; index</code> as its
+second argument. We are then able to get the
+<code class="language-plaintext highlighter-rouge">Index</code> at compile time using <code class="language-plaintext highlighter-rouge">decltype(index)::value</code>. I’ll show an example
+below, but for now here is the implementation:</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td><td class="code"><pre><span class="k">namespace</span> <span class="n">tuple_impl_detail</span> <span class="p">{</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">ReverseIteration</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Elements</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">N_naryOp</span><span class="p">,</span>
+          <span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">Is</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">tuple_transform_impl</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Elements</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">tupull</span><span class="p">,</span> <span class="n">N_naryOp</span><span class="o">&amp;&amp;</span> <span class="n">op</span><span class="p">,</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">Is</span><span class="p">...</span><span class="o">&gt;</span> <span class="cm">/*meta*/</span><span class="p">,</span>
+    <span class="n">Args</span><span class="o">&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">(</span>
+        <span class="k">noexcept</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">{</span>
+    <span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="n">op</span><span class="p">(</span>
+         <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="p">(</span><span class="n">ReverseIteration</span> <span class="o">?</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Elements</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Is</span> <span class="o">:</span> <span class="n">Is</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span>
+             <span class="n">tupull</span><span class="p">),</span>
+         <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span>
+             <span class="kt">size_t</span><span class="p">,</span> <span class="p">(</span><span class="n">ReverseIteration</span> <span class="o">?</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Elements</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Is</span> <span class="o">:</span> <span class="n">Is</span><span class="p">)</span><span class="o">&gt;</span><span class="p">{},</span>
+         <span class="n">args</span><span class="p">...)),</span>
+     <span class="sc">'0'</span><span class="p">)...})))</span> <span class="p">{</span>
+  <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">tuple_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Elements</span><span class="p">);</span>
+  <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">{(</span>
+      <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">(</span><span class="n">op</span><span class="p">(</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="p">(</span><span class="n">ReverseIteration</span> <span class="o">?</span> <span class="n">tuple_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Is</span> <span class="o">:</span> <span class="n">Is</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tupull</span><span class="p">),</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="p">(</span><span class="n">ReverseIteration</span> <span class="o">?</span> <span class="n">tuple_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">Is</span>
+                                                           <span class="o">:</span> <span class="n">Is</span><span class="p">)</span><span class="o">&gt;</span><span class="p">{},</span>
+          <span class="n">args</span><span class="p">...)),</span>
+      <span class="sc">'0'</span><span class="p">)...});</span>
+<span class="p">}</span>
+<span class="p">}</span>  <span class="c1">// namespace tuple_impl_detail</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">ReverseIteration</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Elements</span><span class="p">,</span>
+          <span class="k">typename</span> <span class="nc">N_naryOp</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">tuple_transform</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Elements</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">tuple</span><span class="p">,</span> <span class="n">N_naryOp</span><span class="o">&amp;&amp;</span> <span class="n">op</span><span class="p">,</span>
+    <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">(</span><span class="k">noexcept</span><span class="p">(</span><span class="n">tuple_impl_detail</span><span class="o">::</span>
+                                          <span class="n">tuple_transform_impl</span><span class="o">&lt;</span>
+                                              <span class="n">ReverseIteration</span><span class="o">&gt;</span><span class="p">(</span>
+                                              <span class="n">tuple</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">N_naryOp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">op</span><span class="p">),</span>
+                                              <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span>
+                                                  <span class="k">sizeof</span><span class="p">...(</span><span class="n">Elements</span><span class="p">)</span><span class="o">&gt;</span><span class="p">{},</span>
+                                              <span class="n">args</span><span class="p">...)))</span> <span class="p">{</span>
+  <span class="n">tuple_impl_detail</span><span class="o">::</span><span class="n">tuple_transform_impl</span><span class="o">&lt;</span><span class="n">ReverseIteration</span><span class="o">&gt;</span><span class="p">(</span>
+      <span class="n">tuple</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">N_naryOp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">op</span><span class="p">),</span>
+      <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">Elements</span><span class="p">)</span><span class="o">&gt;</span><span class="p">{},</span> <span class="n">args</span><span class="p">...);</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>As you can see, the code is nearly identical to <code class="language-plaintext highlighter-rouge">tuple_fold</code> except that now
+<code class="language-plaintext highlighter-rouge">op</code> is called using
+<code class="language-plaintext highlighter-rouge">op(std::get&lt;Is&gt;(tupull), std::integral_constant&lt;size_t, Is&gt;{}, ...)</code> so
+that the second argument can be used for indexing a <code class="language-plaintext highlighter-rouge">std::tuple</code> inside a
+generic lambda. In the C++11 case you are restricted to function objects
+since generic lambdas are a C++14 feature, but other than that the code
+is the same.</p>
+
+<h3 id="example-use-cases">Example Use Cases</h3>
+
+<p>Now let’s look at some toy examples of how to use the above functions. First,
+let’s look at <code class="language-plaintext highlighter-rouge">tuple_fold</code></p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="k">const</span> <span class="k">auto</span> <span class="n">my_tupull</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.8</span><span class="p">,</span> <span class="mf">20.9</span><span class="p">);</span>
+<span class="kt">double</span> <span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="n">tuple_fold</span><span class="p">(</span><span class="n">my_tupull</span><span class="p">,</span>
+           <span class="p">[](</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">element</span><span class="p">,</span> <span class="kt">double</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">)</span> <span class="p">{</span> <span class="n">state</span> <span class="o">+=</span> <span class="n">element</span><span class="p">;</span> <span class="p">},</span>
+           <span class="n">sum_value</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Expected: 26.1   Computed: "</span> <span class="o">&lt;&lt;</span> <span class="n">sum_value</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="n">sum_value</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="n">tuple_counted_fold</span><span class="p">(</span><span class="n">my_tupull</span><span class="p">,</span>
+                   <span class="p">[](</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">element</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">index</span><span class="p">,</span> <span class="kt">double</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                      <span class="n">state</span> <span class="o">+=</span> <span class="n">element</span><span class="p">;</span>
+                    <span class="p">}</span>
+                   <span class="p">},</span>
+                   <span class="n">sum_value</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Expected: 19.1   Computed: "</span> <span class="o">&lt;&lt;</span> <span class="n">sum_value</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>Of course, in this example you could have just used a <code class="language-plaintext highlighter-rouge">std::vector&lt;double&gt;</code>
+as the container instead of a <code class="language-plaintext highlighter-rouge">tuple</code>.
+However, if you need to iterate over different classes and call a member
+function on each, the solution is less obvious. One method is to have all
+classes derive from an abstract base class, and then have a <code class="language-plaintext highlighter-rouge">vector</code> of
+pointers to abstract base classes. This works, but does limit what you can do
+at compile time. I’ve found that avoiding the use of abstract base classes leads
+to clearer and safer code. The objects of different types are stored in a
+<code class="language-plaintext highlighter-rouge">tuple</code>, over which one can then iterate using either <code class="language-plaintext highlighter-rouge">tuple_fold</code> or
+<code class="language-plaintext highlighter-rouge">tuple_transform</code>. An example of this approach is in the <code class="language-plaintext highlighter-rouge">CoordinateMap</code>
+class in <a href="https://github.com/sxs-collaboration/spectre">SpECTRE</a>.</p>
+
+<p>Now for an example of <code class="language-plaintext highlighter-rouge">tuple_transform</code>,</p>
+
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="k">const</span> <span class="k">auto</span> <span class="n">my_tupull</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.8</span><span class="p">,</span> <span class="mf">20.9</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">my_tupull</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">out_tupull</span><span class="p">;</span>
+<span class="n">tuple_transform</span><span class="p">(</span><span class="n">my_tupull</span><span class="p">,</span>
+                <span class="p">[](</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">element</span><span class="p">,</span> <span class="k">auto</span> <span class="n">index</span><span class="p">,</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">out_tuple</span><span class="p">)</span> <span class="p">{</span>
+                  <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">index_v</span> <span class="o">=</span> <span class="k">decltype</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">::</span><span class="n">value</span><span class="p">;</span>
+                  <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index_v</span><span class="o">&gt;</span><span class="p">(</span><span class="n">out_tuple</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">element</span><span class="p">;</span>
+                <span class="p">},</span>
+                <span class="n">out_tupull</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Expected: (-2, -7, 3.8, -20.9)   Computed: "</span> <span class="o">&lt;&lt;</span> <span class="n">out_tupull</span>
+          <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+
+<p>In order to use the <code class="language-plaintext highlighter-rouge">index</code> at compile time for indexing the <code class="language-plaintext highlighter-rouge">out_tuple</code>
+we must get its type (<code class="language-plaintext highlighter-rouge">std::integral_constant</code>), and then assign the
+member variable <code class="language-plaintext highlighter-rouge">value</code> to a constexpr variable. Other than that,
+<code class="language-plaintext highlighter-rouge">tuple_transform</code> and <code class="language-plaintext highlighter-rouge">tuple_fold</code> behave very similarly and there is not much
+to say.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>We used parameter pack expansion and <code class="language-plaintext highlighter-rouge">std::initializer_list</code> to implement
+a non-recursive <code class="language-plaintext highlighter-rouge">tuple_fold</code> and <code class="language-plaintext highlighter-rouge">tuple_transform</code> for both C++11 and C++14.
+The main takeaway is
+that using parameter pack expansion is the preferred way to do iteration
+whenever possible because this trivially avoids recursion depth problems
+and is faster than function template and class template instantiation.
+As we saw in the previous post, recursive iteration over a tuple requires
+using <a href="http://en.cppreference.com/w/cpp/language/sfinae">SFINAE</a>, which is
+extremely slow. See 9:20 of
+<a href="https://www.youtube.com/watch?v=EtU4RDCCsiU">Odin Holmes’s talk</a> for some
+insight on performance of different TMP techniques. Finally, I have shared
+the fully implemented version on
+<a href="https://github.com/nilsdeppe/template-metaprogramming-tutorials">GitHub</a>
+under the Boost License, so please, feel free to use the code.</p>
+</p>
+          </div>
+        </div><!-- .col-md-7 close -->
+      </div>
+    </div>
+  </section>
+</div>
+<p class="center-text" style="padding: 30px;">
+  <a href="/blog">Back to blog</a>
+</p>
+
+
+<div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'nilsdeppe'; // required: replace example with your forum shortname
+        // var disqus_developer = 1; // Comment out when the site is live
+        var disqus_identifier = "/posts/tmpl-part4";
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer Start -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="footer-manu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            
+            <li><a href="/assets/pdfs/cv.pdf" target="_blank" title="CV"><i class="ai ai-cv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://orcid.org/0000-0003-4557-4115" target="_blank" title="ORCID"><i class="ai ai-orcid ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://arxiv.org/search/?query=Deppe%2C+Nils&searchtype=author&abstracts=show&order=-announced_date_first&size=200" target="_blank" title="arXiv"><i class="ai ai-arxiv ai-1x"></i></a></li>
+            
+            
+            <li><a href="https://github.com/nilsdeppe" target="_blank" title="GitHub"><i class="fab fa-github fa-1x"></i></a></li>
+            
+            
+            <li><a href="https://www.linkedin.com/in/nilsdeppe" target="_blank" title="LinkedIn"><i class="fab fa-linkedin fa-1x"></i></a></li>
+            
+          </ul>
+        </div>
+        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    </body>
+</html>
