@@ -555,7 +555,7 @@ trait <code class="language-plaintext highlighter-rouge">has_func</code>. The si
     <span class="k">decltype</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">declval</span><span class="o">&lt;</span><span class="n">Trait</span><span class="o">&gt;</span><span class="p">()(</span><span class="n">std</span><span class="o">::</span><span class="n">declval</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;</span><span class="p">()...,</span> <span class="mi">0</span><span class="p">))</span><span class="o">::</span><span class="n">value</span><span class="p">;</span>
 
 <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">&gt;</span>
-<span class="kt">void</span> <span class="n">local_type_trait_example1</span><span class="p">(</span><span class="n">T</span> <span class="cm">/*t*/</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="nf">local_type_trait_example1</span><span class="p">(</span><span class="n">T</span> <span class="cm">/*t*/</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">has_func_impl</span> <span class="o">=</span> <span class="n">make_overloader</span><span class="p">(</span>
       <span class="p">[](</span><span class="k">auto</span> <span class="n">t</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span>
           <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">std</span><span class="o">::</span><span class="n">declval</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">&gt;</span><span class="p">().</span><span class="n">func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">declval</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">()),</span>
@@ -566,7 +566,7 @@ trait <code class="language-plaintext highlighter-rouge">has_func</code>. The si
   <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Has func(int) member function: "</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span>
             <span class="o">&lt;&lt;</span> <span class="n">local_trait_v</span><span class="o">&lt;</span><span class="n">has_func_member</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">local_type_trait_example1</span><span class="p">(</span><span class="n">my_type1</span><span class="p">{});</span>
   <span class="n">local_type_trait_example1</span><span class="p">(</span><span class="n">my_type2</span><span class="p">{});</span>
 <span class="p">}</span>

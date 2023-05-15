@@ -233,7 +233,7 @@ in C++11 by removing <code class="language-plaintext highlighter-rouge">constexp
 
 <span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">ReverseIteration</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Elements</span><span class="p">,</span>
           <span class="k">typename</span> <span class="nc">N_naryOp</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">&gt;</span>
-<span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">tuple_fold</span><span class="p">(</span>
+<span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">tuple_fold</span><span class="p">(</span>
     <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Elements</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">tuple</span><span class="p">,</span> <span class="n">N_naryOp</span><span class="o">&amp;&amp;</span> <span class="n">op</span><span class="p">,</span>
     <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">(</span><span class="k">noexcept</span><span class="p">(</span><span class="n">tuple_impl_detail</span><span class="o">::</span>
                                           <span class="n">tuple_fold_impl</span><span class="o">&lt;</span><span class="n">ReverseIteration</span><span class="o">&gt;</span><span class="p">(</span>
@@ -422,7 +422,7 @@ below, but for now here is the implementation:</p>
 
 <span class="k">template</span> <span class="o">&lt;</span><span class="kt">bool</span> <span class="n">ReverseIteration</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Elements</span><span class="p">,</span>
           <span class="k">typename</span> <span class="nc">N_naryOp</span><span class="p">,</span> <span class="k">typename</span><span class="o">...</span> <span class="nc">Args</span><span class="p">&gt;</span>
-<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">tuple_transform</span><span class="p">(</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="nf">tuple_transform</span><span class="p">(</span>
     <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Elements</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">tuple</span><span class="p">,</span> <span class="n">N_naryOp</span><span class="o">&amp;&amp;</span> <span class="n">op</span><span class="p">,</span>
     <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">(</span><span class="k">noexcept</span><span class="p">(</span><span class="n">tuple_impl_detail</span><span class="o">::</span>
                                           <span class="n">tuple_transform_impl</span><span class="o">&lt;</span>
