@@ -185,7 +185,7 @@ with a <em>variadic-using</em>. Here is the code:</p>
 </pre></td></tr></tbody></table></code></pre></figure>
 
 <p>The <code class="language-plaintext highlighter-rouge">make_overload</code> is a helper function to do the type deduction for us,
-similar in spirit to <code class="language-plaintext highlighter-rouge">std::make_tuple</code>.<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> What line 5
+similar in spirit to <code class="language-plaintext highlighter-rouge">std::make_tuple</code>.<sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup> What line 5
 (the <em>variadic-using</em>) does in pull in the call operator
 of all the <code class="language-plaintext highlighter-rouge">Lambdas</code> into the scope of <code class="language-plaintext highlighter-rouge">overload</code> so that they are
 available for overload resolution.</p>
@@ -341,7 +341,7 @@ with the name <code class="language-plaintext highlighter-rouge">variadic-using.
 
 <div class="footnotes" role="doc-endnotes">
   <ol>
-    <li id="fn:1" role="doc-endnote">
+    <li id="fn:1">
       <p><code class="language-plaintext highlighter-rouge">make_overload</code> can be replaced with a deduction guideline, but that
   is not yet supported in a release build of Clang, so I am avoiding it
   for now. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
