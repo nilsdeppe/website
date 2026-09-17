@@ -1,6 +1,10 @@
 source "https://rubygems.org"
-gem 'bundler'
-gem 'jekyll'
-gem 'jekyll-sitemap'
-gem "webrick", "~> 1.7"
-gem "rake", "~> 12.3.1"
+
+gem "jekyll", "~> 4.4"
+
+group :jekyll_plugins do
+  gem "jekyll-sitemap", "~> 1.4"
+end
+
+# Ruby 3.x no longer ships webrick, which `jekyll serve` needs.
+gem "webrick", "~> 1.9"
